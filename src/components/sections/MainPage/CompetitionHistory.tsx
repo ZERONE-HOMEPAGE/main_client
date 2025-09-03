@@ -1,5 +1,5 @@
 import Card from "@/components/ui/Card";
-import competetionImg from "@/assets/images/competition.jpg";
+import competetionImg from "@/assets/images/competition.png";
 
 export default function CompetitionHistory() {
     return (

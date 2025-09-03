@@ -1,6 +1,6 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import zeroneCharacter from '@/assets/images/zerone_character.jpg';
+import zeroneCharacter from '@/assets/images/zerone_character.png';
 import clockIcon from '@/assets/icon/clock.png';
 import oneAndN from '@/assets/eventImg/1&N.png';
 import baekjoonbingo from '@/assets/eventImg/baekjoonbingo.png';

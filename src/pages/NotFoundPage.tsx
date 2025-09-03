@@ -1,4 +1,4 @@
-import zeroneCharacter from '@/assets/images/zerone_character.jpg';
+import zeroneCharacter from '@/assets/images/zerone_character.png';
 import Button from '@/components/ui/Button';
 import { useNavigate } from 'react-router-dom';
 
