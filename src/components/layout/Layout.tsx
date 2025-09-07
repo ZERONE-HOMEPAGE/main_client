@@ -11,12 +11,12 @@ export default function Layout() {
   }, [location.pathname]);
 
   return (
-    <>
+    <div>
       <Header />
       <main>
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
