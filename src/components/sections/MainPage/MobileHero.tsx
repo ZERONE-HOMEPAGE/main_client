@@ -4,7 +4,7 @@ import ScrollDownBtn from "@/components/ui/ScrollDownBtn";
 
 export default function MobileHero(){
     return (
-        <div className="w-full h-full bg-black flex flex-col items-center justify-evenly text-white">
+        <div className="relative w-full h-full bg-black flex flex-col items-center justify-evenly text-white">
             <div>
                 <img src={logo} alt="ZERONE" className="" />
                 <div className="flex flex-col items-center justify-center gap-4">
