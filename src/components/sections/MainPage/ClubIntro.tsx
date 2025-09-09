@@ -12,11 +12,11 @@ export default function ClubIntro() {
 
     const cards = [{
         IconUrl: bookIcon,
-        T1: "정기적인 알고리즘 스터디",
+        T1: "알고리즘 스터디",
         T2: "매주 알고리즘 문제를 풀며 실력을 쌓고 서로 피드백을 주고받는 스터디"
     }, {
         IconUrl: awardIcon,
-        T1: "프로그래밍 대회 참가 및 개최",
+        T1: "대회 참가 및 개최",
         T2: "다양한 대학 및 기업 코딩 대회에 참가하여 실력을 검증하고 경험을 쌓는 기회를 제공"
     }, {
         IconUrl: giftIcon,
@@ -73,7 +73,7 @@ function Background({ children, image }: { children: React.ReactNode; image?: st
 
 function IconBox({ IconUrl, T1, T2 }: { IconUrl: string, T1: string, T2: string }) {
     return (
-        <div className='flex flex-col border border-white rounded-xl flex-1 max-w-sm mx-auto lg:mx-0 '>
+        <div className='flex flex-col border border-white md:h-[350px] rounded-xl flex-1 max-w-sm mx-auto lg:mx-0 '>
             <div className='p-6 md:p-8 text-center flex flex-col h-full'>
                 <img src={`${IconUrl}`} alt="아이콘" className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] mx-auto mb-4"/>
                 <p className='text-white text-lg md:text-xl lg:text-2xl font-semibold mb-3'>{T1}</p>
