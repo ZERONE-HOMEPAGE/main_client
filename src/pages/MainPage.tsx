@@ -22,7 +22,7 @@ export default function MainPage() {
 
   return (
     <div className="min-w-full h-full flex flex-col">
-      <div className="flex flex-col h-screen -mt-16">
+      <div className="flex flex-col h-screen md:-mt-16">
         {isMobile ? <MobileHero /> : <Hero />}
       </div>
       <div className="min-w-full flex flex-col items-center justify-center">
