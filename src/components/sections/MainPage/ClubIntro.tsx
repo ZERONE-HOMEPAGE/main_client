@@ -5,9 +5,14 @@ import giftIcon from '@/assets/icon/gift.png';
 import { useState } from "react";
 
 export default function ClubIntro() {
-    const Text = {
+    const C_Text = {
         introText: "안녕하세요! 영과일에 오신 것을 환영합니다. 저희 학회는 알고리즘과 프로그래밍에 관심 있는 학생들이 함께 모여 실력을 쌓고 다양한 경험을 나누는 공간입니다. 어려운 문제를 해결하며 얻은 성취감과 동료들과의 협력 속에서 우리는 함께 성장하고 있습니다. 앞으로도 지속적으로 발전하는 학회가 되도록 노력하겠습니다.",
         purposeText: "영과일은 알고리즘 문제 해결을 통해 학문적 깊이를 더하고 실제 대회에서의 성과를 통해 현장 경험을 축적하는 것을 목표로 설립되었습니다. 학회원들은 기초부터 고급 수준까지의 다양한 알고리즘 문제를 풀며 실력을 향상시키고 국내외 대회에서 우수한 성적을 거두는 것을 목표로 하고 있습니다. 학회 활동을 통해 프로그래밍 실력뿐만 아니라 팀워크와 협력의 중요성도 배울 수 있습니다."
+    };
+
+    const M_Text = {
+        introText: "안녕하세요! 영과일에 오신 것을 환영합니다. 저희 학회는 알고리즘과 프로그래밍에 관심 있는 학생들이 모여 실력을 쌓고 다양한 경험을 나누는 공간입니다. 어려운 문제를 함께 해결하며 얻은 성취감 속에서 우리는 성장하고 있습니다. 앞으로도 지속적으로 발전하는 학회가 되겠습니다.",
+        purposeText: "영과일은 알고리즘 문제 해결을 통해 학술적 깊이를 더하고 실제 대회에서의 성과를 통해 현장 경험을 축적하는 것을 목표로 설립되었습니다. 학회원들은 기초부터 고급 수준까지의 다양한 알고리즘 문제를 풀며 실력을 향상시키고 국내외 대회에서 우수한 성적을 거두는 것을 목표로 하고 있습니다. " 
     };
 
     const cards = [{
@@ -30,12 +35,16 @@ export default function ClubIntro() {
         <Background image={background}>
             <div className="px-4 w-full max-w-5xl">
                 <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-white mt-[10vh] mb-6 md:mb-10">학회소개</p>
-                <p className='w-full mx-auto leading-relaxed text-lg md:text-xl font-semibold text-center text-violet-300 mb-8 md:mb-12'>{Text.introText}</p>
+                    
+                <p className='block md:hidden w-full mx-auto leading-relaxed text-lg md:text-xl font-semibold text-center text-violet-300 mb-8 md:mb-12'>{M_Text.introText}</p>
+                <p className='hidden md:block w-full max-w-5xl mx-auto leading-relaxed text-lg md:text-xl font-semibold text-center text-violet-300 mb-8 md:mb-12'>{C_Text.introText}</p>
 
                 <ShadowBox className='w-full'>
                     <div className='p-6 md:p-8 lg:p-10'>
                         <p className='text-2xl md:text-3xl font-bold text-white mb-4 md:mb-6'>설립 목적</p>
-                        <p className='leading-relaxed text-lg md:text-xl font-semibold text-gray-200'>{Text.purposeText}</p>
+
+                        <p className='hidden md:block w-full max-w-5xl leading-relaxed text-lg md:text-xl font-semibold text-gray-200'>{C_Text.purposeText}</p>
+                        <p className='block md:hidden w-full leading-relaxed text-lg md:text-xl font-semibold text-gray-200'>{M_Text.purposeText}</p>
                     </div>
                 </ShadowBox>
 

@@ -62,8 +62,8 @@ export default function StudyIntro() {
         name: "변태반",
         intro:["알고리즘반 이상의 심화 주제에 대한 설명과 문제풀이 위주로 진행"],
         target: "어려운 문제 풀이에서 재미를 느끼는 분, 알고리즘반 수준의 지식을 갖추고 더 어려운 알고리즘을 공부해보고 싶은 분",
-        contents: ["모노톤 큐", "세그먼트 트리", "위상정렬 & DAG DP", "ETT", "LCA", "볼록껍질", "KMP"],
-        mentor: [["김범수", "인공지능학과 · 23학번", "zasc90@hanyang.ac.kr", "변태반 멀리하시고 알골반 사랑해주세요"],]
+        contents: ["모노톤 큐", "세그먼트 트리", "위상정렬 & DAG DP", "ETT/LCA", "볼록껍질", "KMP"],
+        mentor: [["김범수", "인공지능학과 · 24학번", "zasc90@hanyang.ac.kr", "변태반 멀리하시고 알골반 사랑해주세요"],]
     },{
         tabIdx: 5,
         name: "코드포스반",
