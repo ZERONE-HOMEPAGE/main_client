@@ -1,26 +1,31 @@
 # zerone 학회 홈페이지 프론트 레포
+
 > 🎯 영과일 프론트앤드 홈페이지 레포입니다!
 
 ## 🛠️ 기술 스택
+
 - React
 - vite
 - typescript
 - tailwindcss
 
 ## 🚀 개발 환경 설정
+
 ```
 npm install
 npm run dev
 ```
 
 ## ⚙️ 추가 설정 파일
+
 - eslint
 - prettier
 
 ⚠️ **설정 파일은 수정하지 말아주세요.**
 
 📚 추가내용은 노션을 참고하세요
-><https://www.notion.so/0-1-233387bfdae48033a188e649cd1ffe57?source=copy_link>
+
+> <https://www.notion.so/0-1-233387bfdae48033a188e649cd1ffe57?source=copy_link>
 
 ## 💬 Commit 메시지
 
@@ -57,5 +62,3 @@ feat: 로그인 API 연동 기능 추가(#123)
 - **develop**: 주요 개발 브랜치입니다. 각 기능(feature) 브랜치에서 개발이 완료되면 이 브랜치로 merge합니다.
 - **feature/**: 개별 기능 개발을 위한 브랜치입니다. 예: `feature/login`, `feature/main` 등. 개발이 끝나면 develop으로 merge합니다.
 - **hotfix/**: 운영 중 긴급 오류가 발생했을 때 빠르게 수정하기 위한 브랜치입니다. 수정 후 main과 develop에 병합합니다.
-
-

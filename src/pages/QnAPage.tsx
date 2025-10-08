@@ -1,10 +1,10 @@
-import StudyIntro from '@/components/sections/StudyPage/StudyIntro';
+import QnA from '@/components/sections/FaqPage/QnA';
 
-export default function StudyPage() {
+export default function QnAPage() {
   return (
     <div className="flex h-full w-full flex-col">
       <div className="flex w-full flex-col items-center justify-center">
-        <StudyIntro />
+        <QnA />
       </div>
     </div>
   );
