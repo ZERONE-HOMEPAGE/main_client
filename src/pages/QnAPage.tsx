@@ -1,4 +1,4 @@
-import QnA from '@/components/sections/FaqPage/QnA';
+import QnA from '@/components/sections/QnAPage/QnA';
 
 export default function QnAPage() {
   return (
