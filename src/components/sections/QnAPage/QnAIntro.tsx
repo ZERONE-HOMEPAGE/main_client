@@ -1,8 +1,9 @@
 export default function QnAIntro() {
   return (
-    <div>
-      <p className="">Frequntly Asked</p>
-      <p>Questions</p>
+    <div className="flex flex-col justify-center items-start m-10">
+      <p className="text-7xl font-semibold">Frequntly Asked</p>
+      <p className="text-8xl font-semibold">Questions</p>
+      <p>영과일의 활동에 대한 자주 묻는 질문들을 모아둔 공간입니다 <br/> 이곳에서 여러분의 궁금증을 빠르게 해결해보세요</p>
     </div>
   );
 }

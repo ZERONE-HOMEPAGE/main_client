@@ -32,7 +32,7 @@ export default function QnAPage() {
   ];
 
   return (
-    <div className="flex h-full w-full flex-col bg-cyan-100">
+    <div className="flex h-full w-full flex-col px-20">
       <div className="flex w-full justify-between items-center">
         <QnAIntro />
         <div className="flex flex-col">
