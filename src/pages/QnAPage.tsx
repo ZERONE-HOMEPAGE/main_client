@@ -1,9 +1,9 @@
 import QnAIntro from '@/components/sections/QnAPage/QnAIntro';
 import QnABox from '@/components/sections/QnAPage/QnABox';
+import { useCallback } from 'react';
+import { useState } from 'react';
 
-/* flex min-h-[100vh] w-full max-w-5xl flex-col items-center justify-evenly gap-6 px-4 py-8 md:gap-10 bg-[B5A9FF] */
-export default function QnAPage() {
-  const qna = [
+const qna = [
     {
       Question : "스터디는 어떻게 진행되나요?",
       Answer : "영과일에서는 학습 수준에 따라 C기초반, 브릿지반, 알고리즘반 등 다양한 단계의 스터디를 운영하고 있습니다.<br/>각 스터디는 경험 많은 멘토들이 직접 지도하며, 자신의 실력에 맞게 배우고 성장할 수 있는 환경을 제공합니다.()"
@@ -31,6 +31,13 @@ export default function QnAPage() {
     },
   ];
 
+export default function QnAPage() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const handleToggle = useCallback((index: number) => {
+    setActiveIndex((prev) => (prev === index ? null : index));
+  }, []);
+
   return (
     <div className="relative isolate min-h-screen flex h-full w-full flex-col px-20 overflow-hidden">
       <div className="absolute left-[-12%] top-[22%] w-[700px] h-[700px] rounded-full
@@ -44,8 +51,11 @@ export default function QnAPage() {
           {qna.map((QA, key) => (
             <QnABox 
               key={key}
-              Q = {QA.Question}
-              A = {QA.Answer}
+              id={key}
+              Question = {QA.Question}
+              Answer = {QA.Answer}
+              onToggle={handleToggle}
+              isActive={activeIndex === key}
             />
           ))}
         </div>

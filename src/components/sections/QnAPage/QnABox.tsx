@@ -1,38 +1,51 @@
-import UpIcon from "@/assets/icon/UpIcon.png"
-import DownIcon from "@/assets/icon/DownIcon.png"
-import { useState } from "react";
+import DownIcon from "@/assets/icon/DownIcon.png";
 
 interface QnAProps {
-  Q: string;
-  A: string;
+  id: number;
+  Question: string;
+  Answer: string;
+  isActive?: boolean;
+  onToggle?: (id: number) => void;
 }
 
-export default function QnA({ Q, A } : QnAProps ) { 
-  const [open, setOpen] = useState(false);
-  if (A === "") A = "야호"; // 테스트
+export default function QnA({ id, Question, Answer, isActive = false, onToggle, }: QnAProps) {
+  const handleKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onToggle?.(id);
+    }
+  };
 
   return (
-    <div onClick={() => setOpen((prev) => !prev)} className="w-full m-2 bg-white shadow-lg flex flex-col justify-center border border-[#E5E5EC] rounded-lg px-8 py-5 cursor-pointer transition-shadow duration-300 hover:shadow-xl hover:bg-[#F4F0FF]">
+    <div
+      role="button"
+      tabIndex={0}
+      aria-pressed={isActive}
+      onClick={() => onToggle?.(id)}
+      onKeyDown={handleKey}
+      className="w-full m-2 bg-white shadow-lg flex flex-col justify-center border border-[#E5E5EC] rounded-lg px-8 py-5 cursor-pointer transition-shadow duration-300 hover:shadow-xl hover:bg-[#F4F0FF]"
+    >
       <div className="flex w-full justify-between items-center flex-1 break-keep">
-        <p className="text-lg font-semibold">{Q}</p>
+        <p className="text-lg font-semibold">{Question}</p>
         <img
           src={DownIcon}
           alt=""
           className={`w-5 h-5 transition-transform duration-300 ${
-            open ? "rotate-180" : "rotate-0"
+            isActive ? "rotate-180" : "rotate-0"
           }`}
         />
       </div>
 
       <div
         className={`grid transition-[grid-template-rows,gap] duration-100 ease-linear ${
-          open ? "grid-rows-[auto_1fr] gap-4" : "grid-rows-[auto_0fr] gap-0"
-      }`}>
+          isActive ? "grid-rows-[auto_1fr] gap-4" : "grid-rows-[auto_0fr] gap-0"
+        }`}
+      >
         <div className="overflow-hidden transition-opacity duration-700 ease-linear">
-          {open && (
+          {isActive && (
             <>
               <hr className="w-full border-t border-[#E5E5EC] my-4" />
-              <p className="leading-relaxed text-base" dangerouslySetInnerHTML={{ __html: A }}></p>
+              <p className="leading-relaxed text-base text-[#444444]" dangerouslySetInnerHTML={{ __html: Answer }}/> {/* 고정으로 박아넣을거라 위험 x */}
             </>
           )}
         </div>
