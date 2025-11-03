@@ -45,7 +45,13 @@ export default function QnA({ id, Question, Answer, isActive = false, onToggle, 
           {isActive && (
             <>
               <hr className="w-full border-t border-[#E5E5EC] my-4" />
-              <p className="leading-relaxed text-base text-[#444444]" dangerouslySetInnerHTML={{ __html: Answer }}/> {/* 고정으로 박아넣을거라 위험 x */}
+              {Answer.split("'\n'").map((line, index) => (
+                <p
+                  key={index}
+                  className="leading-relaxed text-base text-[#6B6B6B]">
+                  {line}
+              </p>
+               ))}
             </>
           )}
         </div>
