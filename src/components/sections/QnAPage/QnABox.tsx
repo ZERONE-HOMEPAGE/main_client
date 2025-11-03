@@ -6,9 +6,11 @@ interface QnAProps {
   Answer: string;
   isActive?: boolean;
   onToggle?: (id: number) => void;
+  animation?: string
+  delay? : number
 }
 
-export default function QnA({ id, Question, Answer, isActive = false, onToggle, }: QnAProps) {
+export default function QnA({ id, Question, Answer, isActive = false, onToggle, animation, delay }: QnAProps) {
   const handleKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -18,6 +20,8 @@ export default function QnA({ id, Question, Answer, isActive = false, onToggle, 
 
   return (
     <div
+      data-aos = {animation}
+      data-aos-delay={delay}
       role="button"
       tabIndex={0}
       aria-pressed={isActive}
