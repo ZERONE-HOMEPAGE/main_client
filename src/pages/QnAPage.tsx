@@ -2,8 +2,6 @@ import QnAIntro from '@/components/sections/QnAPage/QnAIntro';
 import QnABox from '@/components/sections/QnAPage/QnABox';
 import { useCallback } from 'react';
 import { useState } from 'react';
-import { useEffect } from "react";
-import * as AOS from 'aos';
 import "aos/dist/aos.css";
 
 const qna = [ // 원하는 줄넘김 부분에 '\n'추가 해주십쇼
@@ -42,28 +40,57 @@ export default function QnAPage() {
   }, []);
 
   return (
-    <div className="relative isolate min-h-screen flex h-full w-full flex-col overflow-hidden">
+    <div className="relative isolate min-h-screen flex h-full w-full flex-col">
       {/* Background deco */}
-      <div className="absolute left-[-12%] top-[22%] w-[700px] h-[700px] rounded-full
-                      bg-[#B5A9FF] opacity-40 blur-[140px] z-0" />
-      <div className="absolute left-[20%] top-[6%] w-[500px] h-[500px] rounded-full
-                      bg-[#60A5FA] opacity-40 blur-[150px] z-0" />
+      <div aria-hidden
+           className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute left-[-12%] top-[22%] w-[700px] h-[700px] rounded-full
+                        bg-[#B5A9FF] opacity-40 blur-[140px] z-0" />
+        <div className="absolute left-[20%] top-[6%] w-[500px] h-[500px] rounded-full
+                        bg-[#60A5FA] opacity-40 blur-[150px] z-0" />
+      </div>
 
-      <div className="relative z-10 flex w-full justify-between items-center mt-28 mb-20 px-24">
-        <QnAIntro />
-        <div className="flex flex-col w-1/2 -mr-10">
-          {qna.map((QA, key) => (
-            <QnABox 
-              animation="fade-up"
-              delay={key * 100}
-              key={key}
-              id={key}
-              Question = {QA.Question}
-              Answer = {QA.Answer}
-              onToggle={handleToggle}
-              isActive={activeIndex === key}
-            />
-          ))}
+      <div className="block w-full md:hidden">
+        <div className="flex flex-col">
+          <div className="top-64 self-start">
+            <QnAIntro />
+          </div>
+          <div className="flex flex-col w-full px-10">
+            {qna.map((QA, key) => (
+              <QnABox 
+                animation="fade-up"
+                delay={key * 100}
+                key={key}
+                id={key}
+                Question = {QA.Question}
+                Answer = {QA.Answer}
+                onToggle={handleToggle}
+                isActive={activeIndex === key}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="hidden w-full md:block">
+        <div className="relative z-10 flex w-full justify-between items-center mt-28 mb-20 px-24">
+          <div className="flex-shrink-0 sticky top-64 self-start">
+            <QnAIntro />
+          </div>
+          <div className="flex flex-col w-1/2 -mr-10">
+            {qna.map((QA, key) => (
+              <QnABox 
+                animation="fade-up"
+                delay={key * 100}
+                key={key}
+                id={key}
+                Question = {QA.Question}
+                Answer = {QA.Answer}
+                onToggle={handleToggle}
+                isActive={activeIndex === key}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

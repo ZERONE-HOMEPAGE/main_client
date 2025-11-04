@@ -27,7 +27,7 @@ export default function QnA({ id, Question, Answer, isActive = false, onToggle, 
       aria-pressed={isActive}
       onClick={() => onToggle?.(id)}
       onKeyDown={handleKey}
-      className="w-full m-2 bg-white shadow-lg flex flex-col justify-center border border-[#E5E5EC] rounded-lg px-8 py-5 cursor-pointer transition-shadow duration-300 hover:shadow-xl hover:bg-[#F4F0FF]"
+      className="select-none w-full m-2 bg-white flex flex-col justify-center border border-[#E5E5EC] rounded-lg px-8 py-5 cursor-pointer shadow-lg hover:shadow-xl transition-shadow duration-300 hover:bg-[#F4F0FF]"
     >
       <div className="flex w-full justify-between items-center flex-1 break-keep">
         <p className="text-lg font-semibold">{Question}</p>
@@ -41,11 +41,11 @@ export default function QnA({ id, Question, Answer, isActive = false, onToggle, 
       </div>
 
       <div
-        className={`grid transition-[grid-template-rows,gap] duration-100 ease-linear ${
+        className={`grid transition-[grid-template-rows,gap] duration-100 ease-in ${
           isActive ? "grid-rows-[auto_1fr] gap-4" : "grid-rows-[auto_0fr] gap-0"
         }`}
       >
-        <div className="overflow-hidden transition-opacity duration-700 ease-linear">
+        <div className="overflow-hidden transition-opacity duration-700 ease-in">
           {isActive && (
             <>
               <hr className="w-full border-t border-[#E5E5EC] my-4" />

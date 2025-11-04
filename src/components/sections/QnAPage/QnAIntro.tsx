@@ -1,8 +1,8 @@
 export default function QnAIntro() {
   return (
     <div className="flex flex-col justify-center items-start m-10">
-      <p data-aos="fade-down" className="text-7xl font-semibold my-4">Frequntly Asked</p>
-      <p data-aos="fade-up" className="text-8xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#8B5CF6] to-[#60A5FA] my-4">Questions</p>
+      <p data-aos="fade-down" className="text-7xl font-semibold my-4">Frequently Asked</p>
+      <p data-aos="fade-up" className="text-8xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#8B5CF6] to-[#60A5FA] my-4 -mt-1">Questions</p>
       <p data-aos="fade-right" className="text-xl font-base text-[#6B6B6B]">영과일의 활동에 대한 자주 묻는 질문들을 모아둔 공간입니다 <br/> 이곳에서 여러분의 궁금증을 빠르게 해결해보세요</p>
     </div>
   );
