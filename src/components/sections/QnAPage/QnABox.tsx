@@ -49,13 +49,8 @@ export default function QnA({ id, Question, Answer, isActive = false, onToggle, 
           {isActive && (
             <>
               <hr className="w-full border-t border-[#E5E5EC] my-4" />
-              {Answer.split("'\n'").map((line, index) => (
-                <p
-                  key={index}
-                  className="leading-relaxed text-base text-[#6B6B6B]">
-                  {line}
+                <p className="leading-relaxed text-base text-[#6B6B6B] whitespace-pre-wrap"> {Answer}
               </p>
-               ))}
             </>
           )}
         </div>
