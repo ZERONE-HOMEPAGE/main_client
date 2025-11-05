@@ -8,7 +8,8 @@ import 'swiper/css/pagination';
 import Layout from '@/components/layout/Layout';
 import MainPage from '@/pages/MainPage';
 import StudyPage from '@/pages/StudyPage';
-import NotFound from './pages/NotFoundPage';
+import NotFound from '@/pages/NotFoundPage';
+import LoginPage from '@/pages/LoginPage';
 
 function App() {
   useEffect(() => {
@@ -24,6 +25,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<MainPage />} />
           <Route path="/study" element={<StudyPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
