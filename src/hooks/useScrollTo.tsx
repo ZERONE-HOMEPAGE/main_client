@@ -13,7 +13,7 @@ export default function useScrollTo() {
             const start = window.scrollY;
             const headerHeight = 64; // 헤더 높이
             const target = element.offsetTop - headerHeight;
-            const duration = 800;
+            const duration = 100;
             
             const animateScroll = (currentTime: number, startTime: number) => {
                 const timeElapsed = currentTime - startTime;

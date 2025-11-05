@@ -50,8 +50,11 @@ export default function CompetitionHistory() {
                 </Card>
             </div>
 
-            <p className="w-full text-center font-bold text-sm md:text-lg px-4">
+            <p className="hidden md:block w-full max-w-5xl text-center font-bold text-sm md:text-lg px-4">
                 학회에서는 알고리즘 및 프로그래밍 실력을 향상시키고 우수 인재를 발굴하기 위한 다양한 경진대회를 주최하고 있습니다.<br/> 이러한 경진대회는 참가자들에게 실력을 검증할 기회를 제공할 뿐만 아니라<br/> 학회 차원에서 프로그래밍 학습 문화와 경쟁력을 강화하는 데 기여하고 있습니다.<br/>이를 통해 실전 경험을 쌓고 보다 심화된 문제 해결 능력을 배양할 수 있는 환경이 조성되고 있습니다.
+            </p>
+            <p className="block md:hidden w-full mx-auto text-center font-bold text-sm md:text-lg px-4">
+                학회에서는 알고리즘 및 프로그래밍 실력을 향상시키고 우수 인재를 발굴하기 위한 다양한 경진대회를 주최하고 있습니다.<br/> 이를 통해 실전 경험을 쌓고 보다 심화된 문제 해결 능력을 배양할 수 있는 환경이 조성되고 있습니다.
             </p>
         </div>
     );

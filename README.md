@@ -1,11 +1,11 @@
-# 🎵 zerone 학회 홈페이지 프론트 레포
+# zerone 학회 홈페이지 프론트 레포
 > 🎯 영과일 프론트앤드 홈페이지 레포입니다!
 
 ## 🛠️ 기술 스택
-- ⚛️ React
-- ⚡ vite
-- 📘 typescript
-- 🎨 tailwindcss
+- React
+- vite
+- typescript
+- tailwindcss
 
 ## 🚀 개발 환경 설정
 ```
@@ -14,8 +14,8 @@ npm run dev
 ```
 
 ## ⚙️ 추가 설정 파일
-- 🔍 eslint
-- 💅 prettier
+- eslint
+- prettier
 
 ⚠️ **설정 파일은 수정하지 말아주세요.**
 
