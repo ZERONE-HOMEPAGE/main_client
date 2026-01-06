@@ -1,0 +1,40 @@
+# 1. 빌드 결과물 (이미지 상의 .next, dist 폴더)
+.next/
+dist/
+out/
+build/
+
+# 2. 의존성 (node_modules 폴더)
+node_modules/
+
+# 3. 환경 변수 및 보안 (이미지 상의 .env, .env.local)
+.env
+.env.*
+.env.local
+
+# 4. 이미지 및 정적 자원 (public 폴더 및 각종 이미지)
+public/
+*.png
+*.jpg
+*.jpeg
+*.svg
+*.ico
+*.gif
+
+# 5. 설정 파일 (이미지 상의 다양한 config 파일들)
+# 이 파일들은 프리티어가 강제로 줄바꿈을 하면 문법 오류나 가독성이 깨질 수 있습니다.
+package-lock.json
+*.config.js
+*.config.mjs
+*.config.ts
+tsconfig.json
+tsconfig.app.json
+next-env.d.ts
+
+# 6. Git 및 기타 (이미지 상의 .git-blame-ignore-rev 등)
+.github/
+.vscode/
+.git-blame-ignore-rev
+.gitignore
+.dockerignore
+Dockerfile
