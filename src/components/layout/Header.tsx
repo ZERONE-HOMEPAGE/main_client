@@ -1,5 +1,5 @@
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react';
 
 export default function Header() {
   const [barOpen, setBarOpen] = useState(false);
@@ -52,35 +52,36 @@ export default function Header() {
     <>
       <div
         ref={observerRef}
-        className="absolute top-[100vh] h-px w-full pointer-events-none invisible"
+        className="pointer-events-none invisible absolute top-[100vh] h-px w-full"
       ></div>
-      <header className="sticky top-0 z-50  bg-transparent">
+      <header className="sticky top-0 z-50 bg-transparent">
         <div
-          className={`absolute inset-0 bg-gradient-to-b from-black/95 via-black/50 to-transparent pointer-events-none transition-opacity duration-500 ease-out backdrop-blur ${
+          className={`pointer-events-none absolute inset-0 bg-gradient-to-b from-black/95 via-black/50 to-transparent backdrop-blur transition-opacity duration-500 ease-out ${
             isHeroVisible ? 'opacity-100' : 'opacity-0'
           }`}
         ></div>
         <div
-          className={`absolute inset-0 bg-black pointer-events-none transition-opacity duration-500 ease-out ${
+          className={`pointer-events-none absolute inset-0 bg-black transition-opacity duration-500 ease-out ${
             location.pathname === '/' && isHeroVisible ? 'opacity-0' : 'opacity-100'
           }`}
         ></div>
-        <nav className="flex flex-row md:justify-around justify-between relative text-white items-center px-4 h-16">
+        <nav className="relative flex h-16 flex-row items-center justify-between px-4 text-white md:justify-around">
           <div className="font-semibold">
             <Link to="/">zerone</Link>
           </div>
 
           <div>
-            <ul className="md:flex hidden flex-row space-x-5">
+            <ul className="hidden flex-row space-x-5 md:flex">
               {menuItems.map(({ name, path, external }) => (
                 <li key={name}>
                   {path ? (
                     external ? (
-                      <a href={path}>
-                        {name}
-                      </a>
+                      <a href={path}>{name}</a>
                     ) : (
-                      <NavLink to={path} className={({ isActive }) => (isActive ? 'font-bold' : '')}>
+                      <NavLink
+                        to={path}
+                        className={({ isActive }) => (isActive ? 'font-bold' : '')}
+                      >
                         {name}
                       </NavLink>
                     )
@@ -91,40 +92,37 @@ export default function Header() {
               ))}
             </ul>
             <div>
-              <button className="md:hidden text-xl" onClick={barClick}>
+              <button className="text-xl md:hidden" onClick={barClick}>
                 ☰
               </button>
             </div>
           </div>
           {barOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-40 z-20 " onClick={barClick}></div>
+            <div className="fixed inset-0 z-20 bg-black bg-opacity-40" onClick={barClick}></div>
           )}
           <div
-            className={`fixed top-0 right-0 h-full w-3/5 bg-white z-30 transform ${
+            className={`fixed right-0 top-0 z-30 h-full w-3/5 transform bg-white ${
               barOpen ? 'translate-x-0' : 'translate-x-full'
-            } transition-transform duration-300 ease-in-out text-black `}
+            } text-black transition-transform duration-300 ease-in-out`}
           >
-            <div className="h-16 flex items-center px-7">
+            <div className="flex h-16 items-center px-7">
               <button className="text-xl" onClick={barClick}>
                 ✕
               </button>
             </div>
-            <ul className="flex flex-col space-y-4 p-4 ">
+            <ul className="flex flex-col space-y-4 p-4">
               {menuItems.map(({ name, path, external }) => (
                 <li key={name} onClick={barClick} className="w-full">
                   {path ? (
                     external ? (
-                      <a
-                        href={path}
-                        className="block w-full p-3 rounded"
-                      >
+                      <a href={path} className="block w-full rounded p-3">
                         {name}
                       </a>
                     ) : (
                       <NavLink
                         to={path}
                         className={({ isActive }) =>
-                          'block w-full p-3 rounded ' + (isActive ? 'font-bold' : '')
+                          'block w-full rounded p-3 ' + (isActive ? 'font-bold' : '')
                         }
                       >
                         {name}
