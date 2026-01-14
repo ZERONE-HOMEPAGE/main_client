@@ -31,6 +31,7 @@ export default function StudyIntro() {
     {
       tabIdx: 0,
       name: 'C언어 기초반',
+      tag : 'algorithm',
       intro: [
         'C언어에 대한 이해를 높이고 문제를 통해 적용해보며 학습',
         '직접 코드를 작성해보며 프로그램 동작 원리에 대한 이해',
@@ -46,6 +47,7 @@ export default function StudyIntro() {
     {
       tabIdx: 1,
       name: '브릿지반',
+      tag : 'algorithm',
       intro: [
         '기초반과 자료구조반 사이의 난이도를 다루는 중간 단계',
         '포인터, 재귀함수, 자료구조 등 C언어에서 심화 학습에 필요한 핵심 개념을 다룸',
@@ -59,6 +61,7 @@ export default function StudyIntro() {
     {
       tabIdx: 2,
       name: '자료구조반',
+      tag : 'algorithm',
       intro: [
         '자료구조에 대한 설명과 C++기반 문제풀이 위주 진행',
         'C언어 기초 개념을 알고 있고, 구현이 가능하다는 전제 하에 진행됩니다.',
@@ -74,6 +77,7 @@ export default function StudyIntro() {
     {
       tabIdx: 3,
       name: '알고리즘반',
+      tag : 'algorithm',
       intro: ['C++ 기반 문제풀이에 주로 쓰이는 알고리즘 위주의 문제 해결 및 설명'],
       target:
         '기본적인 자료구조를 알고 있고 코딩테스트에서 주로 나오는 알고리즘을 공부하고 싶으신 분',
@@ -90,6 +94,7 @@ export default function StudyIntro() {
     {
       tabIdx: 4,
       name: '변태반',
+      tag : 'algorithm',
       intro: ['알고리즘반 이상의 심화 주제에 대한 설명과 문제풀이 위주로 진행'],
       target:
         '어려운 문제 풀이에서 재미를 느끼는 분, 알고리즘반 수준의 지식을 갖추고 더 어려운 알고리즘을 공부해보고 싶은 분',
@@ -106,6 +111,7 @@ export default function StudyIntro() {
     {
       tabIdx: 5,
       name: '코드포스반',
+      tag : 'algorithm',
       intro: [
         '이전에 열린 코드포스 대회를 가상 참가하고 codeforces anytime으로 자신의 위치를 확인하는 것을 목표',
       ],
@@ -127,6 +133,34 @@ export default function StudyIntro() {
         ],
       ],
     },
+    {
+      tabIdx: 6,
+      name: '서비스 개발',
+      tag : 'algorithm',
+      intro: [
+        '서비스 개발',
+      ],
+      target: '동열이 정빈이 같은 분',
+      contents: [
+        '서비스 개발',
+        '서비스 개발',
+        '서비스 개발',
+        '서비스 개발',
+        '서비스 개발',
+        '서비스 개발',
+        '서비스 개발',
+        '서비스 개발',
+        '서비스 개발',
+      ],
+      mentor: [
+        [
+          '박하늘별님구름햇님보다사랑스러우리',
+          ' 디지털 콘텐츠 게임 애니메이션 공학부 · 123학번',
+          '1q2w3e4r!@hanyang.ac.kr',
+          '이걸 왜 하지?',
+        ],
+      ],
+    },
   ];
 
   const [activeTabIdx, setActiveTabIdx] = useState<number>(0);
@@ -135,15 +169,12 @@ export default function StudyIntro() {
     <div className="my-20 flex w-full flex-col items-center px-4">
       <h1 className="mb-8 text-3xl font-bold">스터디 소개</h1>
       <PillTab
-        tabElements={[
-          { label: 'C언어 기초반', active: activeTabIdx === 0 },
-          { label: '브릿지반', active: activeTabIdx === 1 },
-          { label: '자료구조반', active: activeTabIdx === 2 },
-          { label: '알고리즘반', active: activeTabIdx === 3 },
-          { label: '변태반', active: activeTabIdx === 4 },
-          { label: '코드포스반', active: activeTabIdx === 5 },
-        ]}
-        clickHandler={(index) => setActiveTabIdx(index)}
+        tabElements={
+          Class.map((data, idx) => ({
+            label : data.name,
+            active : activeTabIdx === idx,
+          }))}
+        clickHandler={(idx) => setActiveTabIdx(idx)}
         activeTabIdx={activeTabIdx}
         textclass="font-semibold"
       />
