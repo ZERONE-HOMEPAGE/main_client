@@ -27,11 +27,6 @@ interface MentorProps {
   Message?: string;
 }
 
-const style = {
-  algorithm: '나중에',
-  development: '나중에', 
-};
-
 export default function StudyIntro() {
   const Class = [
     {
@@ -56,8 +51,8 @@ export default function StudyIntro() {
         [
           '손동열', 
           '컴퓨터학부 · 25학번', 
-          '', 
-          ''
+          'sdy423@hanyang.ac.kr',
+          '멘토도 같이배우는 c언어'
         ],
       ],
     },
@@ -66,23 +61,23 @@ export default function StudyIntro() {
       name: '파이썬 기초반',
       tag : 'algorithm',
       intro: [
-        'C언어에 대한 이해를 높이고 문제를 통해 적용해보며 학습',
+        '파이썬에 대한 이해를 높이고 문제를 통해 적용해보며 학습',
         '직접 코드를 작성해보며 프로그램 동작 원리에 대한 이해',
         '이후에 듣게 될 자료구조나 알고리즘 스터디 대비 및 문제 해결 능력 향상',
       ],
-      target: '프로그래밍이 처음이거나, C언어를 기초부터 배우고 싶으신 분',
+      target: '프로그래밍이 처음이거나, 파이썬를 기초부터 배우고 싶으신 분',
       contents: [
-        '입출력', 
-        '연산자', 
-        '조건문', 
-        '반복문', 
-        '배열', 
-        '함수',
+        '입출력, 자료형, 사칙연산',
+        '조건문과 연산자(비교 및 논리연산자)', 
+        '반복문과 함수', 
+        '리스트, 문자열', 
+        '람다함수, 정렬', 
+        '중첩 반복문, 완전탐색',
       ],
       mentor: [
         [
           '유지성', 
-          '컴퓨터학부 · ##학번', 
+          '컴퓨터학부 · 22학번', 
           '', 
           ''
         ],
@@ -198,15 +193,23 @@ export default function StudyIntro() {
     },
     {
       tabIdx: 6,
-      name: '서비스 개발',
+      name: '홈페이지 스터디',
       tag : 'development',
       intro: [
-        '서비스 개발',
+        '웹 개발 기초부터 실제 배포까지 경험해보는 과정',
+        'HTML/CSS로 웹페이지 만들기부터 JavaScript 동작, GitHub를 통한 배포까지 다룹니다.',
       ],
-      target: '동열이 정빈이 같은 분',
-      contents: [''],
+      target: '웹 개발이 처음이지만 자신만의 웹사이트를 만들어보고 싶으신 분',
+      contents: [
+        'html/css기본',
+        'css심화',
+        'javascript(1)',
+        'javascript(2)',
+        'Open API 맛보기',
+        'GitHub 사용법 및 웹사이트 배포',
+      ],
       mentor: [
-        ['박하늘별님구름햇님보다사랑스러우리', ' 디지털 콘텐츠 게임 애니메이션 공학부 · 123학번', '1q2w3e4r!@hanyang.ac.kr', '이걸 왜 하지?'],
+        ['목정빈', '컴퓨터학부 25학번', 'jbmok66@hanyang.ac.kr', '즐겁게 웹개발 공부해요!'],
       ],
     },
   ] as const;

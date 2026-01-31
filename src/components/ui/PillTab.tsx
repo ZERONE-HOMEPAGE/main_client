@@ -32,9 +32,9 @@ export default function Pill({
         </div>
 
         <div
-          className="absolute top-1 bottom-1 w-32 rounded-3xl bg-white transition-all duration-300 ease-in-out"
+          className="absolute top-0.5 bottom-0.5 w-32 rounded-3xl bg-white transition-all duration-300 ease-in-out"
           style={{
-            left: `calc(${activeTabIdx} * (100% / ${tabElements.length}) + 0.25rem)`
+            left: `calc(${activeTabIdx} * (100% / ${tabElements.length}) + 0.40rem)`
           }}
         />
 
