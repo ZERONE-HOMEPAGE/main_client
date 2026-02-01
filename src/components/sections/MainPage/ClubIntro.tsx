@@ -1,6 +1,5 @@
-import background from '@/assets/images/intro.png';
-import bookIcon from '@/assets/icon/book.png';
 import awardIcon from '@/assets/icon/award.png';
+import bookIcon from '@/assets/icon/book.png';
 import giftIcon from '@/assets/icon/gift.png';
 import { useState } from 'react';
 

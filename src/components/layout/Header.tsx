@@ -1,5 +1,5 @@
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react';
 
 export default function Header() {
   const [barOpen, setBarOpen] = useState(false);

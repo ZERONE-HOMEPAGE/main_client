@@ -1,4 +1,10 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from '@/components/layout/Layout';
+import LoginPage from '@/pages/LoginPage';
+import MainPage from '@/pages/MainPage';
+import NotFound from '@/pages/NotFoundPage';
+import StudyPage from '@/pages/StudyPage';
+import * as AOS from 'aos';
+import 'aos/dist/aos.css';
 import { useEffect } from 'react';
 import * as AOS from 'aos';
 import 'aos/dist/aos.css';
