@@ -4,7 +4,7 @@ import HomeIcon from '@/assets/icon/home.png';
 import LineIcon from '@/assets/icon/line.png';
 import MailIcon from '@/assets/icon/mail.png';
 import UserIcon from '@/assets/icon/user.png';
-import PillTab from '@/components/ui/PillTab';
+import PillTab_study from '@/components/ui/PillTab_study';
 import { useState } from 'react';
 
 interface CheckTextProps {
@@ -219,7 +219,7 @@ export default function StudyIntro() {
   return (
     <div className="my-20 flex w-full flex-col items-center px-4">
       <h1 className="mb-8 text-3xl font-bold">스터디 소개</h1>
-      <PillTab
+      <PillTab_study
         tabElements={
           Class.map((data, idx) => ({
             label : data.name,
