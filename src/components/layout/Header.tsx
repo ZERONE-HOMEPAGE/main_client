@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
+import NewButton from '../ui/NewButton';
 
 export default function Header() {
   const [barOpen, setBarOpen] = useState(false);
@@ -16,8 +17,7 @@ export default function Header() {
     { name: '게시판', path: null },
     { name: '컴파일러', path: 'https://zerone01.kr/compiler', external: true },
     { name: 'Q&A', path: null },
-    { name: '로그인', path: '/login' },
-    //로그인 페이지 연결 임시 처리 -> 버튼 컴포넌트 필요
+    { name: '로그인', path: '/login', isButton: true },
   ];
 
   useEffect(() => {
@@ -74,9 +74,15 @@ export default function Header() {
 
           <div>
             <ul className="hidden flex-row space-x-5 md:flex">
-              {menuItems.map(({ name, path, external }) => (
+              {menuItems.map(({ name, path, external, isButton }: any) => (
                 <li key={name}>
-                  {path ? (
+                  {isButton ? (
+                    <NavLink to={path}>
+                      <NewButton variant="default" size="sm">
+                        {name}
+                      </NewButton>
+                    </NavLink>
+                  ) : path ? (
                     external ? (
                       <a href={path}>{name}</a>
                     ) : (
@@ -113,9 +119,15 @@ export default function Header() {
               </button>
             </div>
             <ul className="flex flex-col space-y-4 p-4">
-              {menuItems.map(({ name, path, external }) => (
+              {menuItems.map(({ name, path, external, isButton }: any) => (
                 <li key={name} onClick={barClick} className="w-full">
-                  {path ? (
+                  {isButton ? (
+                    <NavLink to={path} className="block w-full">
+                      <NewButton variant="default" size="md" className="w-full">
+                        {name}
+                      </NewButton>
+                    </NavLink>
+                  ) : path ? (
                     external ? (
                       <a href={path} className="block w-full rounded p-3">
                         {name}
