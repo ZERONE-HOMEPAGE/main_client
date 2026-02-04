@@ -1,6 +1,6 @@
-type NewButtonProps = {
+type ActionButtonProps = {
   children: React.ReactNode;
-  variant?: 'default' | 'outline' | 'ghost';
+  variant?: 'primary' | 'secondary';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   onClick?: () => void;
@@ -9,9 +9,8 @@ type NewButtonProps = {
 
 const styles = {
   variant: {
-    default: 'bg-blue-500 text-white hover:bg-blue-600',
-    outline: 'border border-blue-500 text-blue-500 hover:bg-blue-50',
-    ghost: 'text-blue-500 hover:bg-blue-100',
+    primary: 'bg-zerone text-white hover:bg-opacity-80 transition-all',
+    secondary: 'bg-[#1E2025] text-[#98989C] hover:bg-opacity-80 transition-all',
   },
   size: {
     sm: 'px-2 py-1 text-sm',
@@ -21,17 +20,17 @@ const styles = {
   disabled: 'opacity-50 cursor-not-allowed',
 };
 
-export default function NewButton({
+export default function ActionButton({
   children,
-  variant = 'default',
+  variant = 'primary',
   size = 'md',
   disabled = false,
   onClick,
   className,
-}: NewButtonProps) {
+}: ActionButtonProps) {
   return (
     <button
-      className={`${styles.variant[variant]} ${styles.size[size]} ${disabled ? styles.disabled : ''} rounded-lg transition-colors ${className}`}
+      className={`${styles.variant[variant]} ${styles.size[size]} ${disabled ? styles.disabled : ''} rounded-xl transition-colors ${className}`}
       onClick={onClick}
       disabled={disabled}
     >

@@ -1,6 +1,7 @@
 import googleLogo from '@/assets/icon/googleLogo.svg';
 import logo from '@/assets/icon/logo.png';
-import NewButton from '@/components/ui/NewButton';
+import ActionButton from '@/components/ui/ActionButton';
+
 
 export default function LoginPage() {
   const handleGoogleLogin = () => {
@@ -13,7 +14,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-4">
-      <div className="flex flex-col  gap-20">
+      <div className="flex w-full max-w-lg flex-col gap-20">
         {/* zerone 로고 */}
         <div className="flex flex-col items-center gap-4">
           
@@ -25,24 +26,24 @@ export default function LoginPage() {
         </div>
 
         {/* 로그인/회원가입 버튼 */}
-        <div className="w-full max-w-sm space-y-3">
-          <NewButton
-            variant="default"
+        <div className="w-full max-w-sm md:max-w-md space-y-3 flex flex-col justify-center mx-auto">
+          <ActionButton
+            variant="primary"
             size="lg"
             onClick={handleGoogleLogin}
             className="w-full flex items-center justify-center gap-3"
           >
             <img src={googleLogo} alt="Google" className="h-5 w-5" />
             <span>Google 계정으로 로그인</span>
-          </NewButton>
-          <NewButton
-            variant="outline"
+          </ActionButton>
+          <ActionButton
+            variant="secondary"
             size="lg"
             onClick={handleSignup}
             className="w-full"
           >
             회원가입
-          </NewButton>
+          </ActionButton>
         </div>
       </div>
 
