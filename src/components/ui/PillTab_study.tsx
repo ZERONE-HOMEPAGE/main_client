@@ -2,39 +2,30 @@ export default function PillTab_study({
   tabElements,
   clickHandler,
   activeTabIdx,
-  textclass
+  textclass,
 }: {
   tabElements: { label: string; active: boolean; tag: string }[];
   clickHandler: (index: number) => void;
   activeTabIdx: number;
   textclass?: string;
 }) {
-  const algorithmCount = tabElements.filter(
-    (el) => el.tag === 'algorithm'
-  ).length;
+  const algorithmCount = tabElements.filter((el) => el.tag === 'algorithm').length;
 
   const developCount = tabElements.length - algorithmCount;
 
   return (
     <>
       {/* Desktop */}
-      <div className="relative hidden h-12 overflow-hidden rounded-3xl md:flex">
-
+      <div className="relative hidden h-12 overflow-hidden rounded-3xl lg:flex">
         <div className="absolute inset-0 flex">
-          <div
-            className="bg-[#E0D7F1]"
-            style={{ flex: algorithmCount }}
-          />
-          <div
-            className="bg-[#C7CDF8]"
-            style={{ flex: developCount }}
-          />
+          <div className="bg-[#E0D7F1]" style={{ flex: algorithmCount }} />
+          <div className="bg-[#C7CDF8]" style={{ flex: developCount }} />
         </div>
 
         <div
-          className="absolute top-0.5 bottom-0.5 w-32 rounded-3xl bg-white transition-all duration-300 ease-in-out"
+          className="absolute bottom-1 top-1 w-32 rounded-3xl bg-white transition-all duration-300 ease-in-out"
           style={{
-            left: `calc(${activeTabIdx} * (100% / ${tabElements.length}) + 0.40rem)`
+            left: `calc(${activeTabIdx} * (100% / ${tabElements.length}) + 0.6rem)`,
           }}
         />
 
@@ -43,7 +34,7 @@ export default function PillTab_study({
             <button
               key={index}
               onClick={() => clickHandler(index)}
-              className="w-32 py-2 text-center bg-transparent"
+              className="w-32 bg-transparent py-2 text-center"
             >
               <p className={textclass}>{element.label}</p>
             </button>
@@ -52,7 +43,7 @@ export default function PillTab_study({
       </div>
 
       {/* Mobile */}
-      <div className="relative md:hidden">
+      <div className="relative lg:hidden">
         <select
           value={activeTabIdx}
           onChange={(e) => clickHandler(Number(e.target.value))}
@@ -66,18 +57,8 @@ export default function PillTab_study({
         </select>
 
         <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </div>
       </div>
