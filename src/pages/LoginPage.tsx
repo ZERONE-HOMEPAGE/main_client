@@ -33,7 +33,6 @@ export default function LoginPage() {
             onClick={handleGoogleLogin}
             className="w-full flex items-center justify-center gap-3"
           >
-            <img src={googleLogo} alt="Google" className="h-5 w-5" />
             <span>Google 계정으로 로그인</span>
           </ActionButton>
           <ActionButton
