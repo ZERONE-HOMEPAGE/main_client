@@ -24,7 +24,7 @@ jobs:
         run: npm run build
 
       - name: Upload dist
-        uses: burnett01/rsync-deployments@v7.0.1
+        uses: burnett01/rsync-deployments@v8
         with:
           switches: -avzr --delete
           path: dist/
