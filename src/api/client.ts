@@ -1,7 +1,7 @@
 import axios, { type AxiosRequestConfig } from 'axios';
 
 export const client = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
   withCredentials: true, // httpOnly 쿠키(refreshToken) 자동 전송
   headers: {
@@ -58,7 +58,7 @@ client.interceptors.response.use(
     try {
       // refreshToken은 httpOnly 쿠키로 자동 전송됨
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/refresh`,
+        `${import.meta.env.VITE_API_BASE_URL}/auth/refresh`,
         {},
         { withCredentials: true },
       );
@@ -73,7 +73,8 @@ client.interceptors.response.use(
       };
       return client(originalRequest);
     } catch {
-      // 갱신 실패 → 로그아웃 처리
+      // 갱신 실패 → 대기열 정리 후 로그아웃 처리
+      pendingRequests = [];
       sessionStorage.removeItem('accessToken');
       window.location.href = '/login';
       return Promise.reject(error);
