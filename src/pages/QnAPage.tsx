@@ -56,12 +56,16 @@ export default function QnAPage() {
         <div className="absolute left-[20%] top-[6%] z-0 h-[500px] w-[500px] rounded-full bg-[#60A5FA] opacity-40 blur-[150px]" />
       </div>
 
-      <div className="block w-full md:hidden">
+      <div className="block w-full lg:hidden">
         <div className="mx-10 flex flex-col items-center justify-evenly">
           <div className="mt-20">
-            <QnAIntro className_F="text-6xl" className_Q="text-7xl" className_t="text-base" />
+            <QnAIntro
+              className_F="text-2xl md:text-6xl"
+              className_Q="text-5xl md:text-7xl"
+              className_t="text-base"
+            />
           </div>
-          <div className="mb-40 flex w-full flex-col px-10">
+          <div className="flex w-full flex-col md:px-10">
             {qna.map((QA, key) => (
               <QnABox
                 animation="fade-right"
@@ -78,7 +82,7 @@ export default function QnAPage() {
         </div>
       </div>
 
-      <div className="hidden w-full md:block">
+      <div className="hidden w-full lg:block">
         <div className="relative z-10 mb-20 mt-10 flex w-full items-center justify-between px-24">
           <div className="sticky top-64 flex-shrink-0 self-start">
             <QnAIntro />
