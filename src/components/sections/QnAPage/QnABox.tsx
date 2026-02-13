@@ -1,4 +1,4 @@
-import DownIcon from "@/assets/icon/DownIcon.png";
+import DownIcon from '@/assets/icon/DownIcon.png';
 
 interface QnAProps {
   id: number;
@@ -6,13 +6,21 @@ interface QnAProps {
   Answer: string;
   isActive?: boolean;
   onToggle?: (id: number) => void;
-  animation?: string
-  delay? : number
+  animation?: string;
+  delay?: number;
 }
 
-export default function QnA({ id, Question, Answer, isActive = false, onToggle, animation, delay }: QnAProps) {
+export default function QnA({
+  id,
+  Question,
+  Answer,
+  isActive = false,
+  onToggle,
+  animation,
+  delay,
+}: QnAProps) {
   const handleKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter" || e.key === " ") {
+    if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       onToggle?.(id);
     }
@@ -20,36 +28,38 @@ export default function QnA({ id, Question, Answer, isActive = false, onToggle, 
 
   return (
     <div
-      data-aos = {animation}
+      data-aos={animation}
       data-aos-delay={delay}
       role="button"
       tabIndex={0}
       aria-pressed={isActive}
       onClick={() => onToggle?.(id)}
       onKeyDown={handleKey}
-      className="select-none w-full m-2 bg-white flex flex-col justify-center border border-[#E5E5EC] rounded-lg px-8 py-5 cursor-pointer shadow-lg hover:shadow-xl transition-shadow duration-300 hover:bg-[#F4F0FF]"
+      className="m-2 flex w-full cursor-pointer select-none flex-col justify-center rounded-lg border border-[#E5E5EC] bg-white px-8 py-5 shadow-lg transition-shadow duration-300 hover:bg-[#F4F0FF] hover:shadow-xl"
     >
-      <div className="flex w-full justify-between items-center flex-1 break-keep">
+      <div className="flex w-full flex-1 items-center justify-between break-keep">
         <p className="text-lg font-semibold">{Question}</p>
         <img
           src={DownIcon}
           alt=""
-          className={`w-5 h-5 transition-transform duration-300 ${
-            isActive ? "rotate-180" : "rotate-0"
+          className={`h-5 w-5 transition-transform duration-300 ${
+            isActive ? 'rotate-180' : 'rotate-0'
           }`}
         />
       </div>
 
       <div
         className={`grid transition-[grid-template-rows,gap] duration-100 ease-in ${
-          isActive ? "grid-rows-[auto_1fr] gap-4" : "grid-rows-[auto_0fr] gap-0"
+          isActive ? 'grid-rows-[auto_1fr] gap-4' : 'grid-rows-[auto_0fr] gap-0'
         }`}
       >
         <div className="overflow-hidden transition-opacity duration-700 ease-in">
           {isActive && (
             <>
-              <hr className="w-full border-t border-[#E5E5EC] my-4" />
-                <p className="leading-relaxed text-base text-[#6B6B6B] whitespace-pre-wrap"> {Answer}
+              <hr className="my-4 w-full border-t border-[#E5E5EC]" />
+              <p className="whitespace-pre-wrap text-base leading-relaxed text-[#6B6B6B]">
+                {' '}
+                {Answer}
               </p>
             </>
           )}
