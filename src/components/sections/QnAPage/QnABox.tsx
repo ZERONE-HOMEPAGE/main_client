@@ -38,7 +38,7 @@ export default function QnA({
       className="m-2 flex w-full cursor-pointer select-none flex-col justify-center rounded-lg border border-[#E5E5EC] bg-white px-8 py-5 shadow-lg transition-shadow duration-300 hover:bg-[#F4F0FF] hover:shadow-xl"
     >
       <div className="flex w-full flex-1 items-center justify-between break-keep">
-        <p className="text-lg font-semibold">{Question}</p>
+        <p className="text-md font-semibold md:text-lg">{Question}</p>
         <img
           src={DownIcon}
           alt=""
