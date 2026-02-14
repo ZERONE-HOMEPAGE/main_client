@@ -24,12 +24,13 @@ export default function LoginPage() {
         {/* 로그인/회원가입 버튼 */}
         <div className="mx-auto flex w-full max-w-sm flex-col justify-center space-y-3 md:max-w-md">
           <ActionButton
-            variant="primary"
+            variant="google"
             size="lg"
             onClick={handleGoogleLogin}
             className="flex w-full items-center justify-center gap-3"
           >
-            Google 계정으로 로그인
+            <img src="/src/assets/icon/googleLogo.svg" alt="Google 로고" className="h-6 w-6" />
+            <span>Google 계정으로 로그인</span>
           </ActionButton>
           <ActionButton variant="secondary" size="lg" onClick={handleSignup} className="w-full">
             회원가입
