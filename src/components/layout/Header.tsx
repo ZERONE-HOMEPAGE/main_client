@@ -16,6 +16,8 @@ export default function Header() {
     { name: '게시판', path: null },
     { name: '컴파일러', path: 'https://zerone01.kr/compiler', external: true },
     { name: 'Q&A', path: null },
+    { name: '로그인', path: '/login' },
+    //로그인 페이지 연결 임시 처리
   ];
 
   useEffect(() => {
@@ -30,6 +32,12 @@ export default function Header() {
   }, [barOpen]);
 
   useEffect(() => {
+    // 메인 페이지일 때만 observer 작동
+    if (location.pathname !== '/') {
+      setIsHeroVisible(false);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsHeroVisible(entry.isIntersecting);
@@ -46,7 +54,7 @@ export default function Header() {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [location.pathname]);
 
   return (
     <>
@@ -56,14 +64,14 @@ export default function Header() {
       ></div>
       <header className="sticky top-0 z-50 bg-transparent">
         <div
-          className={`pointer-events-none absolute inset-0 bg-gradient-to-b from-black/95 via-black/50 to-transparent backdrop-blur transition-opacity duration-500 ease-out ${
-            isHeroVisible ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`pointer-events-none absolute inset-0 bg-gradient-to-b from-black/95 via-black/50 to-transparent backdrop-blur ${
+            location.pathname !== '/' ? '' : 'transition-opacity duration-500 ease-out'
+          } ${isHeroVisible ? 'opacity-100' : 'opacity-0'}`}
         ></div>
         <div
-          className={`pointer-events-none absolute inset-0 bg-black transition-opacity duration-500 ease-out ${
-            location.pathname === '/' && isHeroVisible ? 'opacity-0' : 'opacity-100'
-          }`}
+          className={`pointer-events-none absolute inset-0 bg-black ${
+            location.pathname !== '/' ? '' : 'transition-opacity duration-500 ease-out'
+          } ${location.pathname === '/' && isHeroVisible ? 'opacity-0' : 'opacity-100'}`}
         ></div>
         <nav className="relative flex h-16 flex-row items-center justify-between px-4 text-white md:justify-around">
           <div className="font-semibold">
