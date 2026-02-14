@@ -1,7 +1,6 @@
-import useScrollTo from '@/hooks/useScrollTo';
+import { scrollDown } from '@/utils/scroll';
 
 export default function ScrollDownBtn() {
-  const { scrollDown } = useScrollTo();
   return (
     <div className="pointer-events-none absolute bottom-10 left-0 right-0 flex justify-center">
       <div
