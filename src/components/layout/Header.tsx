@@ -17,7 +17,7 @@ export default function Header() {
     { name: '컴파일러', path: 'https://zerone01.kr/compiler', external: true },
     { name: 'Q&A', path: null },
     { name: '로그인', path: '/login' },
-    //로그인 페이지 연결 임시 처리 -> 버튼 컴포넌트 필요
+    //로그인 페이지 연결 임시 처리
   ];
 
   useEffect(() => {
