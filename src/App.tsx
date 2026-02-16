@@ -26,8 +26,10 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/study" element={<StudyPage />} />
           <Route path="/QnA" element={<QnAPage />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/example" element={<ExamplePage />} />
         </Route>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

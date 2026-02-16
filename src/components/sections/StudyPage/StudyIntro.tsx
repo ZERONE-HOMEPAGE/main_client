@@ -1,10 +1,10 @@
-import PillTab from '@/components/ui/PillTab';
-import { useState } from 'react';
-import CheckIcon from '@/assets/icon/CheckIcon.png';
+import Check_algo from '@/assets/icon/CheckIcon_algo.png';
+import Check_dev from '@/assets/icon/CheckIcon_dev.png';
+import HomeIcon from '@/assets/icon/home.png';
 import LineIcon from '@/assets/icon/line.png';
 import UserIcon from '@/assets/icon/user.png';
-import HomeIcon from '@/assets/icon/home.png';
-import MailIcon from '@/assets/icon/mail.png';
+import PillTab_study from '@/components/ui/PillTab_study';
+import { useState } from 'react';
 
 interface CheckTextProps {
   text: string;
@@ -31,6 +31,7 @@ export default function StudyIntro() {
     {
       tabIdx: 0,
       name: 'C언어 기초반',
+      tag: 'algorithm',
       intro: [
         'C언어에 대한 이해를 높이고 문제를 통해 적용해보며 학습',
         '직접 코드를 작성해보며 프로그램 동작 원리에 대한 이해',
@@ -39,73 +40,91 @@ export default function StudyIntro() {
       target: '프로그래밍이 처음이거나, C언어를 기초부터 배우고 싶으신 분',
       contents: ['입출력', '연산자', '조건문', '반복문', '배열', '함수'],
       mentor: [
-        ['남동우', '컴퓨터학부 · 23학번', 'askska1002@naver.com', '화이팅'],
-        ['김예림', '컴퓨터학부 · 24학번', 'yerim2298@hanyang.ac.kr', '화이팅!'],
+        ['손동열', '컴퓨터학부 · 25학번', 'sdy423@hanyang.ac.kr', '멘토도 같이배우는 c언어'],
       ],
     },
     {
       tabIdx: 1,
-      name: '브릿지반',
+      name: '파이썬 기초반',
+      tag: 'algorithm',
       intro: [
-        '기초반과 자료구조반 사이의 난이도를 다루는 중간 단계',
-        '포인터, 재귀함수, 자료구조 등 C언어에서 심화 학습에 필요한 핵심 개념을 다룸',
+        '파이썬에 대한 이해를 높이고 문제를 통해 적용해보며 학습',
+        '직접 코드를 작성해보며 프로그램 동작 원리에 대한 이해',
+        '이후에 듣게 될 자료구조나 알고리즘 스터디 대비 및 문제 해결 능력 향상',
       ],
-      target: 'C언어에서 함수와 다차원 배열을 모두 다뤄보신 분',
-      contents: ['포인터', '다차원 배열 복습', '재귀함수', '구조체'],
-      mentor: [
-        ['김재민', '컴퓨터학부 · 21학번', 'jaemkim01@hanyang.ac.kr', '코딩으로 먹고 살기 힘들다'],
+      target: '프로그래밍이 처음이거나, 파이썬를 기초부터 배우고 싶으신 분',
+      contents: [
+        '입출력, 자료형, 사칙연산',
+        '조건문과 연산자(비교 및 논리연산자)',
+        '반복문과 함수',
+        '리스트, 문자열',
+        '람다함수, 정렬',
+        '중첩 반복문, 완전탐색',
       ],
+      mentor: [['유지성', '컴퓨터학부 · 22학번', '', '']],
     },
     {
       tabIdx: 2,
-      name: '자료구조반',
+      name: '브릿지반',
+      tag: 'algorithm',
       intro: [
-        '자료구조에 대한 설명과 C++기반 문제풀이 위주 진행',
-        'C언어 기초 개념을 알고 있고, 구현이 가능하다는 전제 하에 진행됩니다.',
+        '기초에서 자료구조로 넘어가기 전에 C 핵심 개념을 정리하는 단계',
+        '포인터, 재귀함수, 자료구조 등 C언어에서 심화 학습에 필요한 핵심 개념을 다룸',
       ],
-      target:
-        '배열을 이용한 구현이 가능한 분 또는 본인이 자료구조에 대한 이해가 부족하다고 생각하시는 분',
-      contents: ['C++ STL', '스택', '큐', '그래프', '트리'],
+      target: 'C언어 문법은 배웠지만, 포인터와 메모리 개념을 더 확실히 잡고 싶은 분',
+      contents: [
+        '포인터(1)',
+        '포인터(2)',
+        '다차원 배열 복습',
+        '재귀함수',
+        '구조체',
+        '메모리 동적 할당',
+      ],
       mentor: [
-        ['김동건', 'ICT융합학부 · 23학번', 'fir3work72@gmail.com', 'PS 재밌어요 같이 하실래요?'],
-        ['신경현', '컴퓨터학부 · 23학번', 'tlsrudgus0501@hanyang.ac.kr', '화이팅!'],
+        [
+          '정다혜',
+          '컴퓨터학부 · 24학번',
+          'dahye8724@hanyang.ac.kr',
+          '편하게 와서 실력 다지고 올라가요',
+        ],
       ],
     },
     {
       tabIdx: 3,
-      name: '알고리즘반',
-      intro: ['C++ 기반 문제풀이에 주로 쓰이는 알고리즘 위주의 문제 해결 및 설명'],
-      target:
-        '기본적인 자료구조를 알고 있고 코딩테스트에서 주로 나오는 알고리즘을 공부하고 싶으신 분',
-      contents: ['완전탐색', '이분탐색', '백트래킹', '분할정복', '동적계획법', '그리디'],
+      name: '자료구조반',
+      tag: 'algorithm',
+      intro: [
+        '자료구조에 대한 설명과 C++기반 문제풀이 위주 진행',
+        'C언어 기초 개념을 알고 있고, 구현이 가능하다는 전제 하에 진행됩니다.',
+      ],
+      target: 'C언어에서 함수와 다차원 배열을 모두 다뤄보신 분',
+      contents: ['c++, stl', '스택 큐 덱', 'map, set', '그래프', '트리', '우선순위 큐'],
       mentor: [
+        ['김예림', '컴퓨터학부 · 24학번', 'yerim2298@hanyang.ac.kr', '같이 성장하는 자료구조반!'],
         [
-          '이준호',
-          '수리데이터사이언스과 · 21학번',
-          'rhdqor213@gmail.com',
-          '알골반 멀리하시고 변태반 사랑해주세요',
+          '신경현',
+          '컴퓨터학부 · 23학번',
+          'tlsrudgus0501@hanyang.ac.kr',
+          '풍물 동아리 탈 많은 관심 부탁드려요!',
         ],
       ],
     },
     {
       tabIdx: 4,
-      name: '변태반',
-      intro: ['알고리즘반 이상의 심화 주제에 대한 설명과 문제풀이 위주로 진행'],
+      name: '알고리즘반',
+      tag: 'algorithm',
+      intro: ['C++ 기반 문제풀이에 주로 쓰이는 알고리즘 위주의 문제 해결 및 설명'],
       target:
-        '어려운 문제 풀이에서 재미를 느끼는 분, 알고리즘반 수준의 지식을 갖추고 더 어려운 알고리즘을 공부해보고 싶은 분',
-      contents: ['모노톤 큐', '세그먼트 트리', '위상정렬 & DAG DP', 'ETT/LCA', '볼록껍질', 'KMP'],
+        '기본적인 자료구조를 알고 있고 코딩테스트에서 주로 나오는 알고리즘을 공부하고 싶으신 분',
+      contents: ['완전탐색', '그래프 탐색', '백트래킹', '그리디', '동적계획법', '최단경로'],
       mentor: [
-        [
-          '김범수',
-          '인공지능학과 · 24학번',
-          'zasc90@hanyang.ac.kr',
-          '변태반 멀리하시고 알골반 사랑해주세요',
-        ],
+        ['곽용민', '컴퓨터학부 · 23학번', 'dydals1004@hanyang.ac.kr', '좋은 여러분들과 좋은 PS'],
       ],
     },
     {
       tabIdx: 5,
       name: '코드포스반',
+      tag: 'algorithm',
       intro: [
         '이전에 열린 코드포스 대회를 가상 참가하고 codeforces anytime으로 자신의 위치를 확인하는 것을 목표',
       ],
@@ -119,31 +138,42 @@ export default function StudyIntro() {
         '코드포스 대회진행(6)',
       ],
       mentor: [
-        [
-          '이준호',
-          '수리데이터사이언스과 · 21학번',
-          'rhdqor213@gmail.com',
-          '혼자보다 같이 할 때 더 재미있습니다!',
-        ],
+        ['곽용민', 'ICT융합학부 · 23학번', 'fir3work72@gmail.com', 'PS 재밌어요 같이 하실래요?'],
       ],
     },
-  ];
+    {
+      tabIdx: 6,
+      name: '웹개발 스터디',
+      tag: 'development',
+      intro: [
+        '웹 개발 기초부터 실제 배포까지 경험해보는 과정',
+        'HTML/CSS로 웹페이지 만들기부터 JavaScript 동작, GitHub를 통한 배포까지 다룹니다.',
+      ],
+      target: '웹 개발이 처음이지만 자신만의 웹사이트를 만들어보고 싶으신 분',
+      contents: [
+        'html/css기본',
+        'css심화',
+        'javascript(1)',
+        'javascript(2)',
+        'Open API 맛보기',
+        'GitHub 사용법 및 웹사이트 배포',
+      ],
+      mentor: [['목정빈', '컴퓨터학부 25학번', 'jbmok66@hanyang.ac.kr', '즐겁게 웹개발 공부해요!']],
+    },
+  ] as const;
 
   const [activeTabIdx, setActiveTabIdx] = useState<number>(0);
 
   return (
     <div className="my-20 flex w-full flex-col items-center px-4">
       <h1 className="mb-8 text-3xl font-bold">스터디 소개</h1>
-      <PillTab
-        tabElements={[
-          { label: 'C언어 기초반', active: activeTabIdx === 0 },
-          { label: '브릿지반', active: activeTabIdx === 1 },
-          { label: '자료구조반', active: activeTabIdx === 2 },
-          { label: '알고리즘반', active: activeTabIdx === 3 },
-          { label: '변태반', active: activeTabIdx === 4 },
-          { label: '코드포스반', active: activeTabIdx === 5 },
-        ]}
-        clickHandler={(index) => setActiveTabIdx(index)}
+      <PillTab_study
+        tabElements={Class.map((data, idx) => ({
+          label: data.name,
+          active: activeTabIdx === idx,
+          tag: data.tag,
+        }))}
+        clickHandler={(idx) => setActiveTabIdx(idx)}
         activeTabIdx={activeTabIdx}
         textclass="font-semibold"
       />
@@ -160,8 +190,8 @@ export default function StudyIntro() {
               text={introText}
               divClassName="m-2"
               iconClassName="w-6 h-6"
-              textClassName="text-lg text-[#9747FF] font-semibold max-w-7xl"
-              iconSrc={CheckIcon}
+              textClassName={`text-lg ${item.tag === 'algorithm' ? 'text-[#9747FF]' : 'text-[#5F5CFF]'} font-semibold max-w-7xl`}
+              iconSrc={item.tag === 'algorithm' ? Check_algo : Check_dev}
             />
           ))}
           <div className="mt-5 w-full self-center rounded-lg bg-[#EBEBEB] p-6">
