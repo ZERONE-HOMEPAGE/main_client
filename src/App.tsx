@@ -9,7 +9,9 @@ import Layout from '@/components/layout/Layout';
 import MainPage from '@/pages/MainPage';
 import StudyPage from '@/pages/StudyPage';
 import QnAPage from '@/pages/QnAPage';
-import NotFound from './pages/NotFoundPage';
+import NotFound from '@/pages/NotFoundPage';
+import ExamplePage from '@/pages/ExamplePage';
+import LoginPage from '@/pages/LoginPage';
 
 function App() {
   useEffect(() => {

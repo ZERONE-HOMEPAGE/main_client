@@ -4,6 +4,7 @@ import HomeIcon from '@/assets/icon/home.png';
 import LineIcon from '@/assets/icon/line.png';
 import UserIcon from '@/assets/icon/user.png';
 import PillTab_study from '@/components/ui/PillTab_study';
+import MailIcon from '@/assets/icon/mail.png';
 import { useState } from 'react';
 
 interface CheckTextProps {
