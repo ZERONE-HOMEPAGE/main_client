@@ -15,7 +15,7 @@ export default function Header() {
     { name: '활동', path: null },
     { name: '게시판', path: null },
     { name: '컴파일러', path: 'https://zerone01.kr/compiler', external: true },
-    { name: 'Q&A', path: null },
+    { name: 'Q&A', path: '/QnA' },
     { name: '로그인', path: '/login' },
     //로그인 페이지 연결 임시 처리
   ];
