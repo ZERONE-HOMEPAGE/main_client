@@ -1,5 +1,7 @@
 import logo from '@/assets/icon/logo.png';
 import ActionButton from '@/components/ui/ActionButton';
+import GoogleLogo from '@/assets/icon/googleLogo.svg';
+
 
 export default function LoginPage() {
   const handleGoogleLogin = () => {
@@ -29,7 +31,7 @@ export default function LoginPage() {
             onClick={handleGoogleLogin}
             className="flex w-full items-center justify-center gap-3"
           >
-            <img src="/src/assets/icon/googleLogo.svg" alt="Google 로고" className="h-6 w-6" />
+            <img src={GoogleLogo} alt="Google 로고" className="h-6 w-6" />
             <span>Google 계정으로 로그인</span>
           </ActionButton>
           <ActionButton variant="secondary" size="lg" onClick={handleSignup} className="w-full">
