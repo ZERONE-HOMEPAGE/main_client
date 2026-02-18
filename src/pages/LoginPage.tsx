@@ -1,13 +1,12 @@
 import logo from '@/assets/icon/logo.png';
 import ActionButton from '@/components/ui/ActionButton';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const handleGoogleLogin = () => {
-    alert('로그인 로직 아직없음');
-  };
-
-  const handleSignup = () => {
-    alert('회원가입 로직 아직없음');
+    alert('로그인 실패');
+    navigate('/signup');
   };
 
   return (
@@ -30,9 +29,6 @@ export default function LoginPage() {
             className="flex w-full items-center justify-center gap-3"
           >
             Google 계정으로 로그인
-          </ActionButton>
-          <ActionButton variant="secondary" size="lg" onClick={handleSignup} className="w-full">
-            회원가입
           </ActionButton>
         </div>
       </div>

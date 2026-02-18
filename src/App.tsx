@@ -1,5 +1,6 @@
 import Layout from '@/components/layout/Layout';
 import LoginPage from '@/pages/LoginPage';
+import SignupPage from '@/pages/SignupPage';
 import MainPage from '@/pages/MainPage';
 import NotFound from '@/pages/NotFoundPage';
 import StudyPage from '@/pages/StudyPage';
@@ -28,6 +29,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
       </Routes>
     </BrowserRouter>
   );
