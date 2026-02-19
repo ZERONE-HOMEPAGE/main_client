@@ -1,15 +1,42 @@
 import logo from '@/assets/icon/logo.png';
 import ActionButton from '@/components/ui/ActionButton';
 import GoogleLogo from '@/assets/icon/googleLogo.svg';
+import { useLogin } from '@/hooks/useLogin';
 
-import { useNavigate } from 'react-router-dom';
+import { decodeIdToken } from '@/api/Auth/useAuth';
+import { initGoogleLogin } from '@/api/Google/useGoogle';
+import { Parsing } from '@/api/Auth/parse';
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-  const handleGoogleLogin = () => {
-    alert('로그인 실패');
-    navigate('/signup');
-  };
+  const { mutate: loginMutate } = useLogin();
+
+  initGoogleLogin({
+    clientId: '914755238439-2qnng7skka6nme7jq6j24ko8qafrs4sc.apps.googleusercontent.com',
+    callback: (idToken) => {
+      if (!idToken) return alert('id_token 없음');
+
+      const payload = decodeIdToken(idToken);
+      if (!payload) return alert('id_token 디코딩 실패');
+
+      const user = Parsing(payload.name);
+
+      // 이벤트 안에서 mutate 호출
+      loginMutate(
+        { idToken },
+        {
+          onSuccess: (res) => {
+            console.log('액세스 토큰:', res.accessToken);
+            localStorage.setItem('accessToken', res.accessToken);
+
+            alert(`이름: ${user?.name}\n학과: ${user?.major}\n이메일: ${payload.email}`);
+          },
+          onError: (err) => {
+            console.error(err);
+          },
+        },
+      );
+    },
+  });
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-4">
@@ -27,7 +54,7 @@ export default function LoginPage() {
           <ActionButton
             variant="google"
             size="lg"
-            onClick={handleGoogleLogin}
+            onClick={() => (window as any).google.accounts.id.prompt()}
             className="flex w-full items-center justify-center gap-3"
           >
             <img src={GoogleLogo} alt="Google 로고" className="h-6 w-6" />

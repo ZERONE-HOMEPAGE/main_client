@@ -12,6 +12,7 @@ import QnAPage from '@/pages/QnAPage';
 import NotFound from '@/pages/NotFoundPage';
 import ExamplePage from '@/pages/ExamplePage';
 import LoginPage from '@/pages/LoginPage';
+import SignupPage from '@/pages/SignupPage';
 
 function App() {
   useEffect(() => {
