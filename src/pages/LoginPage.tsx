@@ -1,5 +1,7 @@
 import logo from '@/assets/icon/logo.png';
 import ActionButton from '@/components/ui/ActionButton';
+import GoogleLogo from '@/assets/icon/googleLogo.svg';
+
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
@@ -23,12 +25,13 @@ export default function LoginPage() {
         {/* 로그인/회원가입 버튼 */}
         <div className="mx-auto flex w-full max-w-sm flex-col justify-center space-y-3 md:max-w-md">
           <ActionButton
-            variant="primary"
+            variant="google"
             size="lg"
             onClick={handleGoogleLogin}
             className="flex w-full items-center justify-center gap-3"
           >
-            Google 계정으로 로그인
+            <img src={GoogleLogo} alt="Google 로고" className="h-6 w-6" />
+            <span>Google 계정으로 로그인</span>
           </ActionButton>
         </div>
       </div>

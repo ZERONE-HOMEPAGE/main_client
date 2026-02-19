@@ -12,7 +12,7 @@ export default {
         },
       },
       animation: {
-        'swing': 'swing 1s ease-in-out infinite',
+        swing: 'swing 1s ease-in-out infinite',
       },
       keyframes: {
         swing: {
@@ -23,5 +23,4 @@ export default {
     },
   },
   plugins: [],
-}
-
+};

@@ -1,16 +1,17 @@
-import Layout from '@/components/layout/Layout';
-import LoginPage from '@/pages/LoginPage';
-import SignupPage from '@/pages/SignupPage';
-import MainPage from '@/pages/MainPage';
-import NotFound from '@/pages/NotFoundPage';
-import StudyPage from '@/pages/StudyPage';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import * as AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEffect } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import Layout from '@/components/layout/Layout';
+import MainPage from '@/pages/MainPage';
+import StudyPage from '@/pages/StudyPage';
+import QnAPage from '@/pages/QnAPage';
+import NotFound from '@/pages/NotFoundPage';
+import ExamplePage from '@/pages/ExamplePage';
+import LoginPage from '@/pages/LoginPage';
 
 function App() {
   useEffect(() => {
@@ -26,10 +27,12 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<MainPage />} />
           <Route path="/study" element={<StudyPage />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/QnA" element={<QnAPage />} />
+          <Route path="/example" element={<ExamplePage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

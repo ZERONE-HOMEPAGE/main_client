@@ -1,6 +1,6 @@
 type ActionButtonProps = {
   children: React.ReactNode;
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'google';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   onClick?: () => void;
@@ -11,6 +11,7 @@ const styles = {
   variant: {
     primary: 'bg-zerone text-white hover:bg-opacity-80 transition-all',
     secondary: 'bg-[#1E2025] text-[#98989C] hover:bg-opacity-80 transition-all',
+    google: 'bg-[#F5F5F5] text-black',
   },
   size: {
     sm: 'px-2 py-1 text-sm',

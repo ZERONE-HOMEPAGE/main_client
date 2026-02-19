@@ -1,5 +1,5 @@
-import logo from '@/assets/icon/logo.png';
 import Button from '@/components/ui/Button';
+import logo from '@/assets/icon/logo.png';
 import ScrollDownBtn from '@/components/ui/ScrollDownBtn';
 
 export default function MobileHero() {
