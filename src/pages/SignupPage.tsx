@@ -2,17 +2,35 @@ import ActionButton from '@/components/ui/ActionButton';
 import Dropdown from '@/components/ui/Dropdown';
 import Input from '@/components/ui/Input';
 import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useUserInfo } from '@/hooks/useDecode';
+import { useSignup } from '@/hooks/useSignup';
 
 export default function SignupPage() {
-  // 상태
+  const location = useLocation();
+  const navigate = useNavigate();
+  const preset_info = useUserInfo();
+  const { mutate: SignupMutate } = useSignup();
+
+  // 상태 (request body순으로 정렬)
+  const idToken = (location.state as { idToken?: string })?.idToken;
+  const [Name, setName] = useState<string>(preset_info.name);
   const [Sid, setSid] = useState<string>('');
-  const [Name, setName] = useState<string>('');
-  const [BJ_id, setBJ_id] = useState<string>('');
-  const [Phone, setPhone] = useState<string>('');
-  const [College, setCollege] = useState<string>('');
   const [Major, setMajor] = useState<string>('');
+  const [Phone, setPhone] = useState<string>('');
+  const [BJ_id, setBJ_id] = useState<string>('');
+
+  const [College, setCollege] = useState<string>('');
   const [isEtc, setIsEtc] = useState<boolean>(false);
 
+  // error
+  const [emailError, setEmailError] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [sidError, setSidError] = useState<string>('');
+  const [majorError, setMajorError] = useState<string>('');
+  const [phoneError, setPhoneError] = useState<string>('');
+
+  // 단과대 목록
   const collegeOptions = [
     '공학대학',
     '소프트웨어융합대학',
@@ -24,7 +42,7 @@ export default function SignupPage() {
     '디자인대학',
     '예체능대학',
     'LIONS칼리지',
-    '기타', // 추가
+    '기타(직접 입력)',
   ];
 
   // 드롭다운 내용
@@ -78,7 +96,7 @@ export default function SignupPage() {
     ],
   };
 
-  // 학과 → 단과대 역추적 함수
+  // college inverse choojeock
   function findCollegeByMajor(major: string) {
     for (const college in departmentMap) {
       if (departmentMap[college].includes(major)) return college;
@@ -86,9 +104,9 @@ export default function SignupPage() {
     return null;
   }
 
-  // server chogigap
+  // server chogi value
   useEffect(() => {
-    const serverMajor = '전자공학부'; // exx
+    const serverMajor = preset_info.major;
     const college = findCollegeByMajor(serverMajor);
 
     if (college) {
@@ -103,21 +121,50 @@ export default function SignupPage() {
   }, []);
 
   // handler
-  const EventHandler = () => {
-    alert(`
-    이름: ${Name}
-    학번: ${Sid}
-    BJ ID: ${BJ_id}
-    전화번호: ${Phone}
-    단과대: ${College}
-    학과: ${Major}
-    `);
+  const handleSubmit = () => {
+    if (!idToken) {
+      console.log('not have idToken (/signup)');
+      navigate('/login'); // idToken x
+      return;
+    }
+    if (!validateFields()) return; // 필드검사
+    SignupMutate(
+      {
+        idToken: idToken,
+        studentId: Sid,
+        name: Name,
+        email: preset_info.email,
+        department: Major,
+        phoneNumber: Phone,
+        baekjoonId: BJ_id,
+      },
+      {
+        onSuccess: (data) => {
+          console.log('succ');
+          navigate('/');
+        },
+        onError: (err: any) => {
+          const data = err.response?.data || err;
+          if (data?.code === '400') {
+            // 필드누락
+            if (Name === '') setNameError('이름을 기입해주세요.');
+            if (Sid === '') setSidError('학번을 기입해주세요.');
+            if (Sid.length !== 10) setSidError('학번은 총 10자리 입니다.');
+            if (Phone === '') setPhoneError('전화번호를 기입해주세요.');
+            if (Phone.length !== 11) setPhoneError('전화번호 11자리를 기입해주세요.');
+            if (Major === '') setMajorError('학과를 선택(입력)해주세요.');
+          } else {
+            console.error('회원가입 실패:', data?.message || err.message);
+          }
+        },
+      },
+    );
   };
 
   const handleCollegeChange = (college: string) => {
     setCollege(college);
     setMajor('');
-    setIsEtc(college === '기타'); // 기타 선택 시 Input으로 전환
+    setIsEtc(college === '기타'); //
   };
 
   const handleNumberOnly_Phone = (value: string) => {
@@ -128,6 +175,47 @@ export default function SignupPage() {
     setSid(value.replace(/[^0-9]/g, ''));
   };
 
+  // field검사
+  const validateFields = () => {
+    let valid = true;
+
+    if (!Name) {
+      setNameError('이름을 기입해주세요.');
+      valid = false;
+    } else {
+      setNameError('');
+    }
+
+    if (!Sid) {
+      setSidError('학번을 기입해주세요.');
+      valid = false;
+    } else if (Sid.length !== 10) {
+      setSidError('학번은 총 10자리 입니다.');
+      valid = false;
+    } else {
+      setSidError('');
+    }
+
+    if (!Phone) {
+      setPhoneError('전화번호를 기입해주세요.');
+      valid = false;
+    } else if (Phone.length !== 11) {
+      setPhoneError('전화번호 11자리를 기입해주세요.');
+      valid = false;
+    } else {
+      setPhoneError('');
+    }
+
+    if (!Major) {
+      setMajorError('학과를 선택(입력)해주세요.');
+      valid = false;
+    } else {
+      setMajorError('');
+    }
+
+    return valid;
+  };
+
   return (
     <div className="flex h-full h-screen w-full flex-col items-center bg-black">
       <div className="max-w-5xl flex-col items-center bg-black px-4 py-32">
@@ -135,49 +223,62 @@ export default function SignupPage() {
         <p className="mt-2 text-xl text-[#9CA3AF]">한양대학교 이메일로만 가입할 수 있습니다.</p>
 
         <div className="mt-8 flex-col gap-2">
+          {/* Name and Baekjoon ID */}
           <div className="flex flex-row flex-wrap justify-center md:gap-8">
-            <InputBox title="이름" value={Name} placeholder="써라" Change={setName} />
+            <InputBox
+              title="이름"
+              value={Name}
+              placeholder="써라"
+              errormessage={nameError}
+              Change={setName}
+            />
             <InputBox title="백준 아이디" value={BJ_id} placeholder="써라" Change={setBJ_id} />
           </div>
 
+          {/* Student ID and Phone NUmber */}
           <div className="flex flex-row flex-wrap justify-center md:gap-8">
             <InputBox
               title="학번"
               value={Sid}
               placeholder="ex) 2026012345"
+              errormessage={sidError}
               Change={handleNumberOnly_SID}
             />
             <InputBox
               title="전화번호"
               value={Phone}
               placeholder="ex) 01012345458"
+              errormessage={phoneError}
               Change={handleNumberOnly_Phone}
             />
           </div>
 
+          {/* College and Major */}
           <div className="flex flex-row flex-wrap justify-center md:gap-8">
             <DropDown
               title="단과대"
               value={College}
               placeholder="선택하세요"
-              onChange={handleCollegeChange}
               label={collegeOptions}
+              onChange={handleCollegeChange}
             />
 
             {isEtc ? (
               <InputBox
                 title="학과"
                 value={Major}
-                Change={setMajor}
                 placeholder="학과를 입력해주세요"
+                errormessage={majorError}
+                Change={setMajor}
               />
             ) : (
               <DropDown
                 title="학과"
                 value={Major}
                 placeholder="선택하세요"
-                onChange={setMajor}
                 label={College ? departmentMap[College] : []}
+                errormessage={majorError}
+                onChange={setMajor}
               />
             )}
           </div>
@@ -187,7 +288,7 @@ export default function SignupPage() {
           <ActionButton
             variant="primary"
             size="lg"
-            onClick={EventHandler}
+            onClick={handleSubmit}
             className="flex justify-center"
           >
             제출하기
@@ -203,6 +304,7 @@ interface inputbox {
   title: string;
   value: string;
   placeholder: string;
+  errormessage?: string;
   Change: (value: string) => void;
 }
 
@@ -211,23 +313,33 @@ interface dropbox {
   value: string;
   placeholder: string;
   label: string[];
+  errormessage?: string;
   onChange: (value: string) => void;
 }
 
-function InputBox({ title, value, placeholder, Change }: inputbox) {
+function InputBox({ title, value, placeholder, errormessage = '', Change }: inputbox) {
+  if (errormessage === '') errormessage = 'NULL';
   return (
-    <div className="mb-4 flex min-w-80 flex-col gap-1">
+    <div className="mb-1 flex min-w-80 flex-col gap-1">
       <p className="text-lg text-white">{title}</p>
       <Input value={value} onChange={Change} placeholder={placeholder} />
+      <p className={`text-md ${errormessage === 'NULL' ? 'text-black' : 'text-[#AE4345]'}`}>
+        {errormessage}
+      </p>
     </div>
   );
 }
 
-function DropDown({ title, value, placeholder, label, onChange }: dropbox) {
+// 얜 왜 누웠냐
+function DropDown({ title, value, placeholder, label, errormessage = '', onChange }: dropbox) {
+  if (errormessage === '') errormessage = 'NULL';
   return (
     <div className="flex min-w-80 flex-col gap-1">
       <p className="text-lg text-white">{title}</p>
       <Dropdown lists={label} value={value} placeholder={placeholder} onChange={onChange} />
+      <p className={`text-md ${errormessage === 'NULL' ? 'text-black' : 'text-[#AE4345]'}`}>
+        {errormessage}
+      </p>
     </div>
   );
 }

@@ -24,7 +24,7 @@ export default function Dropdown({ lists, value, placeholder, onChange, disabled
         type="button"
         onClick={handleToggle}
         disabled={disabled}
-        className={`w-full rounded-md px-3 py-2 text-left text-white ${disabled ? 'cursor-not-allowed bg-gray-500' : 'bg-[#1E2025]'} `}
+        className={`w-full rounded-md px-3 py-2 text-left ${selectedLabel === '선택하세요' ? 'text-[#6B7280]' : 'text-white'} ${disabled ? 'cursor-not-allowed bg-gray-500' : 'bg-[#1E2025]'} `}
       >
         {selectedLabel}
       </button>

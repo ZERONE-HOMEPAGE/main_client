@@ -3,9 +3,7 @@ import ActionButton from '@/components/ui/ActionButton';
 import GoogleLogo from '@/assets/icon/googleLogo.svg';
 import { useLogin } from '@/hooks/useLogin';
 
-import { decodeIdToken } from '@/api/Auth/useAuth';
 import { initGoogleLogin } from '@/api/Google/useGoogle';
-import { Parsing } from '@/api/Auth/parse';
 
 export default function LoginPage() {
   const { mutate: loginMutate } = useLogin();
@@ -13,22 +11,14 @@ export default function LoginPage() {
   initGoogleLogin({
     clientId: '914755238439-2qnng7skka6nme7jq6j24ko8qafrs4sc.apps.googleusercontent.com',
     callback: (idToken) => {
-      if (!idToken) return alert('id_token 없음');
-
-      const payload = decodeIdToken(idToken);
-      if (!payload) return alert('id_token 디코딩 실패');
-
-      const user = Parsing(payload.name);
-
-      // 이벤트 안에서 mutate 호출
+      if (!idToken) return console.log('id_token 없음');
       loginMutate(
         { idToken },
         {
           onSuccess: (res) => {
-            console.log('액세스 토큰:', res.accessToken);
+            //console.log('액세스 토큰:', res.accessToken);
+            //console.log('idToken(login):', idToken);
             localStorage.setItem('accessToken', res.accessToken);
-
-            alert(`이름: ${user?.name}\n학과: ${user?.major}\n이메일: ${payload.email}`);
           },
           onError: (err) => {
             console.error(err);

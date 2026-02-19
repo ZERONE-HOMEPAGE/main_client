@@ -4,7 +4,7 @@ interface User {
   school: string;
 }
 
-export function Parsing(account_name: string): User | null {
+export function parsing(account_name: string): User | null {
   try {
     const words = account_name.split('|').map((p) => p.trim());
     if (words.length !== 3) return null;
