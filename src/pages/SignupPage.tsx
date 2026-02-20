@@ -6,6 +6,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useUserInfo } from '@/hooks/useDecode';
 import { useSignup } from '@/hooks/useSignup';
 
+interface SignupState {
+  idToken: string;
+  Phone: string;
+}
+
 export default function SignupPage() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -13,18 +18,17 @@ export default function SignupPage() {
   const { mutate: SignupMutate } = useSignup();
 
   // 상태 (request body순으로 정렬)
-  const idToken = (location.state as { idToken?: string })?.idToken;
+  const { idToken, Phone } = (location.state as SignupState) ?? {};
   const [Name, setName] = useState<string>(preset_info.name);
   const [Sid, setSid] = useState<string>('');
   const [Major, setMajor] = useState<string>('');
-  const [Phone, setPhone] = useState<string>('');
+  const [PhoneNumber, setPhone] = useState<string>(Phone);
   const [BJ_id, setBJ_id] = useState<string>('');
 
   const [College, setCollege] = useState<string>('');
   const [isEtc, setIsEtc] = useState<boolean>(false);
 
   // error
-  const [emailError, setEmailError] = useState('');
   const [nameError, setNameError] = useState('');
   const [sidError, setSidError] = useState<string>('');
   const [majorError, setMajorError] = useState<string>('');
@@ -123,7 +127,7 @@ export default function SignupPage() {
   // handler
   const handleSubmit = () => {
     if (!idToken) {
-      console.log('not have idToken (/signup)');
+      console.log('idToken이 존재하지않습니다. \n로그인화면으로 이동합니다.');
       navigate('/login'); // idToken x
       return;
     }
@@ -135,26 +139,16 @@ export default function SignupPage() {
         name: Name,
         email: preset_info.email,
         department: Major,
-        phoneNumber: Phone,
+        phoneNumber: PhoneNumber,
         baekjoonId: BJ_id,
       },
       {
         onSuccess: (data) => {
-          console.log('succ');
           navigate('/');
         },
         onError: (err: any) => {
-          const data = err.response?.data || err;
-          if (data?.code === '400') {
-            // 필드누락
-            if (Name === '') setNameError('이름을 기입해주세요.');
-            if (Sid === '') setSidError('학번을 기입해주세요.');
-            if (Sid.length !== 10) setSidError('학번은 총 10자리 입니다.');
-            if (Phone === '') setPhoneError('전화번호를 기입해주세요.');
-            if (Phone.length !== 11) setPhoneError('전화번호 11자리를 기입해주세요.');
-            if (Major === '') setMajorError('학과를 선택(입력)해주세요.');
-          } else {
-            console.error('회원가입 실패:', data?.message || err.message);
+          if (err.status === 409) {
+            setSidError('이미 등록된 학번입니다.');
           }
         },
       },
@@ -164,7 +158,7 @@ export default function SignupPage() {
   const handleCollegeChange = (college: string) => {
     setCollege(college);
     setMajor('');
-    setIsEtc(college === '기타'); //
+    setIsEtc(college === '기타');
   };
 
   const handleNumberOnly_Phone = (value: string) => {
@@ -196,10 +190,10 @@ export default function SignupPage() {
       setSidError('');
     }
 
-    if (!Phone) {
+    if (!PhoneNumber) {
       setPhoneError('전화번호를 기입해주세요.');
       valid = false;
-    } else if (Phone.length !== 11) {
+    } else if (PhoneNumber.length !== 11) {
       setPhoneError('전화번호 11자리를 기입해주세요.');
       valid = false;
     } else {
@@ -228,11 +222,11 @@ export default function SignupPage() {
             <InputBox
               title="이름"
               value={Name}
-              placeholder="써라"
+              placeholder="ex)홍길동"
               errormessage={nameError}
               Change={setName}
             />
-            <InputBox title="백준 아이디" value={BJ_id} placeholder="써라" Change={setBJ_id} />
+            <InputBox title="백준 아이디" value={BJ_id} placeholder="(선택)" Change={setBJ_id} />
           </div>
 
           {/* Student ID and Phone NUmber */}
@@ -246,7 +240,7 @@ export default function SignupPage() {
             />
             <InputBox
               title="전화번호"
-              value={Phone}
+              value={PhoneNumber}
               placeholder="ex) 01012345458"
               errormessage={phoneError}
               Change={handleNumberOnly_Phone}

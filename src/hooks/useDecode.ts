@@ -2,9 +2,14 @@ import { useLocation } from 'react-router-dom';
 import { decodeIdToken } from '@/api/Auth/useAuth';
 import { parsing } from '@/api/Util/useParse';
 
+interface SignupState {
+  idToken: string;
+  Phone: string;
+}
+
 export function useUserInfo() {
   const location = useLocation();
-  const idToken = (location.state as { idToken?: string })?.idToken;
+  const { idToken, Phone } = (location.state as SignupState) ?? {};
   if (!idToken) {
     return {
       idToken: '',
