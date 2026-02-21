@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
-import { decodeIdToken } from '@/api/Auth/useAuth';
-import { parsing } from '@/api/Util/useParse';
+import { decodeIdToken } from '@/utils/Decode';
+import { parsing } from '@/utils/Parse';
 
 interface SignupState {
   idToken: string;

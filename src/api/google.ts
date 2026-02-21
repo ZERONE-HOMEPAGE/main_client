@@ -1,4 +1,4 @@
-import { GoogleCredentialResponse, InitGoogleLoginOptions, GoogleWindow } from './type';
+import { GoogleCredentialResponse, InitGoogleLoginOptions, GoogleWindow } from '../types/Google';
 
 export function initGoogleLogin({ clientId, callback }: InitGoogleLoginOptions) {
   const google = (window as unknown as GoogleWindow).google;

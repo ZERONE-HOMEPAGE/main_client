@@ -1,4 +1,4 @@
-// login types
+// login types 미사용
 export interface LoginRequest {
   idToken: string;
 }
@@ -24,10 +24,10 @@ export interface SignupResponse {
   status: string;
 }
 
-// SSO types
-export type SSOstep = 'LOGIN_SUCCESS' | 'LOGIN_BLOCKED' | 'NEED_PHONE';
+// LoginV2 types
+export type LoginV2step = 'LOGIN_SUCCESS' | 'LOGIN_BLOCKED' | 'NEED_PHONE';
 
-export interface SSOSuccess {
+export interface LoginV2Success {
   step: 'LOGIN_SUCCESS';
   accessToken: string;
   refreshToken: string;
@@ -36,24 +36,24 @@ export interface SSOSuccess {
   };
 }
 
-export interface SSOBlocked {
+export interface LoginV2Blocked {
   step: 'LOGIN_BLOCKED';
   status: string;
   message: string;
 }
 
-export interface SSONeed {
+export interface LoginV2Need {
   step: 'NEED_PHONE';
   email: string;
 }
 
-export type SSOResponse = SSOSuccess | SSOBlocked | SSONeed;
+export type LoginV2Response = LoginV2Success | LoginV2Blocked | LoginV2Need;
 
 // migration types
 export interface MigrationRequest {
   idToken: string;
   phoneNumber: string;
-  studentId: string;
+  studentId?: string;
   baekjoonId?: string;
 }
 

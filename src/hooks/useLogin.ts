@@ -1,13 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { singleLogin } from '@/api/Auth/useAuth';
-import type { SSOResponse, LoginRequest } from '@/api/Auth/type';
+import { loginV2 } from '@/api/auth';
+import type { LoginV2Response, LoginRequest } from '@/types/Auth';
 
 export const useLogin = () => {
   const navigate = useNavigate();
 
-  return useMutation<SSOResponse, Error, LoginRequest>({
-    mutationFn: (body) => singleLogin(body),
+  return useMutation<LoginV2Response, Error, LoginRequest>({
+    mutationFn: (body) => loginV2(body),
 
     onSuccess: (data) => {
       // 성공
@@ -29,7 +29,14 @@ export const useLogin = () => {
         );
     },
     onError: (err: any) => {
-      console.error('/auth/google 실패했습니다. \n error:', err);
+      if (err.status === 403) {
+        console.log(
+          '/auth/google 실패했습니다. \n상태: 학교이메일이 아니거나 활성화상태가 아닙니다. \nerror:',
+          err,
+        );
+      } else {
+        console.error('/auth/google 실패했습니다. \nerror:', err);
+      }
     },
   });
 };

@@ -1,5 +1,5 @@
-import { LookupError, LookupRequest, LookupResponse } from '@/api/Auth/type';
-import { lookup } from '@/api/Auth/useAuth';
+import { LookupError, LookupRequest, LookupResponse } from '@/types/Auth';
+import { lookup } from '@/api/auth';
 import { useMutation } from '@tanstack/react-query';
 import {} from 'axios';
 

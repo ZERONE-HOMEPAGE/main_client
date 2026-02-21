@@ -1,6 +1,6 @@
 import ActionButton from '@/components/ui/ActionButton';
 import Dropdown from '@/components/ui/Dropdown';
-import Input from '@/components/ui/Input';
+import InputBox from '@/components/ui/InputBox';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUserInfo } from '@/hooks/useDecode';
@@ -244,6 +244,7 @@ export default function SignupPage() {
               placeholder="ex) 01012345458"
               errormessage={phoneError}
               Change={handleNumberOnly_Phone}
+              isLock={true}
             />
           </div>
 
@@ -294,14 +295,6 @@ export default function SignupPage() {
 }
 
 // minimini component
-interface inputbox {
-  title: string;
-  value: string;
-  placeholder: string;
-  errormessage?: string;
-  Change: (value: string) => void;
-}
-
 interface dropbox {
   title: string;
   value: string;
@@ -311,20 +304,6 @@ interface dropbox {
   onChange: (value: string) => void;
 }
 
-function InputBox({ title, value, placeholder, errormessage = '', Change }: inputbox) {
-  if (errormessage === '') errormessage = 'NULL';
-  return (
-    <div className="mb-1 flex min-w-80 flex-col gap-1">
-      <p className="text-lg text-white">{title}</p>
-      <Input value={value} onChange={Change} placeholder={placeholder} />
-      <p className={`text-md ${errormessage === 'NULL' ? 'text-black' : 'text-[#AE4345]'}`}>
-        {errormessage}
-      </p>
-    </div>
-  );
-}
-
-// 얜 왜 누웠냐
 function DropDown({ title, value, placeholder, label, errormessage = '', onChange }: dropbox) {
   if (errormessage === '') errormessage = 'NULL';
   return (

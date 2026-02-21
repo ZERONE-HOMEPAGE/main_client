@@ -1,5 +1,5 @@
-import { SignupResponse, SignupRequest } from '@/api/Auth/type';
-import { signup } from '@/api/Auth/useAuth';
+import { SignupResponse, SignupRequest } from '@/types/Auth';
+import { signup } from '@/api/auth';
 import { useMutation } from '@tanstack/react-query';
 
 export const useSignup = () => {

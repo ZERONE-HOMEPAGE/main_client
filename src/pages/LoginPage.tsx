@@ -4,9 +4,10 @@ import logo from '@/assets/icon/logo.png';
 import ActionButton from '@/components/ui/ActionButton';
 import InputModal from '@/components/ui/InputModal';
 import GoogleLogo from '@/assets/icon/googleLogo.svg';
-import { initGoogleLogin } from '@/api/Google/useGoogle';
+import { initGoogleLogin } from '@/api/google';
 import { useLogin } from '@/hooks/useLogin';
 import { useLookup } from '@/hooks/useLookup';
+import { LookupMigrationFound } from '@/types/Auth';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -71,9 +72,11 @@ export default function LoginPage() {
         },
         {
           onSuccess: (res) => {
-            // 매칭됨 => mygration
+            // 매칭됨 => migration
             if (res.step === 'MIGRATION_FOUND') {
-              navigate('/mygration', { state: { idToken, res } });
+              const needSid = res.needsBaekjoonId;
+              const needBjid = res.needsBaekjoonId;
+              navigate('/migration', { state: { idToken, Phone, needSid, needBjid } });
             }
             // 매칭안됨 => signup
             else {
