@@ -57,7 +57,7 @@ export default function MygrationPage() {
     if (!validateFields()) return; // 필드검사)
 
     migrationMutate(body, {
-      onSuccess: (data) => {
+      onSuccess: (_data) => {
         navigate('/');
       },
       onError: (err) => {

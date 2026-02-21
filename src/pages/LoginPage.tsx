@@ -7,7 +7,6 @@ import GoogleLogo from '@/assets/icon/googleLogo.svg';
 import { initGoogleLogin } from '@/api/google';
 import { useLogin } from '@/hooks/useLogin';
 import { useLookup } from '@/hooks/useLookup';
-import { LookupMigrationFound } from '@/types/Auth';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -83,7 +82,7 @@ export default function LoginPage() {
               navigate('/signup', { state: { idToken, Phone } });
             }
           },
-          onError: (err) => {
+          onError: (_err) => {
             setPhoneError('이미 다른 구글 계정과 연동된 전화번호입니다. 관리자에게 문의해주세요.');
           },
         },

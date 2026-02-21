@@ -6,7 +6,7 @@ export const useSignup = () => {
   return useMutation<SignupResponse, Error, SignupRequest>({
     mutationFn: async (body) => signup(body),
 
-    onSuccess: (data) => {
+    onSuccess: (_data) => {
       console.log(
         '/auth/register 성공했습니다. \n상태: 학회비 미납상태 \n회원가입요청이 완료되었습니다.',
       );

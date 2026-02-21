@@ -144,7 +144,7 @@ export default function SignupPage() {
         baekjoonId: BJ_id,
       },
       {
-        onSuccess: (data) => {
+        onSuccess: (_data) => {
           navigate('/');
         },
         onError: (err: any) => {
