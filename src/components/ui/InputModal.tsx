@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 interface InputModalProps {
   isOpen: boolean;
   value: string;

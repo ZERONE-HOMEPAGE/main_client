@@ -9,7 +9,7 @@ interface SignupState {
 
 export function useUserInfo() {
   const location = useLocation(); // loacte에 의존하여 코드가 작동하여 훅으로 넣었습니다.
-  const { idToken, Phone } = (location.state as SignupState) ?? {}; // location 받기용 Phone (사용 x)
+  const { idToken } = (location.state as SignupState) ?? {}; // location 받기용 Phone (사용 x)
   if (!idToken) {
     return {
       idToken: '',
