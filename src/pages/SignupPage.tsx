@@ -132,6 +132,7 @@ export default function SignupPage() {
       return;
     }
     if (!validateFields()) return; // 필드검사
+
     SignupMutate(
       {
         idToken: idToken,

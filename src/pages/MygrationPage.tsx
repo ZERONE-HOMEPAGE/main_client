@@ -21,14 +21,15 @@ export default function MygrationPage() {
   // 상태 (request body순으로 정렬)
   const { idToken, Phone, needSid, needBjid } = state;
   const [Sid, setSid] = useState<string>('');
-  const [PhoneNumber, setPhone] = useState<string>('01047285459');
+  const [PhoneNumber, setPhone] = useState<string>(Phone);
   const [BJ_id, setBJ_id] = useState<string>('');
+
   const SidLock = needSid ?? false;
   const BJidLock = needBjid ?? false;
 
   // error
   const [sidError, setSidError] = useState<string>('');
-  const [phoneError, setPhoneError] = useState<string>('');
+  const [BJidError, setBJidError] = useState<string>('');
 
   // handle
   const handleNumberOnly_Phone = (value: string) => {
@@ -45,7 +46,6 @@ export default function MygrationPage() {
       navigate('/login'); // idToken x
       return;
     }
-    alert(`Token, 학번, 전번 ${idToken} ${Sid} ${PhoneNumber}`);
 
     const body: MigrationRequest = {
       idToken: idToken,
@@ -54,11 +54,39 @@ export default function MygrationPage() {
       ...(needBjid ? { baekjoonId: BJ_id } : {}),
     };
 
+    if (!validateFields()) return; // 필드검사)
+
     migrationMutate(body, {
       onSuccess: (data) => {
-        console.log('하이요', data);
+        navigate('/');
+      },
+      onError: (err) => {
+        if (err.response?.data.step === 'VALIDATION_ERROR') {
+          if (err.response?.data.field === 'studentId') {
+            setSidError('이미 등록되 학번입니다.');
+          } else if (err.response?.data.field === 'baekjoonId') {
+            setBJidError('이미 등록된 백준 아이디 입니다.');
+          }
+        }
       },
     });
+  };
+
+  // field검사
+  const validateFields = () => {
+    let valid = true;
+
+    if (!Sid) {
+      setSidError('학번을 기입해주세요.');
+      valid = false;
+    } else if (Sid.length !== 10) {
+      setSidError('학번은 총 10자리 입니다.');
+      valid = false;
+    } else {
+      setSidError('');
+    }
+
+    return valid;
   };
 
   return (
@@ -82,7 +110,6 @@ export default function MygrationPage() {
               title="전화번호"
               value={PhoneNumber}
               placeholder="ex) 01012345458"
-              errormessage={phoneError}
               Change={handleNumberOnly_Phone}
               isLock={true}
             />
@@ -94,6 +121,7 @@ export default function MygrationPage() {
                 title="백준 아이디"
                 value={BJ_id}
                 placeholder="선택"
+                errormessage={BJidError}
                 Change={setBJ_id}
                 isLock={!BJidLock}
               />
