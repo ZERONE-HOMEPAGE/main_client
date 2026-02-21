@@ -3,7 +3,7 @@ import Dropdown from '@/components/ui/Dropdown';
 import InputBox from '@/components/ui/InputBox';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useUserInfo } from '@/hooks/useDecode';
+import { useUserInfo } from '@/hooks/useUserInfo';
 import { useSignup } from '@/hooks/useSignup';
 
 interface SignupState {
