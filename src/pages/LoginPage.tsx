@@ -1,15 +1,97 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import logo from '@/assets/icon/logo.png';
 import ActionButton from '@/components/ui/ActionButton';
+import InputModal from '@/components/ui/InputModal';
 import GoogleLogo from '@/assets/icon/googleLogo.svg';
-
+import { initGoogleLogin } from '@/api/google';
+import { useLogin } from '@/hooks/useLogin';
+import { useLookup } from '@/hooks/useLookup';
 
 export default function LoginPage() {
-  const handleGoogleLogin = () => {
-    alert('로그인 로직 아직없음');
+  const navigate = useNavigate();
+  // hook
+  const { mutate: loginMutate } = useLogin();
+  const { mutateAsync: lookupMutate } = useLookup();
+
+  // variable
+  const [isOpen, setOpen] = useState<boolean>(false);
+  const [Phone, setPhone] = useState<string>('');
+  const [phoneError, setPhoneError] = useState('');
+  const [idToken, setIdToken] = useState<string>('');
+
+  useEffect(() => {
+    // 소셜로그인
+    initGoogleLogin({
+      clientId: '914755238439-2qnng7skka6nme7jq6j24ko8qafrs4sc.apps.googleusercontent.com',
+      callback: (idToken) => {
+        if (!idToken) return console.log('id_token 없음');
+        setIdToken(idToken);
+        // 서버로그인
+        loginMutate(
+          { idToken },
+          {
+            onSuccess: (res) => {
+              if (res.step === 'NEED_PHONE') {
+                setOpen(true);
+              }
+            },
+          },
+        );
+      },
+    });
+  }, []);
+
+  // handle
+  const handleNumberOnly_Phone = (value: string) => {
+    setPhone(value.replace(/[^0-9]/g, ''));
   };
 
-  const handleSignup = () => {
-    alert('회원가입 로직 아직없음');
+  const handlePhoneSubmit = async () => {
+    let valid = true;
+
+    // 검사
+    if (!Phone) {
+      setPhoneError('전화번호를 기입해주세요.');
+      valid = false;
+    } else if (Phone.length !== 11) {
+      setPhoneError('전화번호 11자리를 기입해주세요.');
+      valid = false;
+    } else {
+      setPhoneError('');
+    }
+
+    if (!valid) return;
+
+    try {
+      await lookupMutate(
+        {
+          idToken: idToken,
+          phoneNumber: Phone,
+        },
+        {
+          onSuccess: (res) => {
+            // 매칭됨 => migration
+            if (res.step === 'MIGRATION_FOUND') {
+              const needSid = res.needsStudentId;
+              const needBjid = res.needsBaekjoonId;
+              navigate('/migration', { state: { idToken, Phone, needSid, needBjid } });
+            }
+            // 매칭안됨 => signup
+            else {
+              navigate('/signup', { state: { idToken, Phone } });
+            }
+          },
+          onError: (_err) => {
+            setPhoneError('이미 다른 구글 계정과 연동된 전화번호입니다. 관리자에게 문의해주세요.');
+          },
+        },
+      );
+      console.log('저장된 전화번호:', Phone);
+      setOpen(false);
+    } catch {
+      console.error();
+    }
   };
 
   return (
@@ -28,17 +110,23 @@ export default function LoginPage() {
           <ActionButton
             variant="google"
             size="lg"
-            onClick={handleGoogleLogin}
+            onClick={() => (window as any).google.accounts.id.prompt()}
             className="flex w-full items-center justify-center gap-3"
           >
             <img src={GoogleLogo} alt="Google 로고" className="h-6 w-6" />
             <span>Google 계정으로 로그인</span>
           </ActionButton>
-          <ActionButton variant="secondary" size="lg" onClick={handleSignup} className="w-full">
-            회원가입
-          </ActionButton>
         </div>
       </div>
+
+      <InputModal
+        isOpen={isOpen}
+        value={Phone}
+        error={phoneError}
+        onChange={handleNumberOnly_Phone}
+        onSubmit={handlePhoneSubmit}
+        onClose={() => setOpen(false)}
+      />
     </div>
   );
 }
