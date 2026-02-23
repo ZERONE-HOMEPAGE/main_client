@@ -522,9 +522,9 @@ export default function Hero() {
         <h1 className="text-4xl font-bold text-white">알고리즘학회 영과일</h1>
         <Button
           variant="primary"
-          onClick={() => window.open('https://forms.gle/tM5VeU42QsDkQ7cz7', '_blank')}
+          onClick={() => window.open('https://open.kakao.com/o/gSIUi0hi', '_blank')}
         >
-          가입하기 →
+          가두모집 바로가기 →
         </Button>
       </div>
       <ScrollDownBtn />

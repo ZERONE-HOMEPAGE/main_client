@@ -8,6 +8,8 @@ import { useLogin } from '@/hooks/useLogin';
 import { useLookup } from '@/hooks/useLookup';
 import { decodeIdToken } from '@/utils/Decode';
 import { parsing } from '@/utils/Parse';
+import Button from '@/components/ui/Button';
+import ActionButton from '@/components/ui/ActionButton';
 
 export default function LoginPage() {
   // 버튼 최대 길이 (가로)
@@ -173,17 +175,23 @@ export default function LoginPage() {
         {/* zerone 로고 */}
         <div className="flex flex-col items-center gap-4">
           <img src={logo} alt="zerone 로고" className="h-48 w-auto" />
-          <h1 className="text-center text-2xl font-bold text-white md:text-3xl">
-            zerone 로그인하기
-          </h1>
-          <p className="text-center text-sm text-[#8b949e]">한양대 이메일로 로그인해주세요</p>
+          <h1 className="text-center text-2xl font-bold text-white md:text-3xl">zerone 영과일</h1>
+          <p className="text-center text-sm text-[#8b949e]">
+            아래 버튼을 통해 가두모집에 참여해주세요.
+          </p>
         </div>
 
         {/* 로그인/회원가입 버튼 */}
         <div className="mx-auto flex w-full max-w-[400px] flex-col items-center justify-center space-y-3">
-          <div ref={googleButtonWrapRef} className="w-full">
+          {/* <div ref={googleButtonWrapRef} className="w-full">
             <div id={googleButtonElementId} className="w-full overflow-hidden rounded-xl" />
-          </div>
+          </div> */}
+          <ActionButton
+            onClick={() => window.open('https://open.kakao.com/o/gSIUi0hi', '_blank')}
+            className="w-full"
+          >
+            가두모집 링크 바로가기
+          </ActionButton>
         </div>
       </div>
 
