@@ -3,6 +3,8 @@ import { LoginRequest, LoginResponse, LoginV2Response } from '@/types/Auth';
 import { SignupRequest, SignupResponse } from '@/types/Auth';
 import { MigrationRequest, MigrationResponse } from '@/types/Auth';
 import { LookupRequest, LookupResponse } from '@/types/Auth';
+import { ProfileResponse } from '@/types/Auth';
+import { LogoutResponse } from '@/types/Auth';
 
 // backend login (더이상 미사용)
 export const login = (body: LoginRequest): Promise<LoginResponse> =>
@@ -25,5 +27,9 @@ export const lookup = (body: LookupRequest): Promise<LookupResponse> =>
   client.post<LookupResponse>('api/v1/auth/lookup-phone', body).then((res) => res.data);
 
 // get profile
-export const getprofile = (): Promise<any> =>
-  client.get('api/v1/auth/profile').then((res) => res.data);
+export const getprofile = (): Promise<ProfileResponse> =>
+  client.get<ProfileResponse>('api/v1/auth/profile').then((res) => res.data);
+
+// logout
+export const logout = (): Promise<LogoutResponse> =>
+  client.post<LogoutResponse>('/api/v1/auth/logout').then((res) => res.data);

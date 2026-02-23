@@ -56,7 +56,7 @@ export default function InputModal({
             className="rounded-lg bg-[#2A2F3A] px-5 py-2 text-sm text-gray-300 transition hover:bg-[#343A46]"
           >
             닫기
-          </button>{' '}
+          </button>
           <button
             onClick={onSubmit}
             className="rounded-lg bg-indigo-600 px-5 py-2 text-sm font-medium text-white transition hover:bg-indigo-500"

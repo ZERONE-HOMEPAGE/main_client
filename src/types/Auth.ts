@@ -166,3 +166,8 @@ export interface StudyHistory {
   joinedAt: string;
   isCurrentSemester: boolean;
 }
+
+// logout types
+export interface LogoutResponse {
+  message: string;
+}

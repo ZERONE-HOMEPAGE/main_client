@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import ActionButton from '@/components/ui/ActionButton';
+import { useLogout } from '@/hooks/useLogout';
 
 export default function Header() {
   const [barOpen, setBarOpen] = useState(false);
   const [isHeroVisible, setIsHeroVisible] = useState(true);
   const observerRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+  const { mutate: LogoutMutate } = useLogout();
 
   // 엑세스토큰 (로그인 버튼 삭제용)
   const token = sessionStorage.getItem('accessToken');
@@ -64,6 +65,11 @@ export default function Header() {
     };
   }, [location.pathname]);
 
+  const handleLogout = () => {
+    LogoutMutate();
+    sessionStorage.removeItem('accessToken');
+  };
+
   return (
     <>
       <div
@@ -105,7 +111,9 @@ export default function Header() {
                     로그인/회원가입
                   </NavLink>
                 ) : (
-                  <span>미완</span>
+                  <button onClick={handleLogout} className="text-white">
+                    로그아웃
+                  </button>
                 )}
               </li>
             </ul>
@@ -150,7 +158,9 @@ export default function Header() {
                     로그인/회원가입
                   </NavLink>
                 ) : (
-                  <span>미완</span>
+                  <button onClick={handleLogout} className="test-white">
+                    로그아웃
+                  </button>
                 )}
               </li>
             </ul>
