@@ -14,6 +14,7 @@ import ExamplePage from '@/pages/ExamplePage';
 import LoginPage from '@/pages/LoginPage';
 import SignupPage from '@/pages/SignupPage';
 import MygrationPage from '@/pages/MygrationPage';
+import RenewPage from '@/pages/RenewPage';
 
 function App() {
   useEffect(() => {
@@ -31,8 +32,9 @@ function App() {
           <Route path="/study" element={<StudyPage />} />
           <Route path="/QnA" element={<QnAPage />} />
           <Route path="/example" element={<ExamplePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/renew" element={<RenewPage />} />
         </Route>
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/migration" element={<MygrationPage />} />
         <Route path="*" element={<NotFound />} />

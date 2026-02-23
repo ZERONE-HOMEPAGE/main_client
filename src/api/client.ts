@@ -1,7 +1,9 @@
 import axios, { type AxiosRequestConfig } from 'axios';
 
+const API_BASE_URL = 'https://zerone01.kr/api/v1/';
+
 export const client = axios.create({
-  baseURL: import.meta.env.DEV ? '/' : import.meta.env.VITE_API_BASE_URL,
+  baseURL: API_BASE_URL,
   timeout: 10000,
   withCredentials: true, // 쿠키 포함
   headers: { 'Content-Type': 'application/json' },
@@ -56,7 +58,7 @@ client.interceptors.response.use(
     try {
       // refreshToken은 httpOnly 쿠키로 자동 전송됨
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/auth/refresh`,
+        `${API_BASE_URL}auth/refresh`,
         {},
         { withCredentials: true },
       );

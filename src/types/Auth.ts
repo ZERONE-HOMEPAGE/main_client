@@ -7,6 +7,62 @@ export interface LoginResponse {
   accessToken: string;
 }
 
+export type DuesStatus = 'YES' | 'NO' | 'HONOR';
+
+export interface ActivitySemester {
+  year: number;
+  semester: number;
+  duesStatus: DuesStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CurrentSemester {
+  year: number;
+  semester: number;
+  isMember: boolean;
+  duesStatus: DuesStatus | null;
+  duesPending: boolean;
+}
+
+export interface StudyHistory {
+  studyId: string;
+  name: string;
+  year: number;
+  semester: number;
+  studyStatus: string;
+  memberStatus: string;
+  joinedAt: string;
+  isCurrentSemester: boolean;
+}
+
+export interface AuthProfile {
+  userId: string;
+  name: string;
+  email: string;
+  studentId?: string;
+  generation?: number | string;
+  department?: string;
+  baekjoonId?: string;
+  phoneNumber?: string;
+  role?: 'ROLE_USER' | 'ROLE_ADMIN' | 'ROLE_MENTOR' | string;
+  status?: 'ACTIVE' | 'PENDING' | 'REJECTED' | 'SUSPENDED' | string;
+  duesStatus?: DuesStatus;
+  duesPending?: boolean;
+  profileImageUrl?: string;
+  createdAt?: string;
+  activitySemesters?: ActivitySemester[];
+  currentSemester?: CurrentSemester;
+  studies?: {
+    all: StudyHistory[];
+    current: StudyHistory[];
+  };
+}
+
+export interface LogoutResponse {
+  message: string;
+}
+
 // signup types
 export interface SignupRequest {
   idToken: string;

@@ -3,6 +3,7 @@ import { LoginRequest, LoginResponse, LoginV2Response } from '@/types/Auth';
 import { SignupRequest, SignupResponse } from '@/types/Auth';
 import { MigrationRequest, MigrationResponse } from '@/types/Auth';
 import { LookupRequest, LookupResponse } from '@/types/Auth';
+import { AuthProfile, LogoutResponse } from '@/types/Auth';
 
 // backend login (더이상 미사용)
 export const login = (body: LoginRequest): Promise<LoginResponse> =>
@@ -23,3 +24,11 @@ export const migration = (body: MigrationRequest): Promise<MigrationResponse> =>
 // lookup phone
 export const lookup = (body: LookupRequest): Promise<LookupResponse> =>
   client.post<LookupResponse>('auth/lookup-phone', body).then((res) => res.data);
+
+// profile
+export const getProfile = (): Promise<AuthProfile> =>
+  client.get<AuthProfile>('/auth/profile').then((res) => res.data);
+
+// logout
+export const logout = (): Promise<LogoutResponse> =>
+  client.post<LogoutResponse>('/auth/logout').then((res) => res.data);

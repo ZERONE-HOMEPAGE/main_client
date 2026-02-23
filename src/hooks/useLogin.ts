@@ -2,6 +2,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { loginV2 } from '@/api/auth';
 import type { LoginV2Response, LoginRequest } from '@/types/Auth';
+import { decodeIdToken } from '@/utils/Decode';
+import { parsing } from '@/utils/Parse';
 
 export const useLogin = () => {
   const navigate = useNavigate();
@@ -9,10 +11,23 @@ export const useLogin = () => {
   return useMutation<LoginV2Response, Error, LoginRequest>({
     mutationFn: (body) => loginV2(body),
 
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       // 성공
       if (data.step === 'LOGIN_SUCCESS') {
-        localStorage.setItem('token', data.accessToken);
+        sessionStorage.setItem('accessToken', data.accessToken);
+
+        const decoded = decodeIdToken(variables.idToken);
+        const parsed = decoded?.name ? parsing(decoded.name) : null;
+        const displayName = parsed?.name ?? decoded?.name ?? '';
+        const profileImage = decoded?.picture ?? '';
+
+        if (displayName) {
+          sessionStorage.setItem('authUserName', displayName);
+        }
+        if (profileImage) {
+          sessionStorage.setItem('authUserImage', profileImage);
+        }
+
         console.log('/auth/google 성공했습니다. \n상태: success \naccessToken: ', data.accessToken);
         navigate('/');
       }

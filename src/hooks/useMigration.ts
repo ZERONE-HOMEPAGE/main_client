@@ -10,6 +10,7 @@ export const useMigration = () => {
     onSuccess: (data) => {
       // migration success
       if (data.step === 'LOGIN_SUCCESS') {
+        sessionStorage.setItem('accessToken', data.accessToken);
         console.log('migration 성공. \n상태: 학회비 지불 확인 \n메인화면으로 이동합니다.');
       }
       // migration uccesss and not pending
