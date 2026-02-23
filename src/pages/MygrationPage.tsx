@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useMigration } from '@/hooks/useMigration';
 import { MigrationRequest } from '@/types/Auth';
+import { useEffect } from 'react';
 
 interface MigrationState {
   idToken: string;
@@ -50,8 +51,8 @@ export default function MygrationPage() {
     const body: MigrationRequest = {
       idToken: idToken,
       phoneNumber: PhoneNumber,
-      ...(needSid ? { studentId: Sid } : {}),
       ...(needBjid ? { baekjoonId: BJ_id } : {}),
+      ...(needSid ? { studentId: Sid } : {}),
     };
 
     if (!validateFields()) return; // 필드검사)
@@ -62,15 +63,25 @@ export default function MygrationPage() {
       },
       onError: (err) => {
         if (err.response?.data.step === 'VALIDATION_ERROR') {
-          if (err.response?.data.field === 'studentId') {
-            setSidError('이미 등록되 학번입니다.');
-          } else if (err.response?.data.field === 'baekjoonId') {
+          // (리팩토링 필요)
+          if (err.response?.data.errors.length === 2) {
+            setSidError('이미 등록된 학번입니다.');
+            setBJidError('이미 등록된 백준 아이디 입니다.');
+          } else if (err.response?.data.errors[0]?.field === 'studentId') {
+            setSidError('이미 등록된 학번입니다.');
+          } else if (err.response?.data.errors[0]?.field === 'baekjoonId') {
             setBJidError('이미 등록된 백준 아이디 입니다.');
           }
         }
       },
     });
   };
+
+  useEffect(() => {
+    if (sessionStorage.getItem('accessToken')) {
+      navigate('/', { replace: true });
+    }
+  }, [navigate]);
 
   // field검사
   const validateFields = () => {

@@ -26,7 +26,9 @@ export const useLookup = () => {
     onError: (err) => {
       if (err.status === 409) {
         console.log('/auth/lookup_phone 실패했습니다. \n상태: 정보가 존재하는 번호입니다.');
-      } else {
+      }
+      // (전화번호 형식 나중에 고치삼)
+      else {
         console.error('/auth/lookup_phone 실패했습니다. \nerror:', err);
       }
     },

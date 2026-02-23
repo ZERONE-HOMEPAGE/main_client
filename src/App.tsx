@@ -10,7 +10,6 @@ import MainPage from '@/pages/MainPage';
 import StudyPage from '@/pages/StudyPage';
 import QnAPage from '@/pages/QnAPage';
 import NotFound from '@/pages/NotFoundPage';
-import ExamplePage from '@/pages/ExamplePage';
 import LoginPage from '@/pages/LoginPage';
 import SignupPage from '@/pages/SignupPage';
 import MygrationPage from '@/pages/MygrationPage';
@@ -30,9 +29,8 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/study" element={<StudyPage />} />
           <Route path="/QnA" element={<QnAPage />} />
-          <Route path="/example" element={<ExamplePage />} />
+          <Route path="/login" element={<LoginPage />} />
         </Route>
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/migration" element={<MygrationPage />} />
         <Route path="*" element={<NotFound />} />

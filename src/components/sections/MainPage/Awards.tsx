@@ -1,5 +1,5 @@
 import Trophyicon from '@/assets/icon/Trophy.png';
-import PillTab from '@/components/ui/PillTab';
+import PillTab from '@/components/ui/PillTab/PillTab';
 import { useState } from 'react';
 
 export default function Awards() {

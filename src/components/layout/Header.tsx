@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
+import ActionButton from '@/components/ui/ActionButton';
 
 export default function Header() {
   const [barOpen, setBarOpen] = useState(false);
@@ -7,16 +8,23 @@ export default function Header() {
   const observerRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
+  // 엑세스토큰 (로그인 버튼 삭제용)
+  const token = sessionStorage.getItem('accessToken');
+
   function barClick() {
     setBarOpen(!barOpen);
   }
+
   const menuItems = [
     { name: '스터디', path: '/study' },
     //{ name: '활동', path: null },
     //{ name: '게시판', path: null },
-    { name: '컴파일러', path: 'https://zerone01.kr/compiler', external: true },
+    //{ name: '컴파일러', path: 'https://zerone01.kr/compiler', external: true },
     { name: 'Q&A', path: '/QnA' },
-    { name: '로그인', path: '/login' },
+
+    // 로그인 - 로그아웃버튼 토글을 위해 따로 빼도록 하겠습니다.
+    //{ name: '로그인/회원가입', path: '/login' },
+
     //로그인 페이지 연결 임시 처리
   ];
 
@@ -80,24 +88,26 @@ export default function Header() {
 
           <div>
             <ul className="hidden flex-row space-x-5 md:flex">
-              {menuItems.map(({ name, path, external }) => (
+              {menuItems.map(({ name, path }) => (
                 <li key={name}>
-                  {path ? (
-                    external ? (
-                      <a href={path}>{name}</a>
-                    ) : (
-                      <NavLink
-                        to={path}
-                        className={({ isActive }) => (isActive ? 'font-bold' : '')}
-                      >
-                        {name}
-                      </NavLink>
-                    )
-                  ) : (
-                    <span>{name}</span>
-                  )}
+                  <NavLink to={path} className={({ isActive }) => (isActive ? 'font-bold' : '')}>
+                    {name}
+                  </NavLink>
                 </li>
               ))}
+
+              <li>
+                {!token ? (
+                  <NavLink
+                    to={'/login'}
+                    className={({ isActive }) => (isActive ? 'font-bold' : '')}
+                  >
+                    로그인/회원가입
+                  </NavLink>
+                ) : (
+                  <span>미완</span>
+                )}
+              </li>
             </ul>
             <div>
               <button className="text-xl md:hidden" onClick={barClick}>
@@ -119,28 +129,30 @@ export default function Header() {
               </button>
             </div>
             <ul className="flex flex-col space-y-4 p-4">
-              {menuItems.map(({ name, path, external }) => (
-                <li key={name} onClick={barClick} className="w-full">
-                  {path ? (
-                    external ? (
-                      <a href={path} className="block w-full rounded p-3">
-                        {name}
-                      </a>
-                    ) : (
-                      <NavLink
-                        to={path}
-                        className={({ isActive }) =>
-                          'block w-full rounded p-3 ' + (isActive ? 'font-bold' : '')
-                        }
-                      >
-                        {name}
-                      </NavLink>
-                    )
-                  ) : (
-                    <div className="block w-full p-3">{name}</div>
-                  )}
+              {menuItems.map(({ name, path }) => (
+                <li key={name} onClick={barClick}>
+                  <NavLink
+                    to={path}
+                    className={({ isActive }) =>
+                      'block w-full rounded p-3 ' + (isActive ? 'font-bold' : '')
+                    }
+                  >
+                    {name}
+                  </NavLink>
                 </li>
               ))}
+              <li className="p-3">
+                {!token ? (
+                  <NavLink
+                    to={'/login'}
+                    className={({ isActive }) => (isActive ? 'font-bold' : '')}
+                  >
+                    로그인/회원가입
+                  </NavLink>
+                ) : (
+                  <span>미완</span>
+                )}
+              </li>
             </ul>
           </div>
         </nav>

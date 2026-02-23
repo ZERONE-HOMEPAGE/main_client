@@ -16,6 +16,7 @@ export interface RenderGoogleButtonOptions {
   elementId: string;
   theme?: 'outline' | 'filled_blue' | 'filled_black';
   size?: 'small' | 'medium' | 'large';
+  width?: number;
 }
 
 // window.google type
@@ -29,7 +30,7 @@ export interface GoogleWindow {
         }) => void;
         renderButton: (
           element: HTMLElement | null,
-          options?: { theme?: string; size?: string },
+          options?: { theme?: string; size?: string; width?: number },
         ) => void;
         prompt: () => void;
       };

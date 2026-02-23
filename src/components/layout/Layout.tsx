@@ -5,6 +5,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 export default function Layout() {
   const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -16,6 +17,7 @@ export default function Layout() {
       <main>
         <Outlet />
       </main>
+      {!isLoginPage && <Footer />}
       <Footer />
     </div>
   );

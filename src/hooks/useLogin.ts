@@ -12,7 +12,7 @@ export const useLogin = () => {
     onSuccess: (data) => {
       // 성공
       if (data.step === 'LOGIN_SUCCESS') {
-        localStorage.setItem('token', data.accessToken);
+        sessionStorage.setItem('accessToken', data.accessToken);
         console.log('/auth/google 성공했습니다. \n상태: success \naccessToken: ', data.accessToken);
         navigate('/');
       }
