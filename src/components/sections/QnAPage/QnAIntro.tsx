@@ -1,7 +1,7 @@
 interface textProps {
-  className_F?: String;
-  className_Q?: String;
-  className_t?: String;
+  className_F?: string;
+  className_Q?: string;
+  className_t?: string;
 }
 
 export default function QnAIntro({

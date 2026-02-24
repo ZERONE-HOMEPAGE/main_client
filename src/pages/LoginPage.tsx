@@ -8,7 +8,6 @@ import { useLogin } from '@/hooks/useLogin';
 import { useLookup } from '@/hooks/useLookup';
 import { decodeIdToken } from '@/utils/Decode';
 import { parsing } from '@/utils/Parse';
-import Button from '@/components/ui/Button';
 import ActionButton from '@/components/ui/ActionButton';
 
 export default function LoginPage() {

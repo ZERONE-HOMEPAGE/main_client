@@ -1,5 +1,5 @@
 import { client } from '@/api/client';
-import { LoginRequest, LoginResponse, LoginV2Response } from '@/types/Auth';
+import { LoginRequest, LoginResponse, LoginV2Response, ProfileResponse } from '@/types/Auth';
 import { SignupRequest, SignupResponse } from '@/types/Auth';
 import { MigrationRequest, MigrationResponse } from '@/types/Auth';
 import { LookupRequest, LookupResponse } from '@/types/Auth';
@@ -25,5 +25,5 @@ export const lookup = (body: LookupRequest): Promise<LookupResponse> =>
   client.post<LookupResponse>('api/v1/auth/lookup-phone', body).then((res) => res.data);
 
 // get profile
-export const getprofile = (): Promise<any> =>
+export const getprofile = (): Promise<ProfileResponse> =>
   client.get('api/v1/auth/profile').then((res) => res.data);

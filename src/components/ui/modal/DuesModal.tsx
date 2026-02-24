@@ -67,7 +67,7 @@ export default function DuesModal({ isNew, isOpen, onClose }: DuesProps) {
         </div>
         <ActionButton
           onClick={() => {
-            onClose;
+            onClose();
             navigate('/');
           }}
           className="min-w-80"
