@@ -29,9 +29,9 @@ export default function LoginPage() {
   const googleButtonWrapRef = useRef<HTMLDivElement>(null);
   const isGoogleInitializedRef = useRef(false);
 
-  //
   const [isTextOpen, setTextOpen] = useState(false);
   const [isInputOpen, setInputOpen] = useState<boolean>(false);
+  const [isPendingOpen, setPendingOpen] = useState(false);
 
   // 로그인 상태면 쫓아내기
   useEffect(() => {
@@ -87,6 +87,8 @@ export default function LoginPage() {
                 onSuccess: (res) => {
                   if (res.step === 'NEED_PHONE') {
                     setInputOpen(true);
+                  } else if (res.step === 'LOGIN_BLOCKED' && res.status === 'PENDING') {
+                    setPendingOpen(true);
                   }
                 },
                 onError: (_err) => {
@@ -214,6 +216,13 @@ export default function LoginPage() {
         title="로그인 실패"
         description="한양대학교 이메일이 아닙니다."
         onClose={() => setTextOpen(false)}
+      />
+
+      <TextModal
+        isOpen={isPendingOpen}
+        title="회원가입 승인 대기중"
+        description="입금 확인 후 승인 처리됩니다. 승인 완료 후 로그인이 가능하며, 승인 완료 시 메일이 발송됩니다."
+        onClose={() => setPendingOpen(false)}
       />
     </div>
   );

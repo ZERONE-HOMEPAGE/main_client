@@ -17,10 +17,10 @@ function getMainCta(profile: ProfileResponse): MainCtaType {
   return isPaidStatus(dues) ? 'NONE' : 'RENEW';
 }
 
-export function useMainCta(): MainCtaType {
+export function useMainCta(): MainCtaType | null {
   const loggedIn = isLoggedIn();
 
-  const { data: profile } = useQuery({
+  const { data: profile, isLoading } = useQuery({
     queryKey: ['profile'],
     queryFn: getprofile,
     enabled: loggedIn,
@@ -28,6 +28,7 @@ export function useMainCta(): MainCtaType {
   });
 
   if (!loggedIn) return 'JOIN';
+  if (isLoading) return null;
   if (!profile) return 'JOIN';
   return getMainCta(profile);
 }

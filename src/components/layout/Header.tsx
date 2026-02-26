@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useLogout } from '@/hooks/useLogout';
 import { isLoggedIn, removeAccessToken } from '@/utils/token';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function Header() {
   const [barOpen, setBarOpen] = useState(false);
@@ -10,6 +11,7 @@ export default function Header() {
   const location = useLocation();
   const { mutate: LogoutMutate } = useLogout();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const token = isLoggedIn();
 
   function barClick() {
@@ -67,6 +69,7 @@ export default function Header() {
 
   const handleLogout = () => {
     removeAccessToken();
+    queryClient.removeQueries({ queryKey: ['profile'] });
     navigate('/');
     LogoutMutate();
   };
