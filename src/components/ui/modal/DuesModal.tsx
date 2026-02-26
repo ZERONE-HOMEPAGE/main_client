@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import tossIcon from '@/assets/icon/tossIcon.png';
 import { duesinfo } from '@/api/dues';
 import type { DuesInfoResponse } from '@/types/Dues';
-import ActionButton from '@/components/ui/ActionButton';
-import { useNavigate } from 'react-router-dom';
 
 interface DuesProps {
   isNew: boolean;
@@ -13,13 +11,11 @@ interface DuesProps {
 
 export default function DuesModal({ isNew, isOpen, onClose }: DuesProps) {
   const [duesInfo, setDuesInfo] = useState<DuesInfoResponse | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await duesinfo();
-        console.log('duesInfo:', data);
         setDuesInfo(data);
       } catch (err) {
         console.error(err);
@@ -29,7 +25,7 @@ export default function DuesModal({ isNew, isOpen, onClose }: DuesProps) {
     fetchData();
   }, []);
 
-  const amount = isNew ? duesInfo?.amountNew : duesInfo?.amountRenew; // New : 신규, reNew : 재갱신
+  const amount = isNew ? duesInfo?.amountNew : duesInfo?.amountRenew;
 
   const infoList = [
     { label: '계좌번호', value: duesInfo?.bankAccount },
@@ -40,40 +36,55 @@ export default function DuesModal({ isNew, isOpen, onClose }: DuesProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="flex h-screen w-full flex-col items-center bg-black">
-      <div className="flex max-w-5xl flex-col items-center px-4 py-32">
-        <p className="text-3xl font-bold text-white">회원가입</p>
-        <p className="mt-2 text-xl text-[#9CA3AF]">
-          {isNew
-            ? '회원가입이 완료되었습니다. 안내된 계좌로 학회비를 입금해주세요.'
-            : '입금까지 시간이 걸립니다.'}
-        </p>
-
-        <div className="my-4 w-[420px] rounded-2xl bg-[#1C1F26] px-8 pb-8 pt-2 shadow-2xl">
-          <div className="my-4 flex items-center gap-2">
-            <img src={tossIcon} className="h-6 w-6" />
-            <p className="text-[#D1D5DB]">토스뱅크</p>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="w-[420px] rounded-2xl bg-[#1C1F26] px-8 pb-8 pt-6 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 헤더 */}
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-white">학회비 납부 안내</h2>
+            <p className="mt-1 text-sm text-gray-400">
+              {isNew
+                ? '회원가입이 완료되었습니다. 안내된 계좌로 학회비를 입금해주세요.'
+                : '아래 계좌로 학회비를 입금해주세요.'}
+            </p>
           </div>
-
-          {infoList.map((item, index) => (
-            <div key={index}>
-              <div className="h-px w-full bg-gray-700" />
-              <div className="flex py-4">
-                <p className="w-24 text-gray-400">{item.label}</p>
-                <p className="flex-1 font-medium text-white">{item.value ?? 'loading'}</p>
-              </div>
-            </div>
-          ))}
+          <button onClick={onClose} className="ml-4 text-gray-400 hover:text-white">
+            ✕
+          </button>
         </div>
-        <ActionButton
-          onClick={() => {
-            onClose;
-            navigate('/');
-          }}
-          className="min-w-80"
-        >
-          입금완료
-        </ActionButton>
+
+        {/* 은행 */}
+        <div className="mb-2 flex items-center gap-2">
+          <img src={tossIcon} className="h-5 w-5" />
+          <p className="text-sm text-[#D1D5DB]">토스뱅크</p>
+        </div>
+
+        {/* 계좌 정보 */}
+        {infoList.map((item, index) => (
+          <div key={index}>
+            <div className="h-px w-full bg-gray-700" />
+            <div className="flex py-3">
+              <p className="w-24 text-sm text-gray-400">{item.label}</p>
+              <p className="flex-1 text-sm font-medium text-white">{item.value ?? '불러오는 중...'}</p>
+            </div>
+          </div>
+        ))}
+
+        {/* 닫기 버튼 */}
+        <div className="mt-6">
+          <button
+            onClick={onClose}
+            className="w-full rounded-lg bg-indigo-600 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-500"
+          >
+            확인
+          </button>
+        </div>
       </div>
     </div>
   );

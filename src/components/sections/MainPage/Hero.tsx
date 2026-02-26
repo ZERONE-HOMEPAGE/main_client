@@ -1,8 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '@/components/ui/Button';
 import ScrollDownBtn from '@/components/ui/ScrollDownBtn';
+import DuesModal from '@/components/ui/modal/DuesModal';
+import { useMainCta } from '@/hooks/useMainCta';
 
 export default function Hero() {
+  const cta = useMainCta();
+  const navigate = useNavigate();
+  const [isDuesOpen, setIsDuesOpen] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // 초기 활성 셀들
@@ -520,14 +526,19 @@ export default function Hero() {
       <div className="relative z-10 ml-[calc(100vw/60*7)] flex flex-col items-start gap-4">
         <p className="text-2xl font-medium text-gray-400">한양대학교 ERICA 소프트웨어융합대학</p>
         <h1 className="text-4xl font-bold text-white">알고리즘학회 영과일</h1>
-        <Button
-          variant="primary"
-          onClick={() => window.open('https://forms.gle/tM5VeU42QsDkQ7cz7', '_blank')}
-        >
-          가입하기 →
-        </Button>
+        {cta === 'JOIN' && (
+          <Button variant="primary" onClick={() => navigate('/login')}>
+            가입하기 →
+          </Button>
+        )}
+        {cta === 'RENEW' && (
+          <Button variant="primary" onClick={() => setIsDuesOpen(true)}>
+            학회비 납부 →
+          </Button>
+        )}
       </div>
       <ScrollDownBtn />
+      <DuesModal isNew={false} isOpen={isDuesOpen} onClose={() => setIsDuesOpen(false)} />
     </div>
   );
 }

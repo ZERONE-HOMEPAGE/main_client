@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useMigration } from '@/hooks/useMigration';
 import { MigrationRequest } from '@/types/Auth';
 import { useEffect } from 'react';
+import { isLoggedIn } from '@/utils/token';
 
 interface MigrationState {
   idToken: string;
@@ -78,7 +79,7 @@ export default function MygrationPage() {
   };
 
   useEffect(() => {
-    if (sessionStorage.getItem('accessToken')) {
+    if (isLoggedIn()) {
       navigate('/', { replace: true });
     }
   }, [navigate]);

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useLogout } from '@/hooks/useLogout';
+import { isLoggedIn, removeAccessToken } from '@/utils/token';
 
 export default function Header() {
   const [barOpen, setBarOpen] = useState(false);
@@ -8,9 +9,8 @@ export default function Header() {
   const observerRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const { mutate: LogoutMutate } = useLogout();
-
-  // 엑세스토큰 (로그인 버튼 삭제용)
-  const token = sessionStorage.getItem('accessToken');
+  const navigate = useNavigate();
+  const token = isLoggedIn();
 
   function barClick() {
     setBarOpen(!barOpen);
@@ -66,8 +66,9 @@ export default function Header() {
   }, [location.pathname]);
 
   const handleLogout = () => {
+    removeAccessToken();
+    navigate('/');
     LogoutMutate();
-    sessionStorage.removeItem('accessToken');
   };
 
   return (

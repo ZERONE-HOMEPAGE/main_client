@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { loginV2 } from '@/api/auth';
 import type { LoginV2Response, LoginRequest } from '@/types/Auth';
+import { setAccessToken } from '@/utils/token';
 
 export const useLogin = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export const useLogin = () => {
     onSuccess: (data) => {
       // 성공
       if (data.step === 'LOGIN_SUCCESS') {
-        sessionStorage.setItem('accessToken', data.accessToken);
+        setAccessToken(data.accessToken);
         console.log('/auth/google 성공했습니다. \n상태: success \naccessToken: ', data.accessToken);
         navigate('/');
       }

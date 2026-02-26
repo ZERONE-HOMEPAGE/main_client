@@ -8,6 +8,9 @@ import { useLogin } from '@/hooks/useLogin';
 import { useLookup } from '@/hooks/useLookup';
 import { decodeIdToken } from '@/utils/Decode';
 import { parsing } from '@/utils/Parse';
+import { isLoggedIn } from '@/utils/token';
+import type { ValidationError422 } from '@/types/Auth';
+import { AxiosError } from 'axios';
 
 export default function LoginPage() {
   // 버튼 최대 길이 (가로)
@@ -32,7 +35,7 @@ export default function LoginPage() {
 
   // 로그인 상태면 쫓아내기
   useEffect(() => {
-    if (sessionStorage.getItem('accessToken')) {
+    if (isLoggedIn()) {
       navigate('/', { replace: true });
     }
   }, [navigate]);
@@ -155,8 +158,18 @@ export default function LoginPage() {
               navigate('/signup', { state: { idToken, Phone } });
             }
           },
-          onError: (_err) => {
-            setPhoneError('이미 다른 구글 계정과 연동된 전화번호입니다. 관리자에게 문의해주세요.');
+          onError: (err) => {
+            const axiosErr = err as unknown as AxiosError<ValidationError422>;
+            const status = axiosErr.response?.status;
+            //전화번호 형식 오류와 구분 필요(422/400 처리되면 분기하기)
+            if (status === 422 || status === 400) {
+              const msg = axiosErr.response?.data?.detail?.[0]?.msg;
+              setPhoneError(msg ?? '전화번호 형식이 올바르지 않습니다.');
+            } else {
+              setPhoneError(
+                '이미 다른 구글 계정과 연동된 전화번호입니다. 관리자에게 문의해주세요.',
+              );
+            }
           },
         },
       );

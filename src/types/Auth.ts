@@ -171,3 +171,14 @@ export interface StudyHistory {
 export interface LogoutResponse {
   message: string;
 }
+
+// FastAPI 422 Validation Error
+export interface ValidationDetail {
+  loc: (string | number)[];
+  msg: string;
+  type: string;
+}
+
+export interface ValidationError422 {
+  detail: ValidationDetail[];
+}
