@@ -1,10 +1,10 @@
 import oneAndN from '@/assets/eventImg/1&N.png';
-import mogakco from '@/assets/eventImg/mogakco.jpeg';
-import marathon from '@/assets/eventImg/marathon.jpeg';
-import study from '@/assets/eventImg/study.jpeg';
+import mogakco from '@/assets/eventImg/mogakco.webp';
+import marathon from '@/assets/eventImg/marathon.webp';
+import study from '@/assets/eventImg/study.webp';
 import clockIcon from '@/assets/icon/clock.png';
 import zeroneCharacter from '@/assets/images/zerone_character.png';
-import MT from '@/assets/eventImg/MT.jpeg';
+import MT from '@/assets/eventImg/MT.webp';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
