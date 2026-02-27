@@ -1,9 +1,10 @@
 import oneAndN from '@/assets/eventImg/1&N.png';
-import baekjoonbingo from '@/assets/eventImg/baekjoonbingo.png';
-import mogakco from '@/assets/eventImg/mogakco.png';
-import study from '@/assets/eventImg/study.png';
+import mogakco from '@/assets/eventImg/mogakco.jpeg';
+import marathon from '@/assets/eventImg/marathon.jpeg';
+import study from '@/assets/eventImg/study.jpeg';
 import clockIcon from '@/assets/icon/clock.png';
 import zeroneCharacter from '@/assets/images/zerone_character.png';
+import MT from '@/assets/eventImg/MT.jpeg';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -48,7 +49,7 @@ export default function Event() {
       title: 'MT',
       start: '2026.05.29',
       end: '2026.05.30',
-      imgUrl: '',
+      imgUrl: MT,
     },
     {
       title: '1&N 네트워킹데이',
@@ -66,13 +67,13 @@ export default function Event() {
       title: '백준마라톤',
       start: '2026.03.23',
       end: '2026.06.05',
-      imgUrl: mogakco,
+      imgUrl: marathon,
     },
     {
       title: '모.각.코',
       start: '2026.03.23',
       end: '2026.06.19',
-      imgUrl: baekjoonbingo,
+      imgUrl: mogakco,
     },
   ];
 
@@ -81,7 +82,7 @@ export default function Event() {
       id="event"
       className="flex h-full w-full flex-col items-center justify-center gap-5 px-4 pb-20"
     >
-      <p className="mb-6 mt-10 text-center text-3xl font-bold">이달의 주요 이벤트</p>
+      <p className="mb-6 mt-10 text-center text-3xl font-bold">주요 이벤트</p>
 
       <div className="block w-full md:hidden">
         {' '}
