@@ -19,11 +19,12 @@ export const useMigration = () => {
     },
     onError: (err) => {
       if (err.response?.data.step === 'VALIDATION_ERROR') {
+        // (수정필요)
         console.log(
           '/auth/migration 실패했습니다. \n상태: 유효성 검사 실패. \n필드:',
-          err.response?.data.field,
-          '\n메시지:',
           err.response?.data.message,
+          '\n메시지:',
+          err.response?.data,
         );
       } else {
         console.error('/auth/migration 실패했습니다. \n error:', err);

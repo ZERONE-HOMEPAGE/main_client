@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { loginV2 } from '@/api/auth';
 import type { LoginV2Response, LoginRequest } from '@/types/Auth';
+import { setAccessToken } from '@/utils/token';
 
 export const useLogin = () => {
   const navigate = useNavigate();
@@ -12,14 +13,13 @@ export const useLogin = () => {
     onSuccess: (data) => {
       // 성공
       if (data.step === 'LOGIN_SUCCESS') {
-        localStorage.setItem('token', data.accessToken);
+        setAccessToken(data.accessToken);
         console.log('/auth/google 성공했습니다. \n상태: success \naccessToken: ', data.accessToken);
         navigate('/');
       }
-      // 학회비 미납
+      // 로그인 차단 - 컴포넌트에서 처리
       else if (data.step === 'LOGIN_BLOCKED') {
-        console.log('/auth/google 성공했습니다. \n상태: 학회비 미납 \n메인으로 돌아갑니다.');
-        navigate('/');
+        console.log('/auth/google 성공했습니다. \n상태: LOGIN_BLOCKED \nstatus:', data.status);
       }
       // 전화번호 필요
       else

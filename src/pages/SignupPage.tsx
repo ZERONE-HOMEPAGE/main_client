@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUserInfo } from '@/hooks/useUserInfo';
 import { useSignup } from '@/hooks/useSignup';
+import DuesModal from '@/components/ui/modal/DuesModal';
+import { isLoggedIn } from '@/utils/token';
 
 interface SignupState {
   idToken: string;
@@ -27,12 +29,16 @@ export default function SignupPage() {
 
   const [College, setCollege] = useState<string>('');
   const [isEtc, setIsEtc] = useState<boolean>(false);
+  const [onModal, setOnModal] = useState<boolean>(false);
 
   // error
   const [nameError, setNameError] = useState('');
   const [sidError, setSidError] = useState<string>('');
   const [majorError, setMajorError] = useState<string>('');
   const [phoneError, setPhoneError] = useState<string>('');
+
+  // (만들어 개새리)
+  const [Bj_idError, _setBj_idError] = useState<string>('');
 
   // 단과대 목록
   const collegeOptions = [
@@ -118,11 +124,17 @@ export default function SignupPage() {
       setMajor(serverMajor);
       setIsEtc(false);
     } else {
-      setCollege('기타');
+      setCollege('기타(직접 입력)');
       setMajor(serverMajor);
       setIsEtc(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (isLoggedIn()) {
+      navigate('/', { replace: true });
+    }
+  }, [navigate]);
 
   // handler
   const handleSubmit = () => {
@@ -145,11 +157,13 @@ export default function SignupPage() {
       },
       {
         onSuccess: (_data) => {
-          navigate('/');
+          setOnModal(true);
         },
         onError: (err: any) => {
           if (err.status === 409) {
-            setSidError('이미 등록된 학번입니다.');
+            console.log(err.res);
+
+            if (err.res) setSidError('이미 등록된 학번입니다.');
           }
         },
       },
@@ -212,6 +226,8 @@ export default function SignupPage() {
   };
 
   return (
+    <>
+    <DuesModal isNew={true} isOpen={onModal} onClose={() => navigate('/')} />
     <div className="flex h-full h-screen w-full flex-col items-center bg-black">
       <div className="max-w-5xl flex-col items-center bg-black px-4 py-32">
         <p className="text-3xl font-bold text-white">회원가입</p>
@@ -227,7 +243,13 @@ export default function SignupPage() {
               errormessage={nameError}
               Change={setName}
             />
-            <InputBox title="백준 아이디" value={BJ_id} placeholder="(선택)" Change={setBJ_id} />
+            <InputBox
+              title="백준 아이디"
+              value={BJ_id}
+              placeholder="(선택)"
+              Change={setBJ_id}
+              errormessage={Bj_idError}
+            />
           </div>
 
           {/* Student ID and Phone NUmber */}
@@ -292,6 +314,7 @@ export default function SignupPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

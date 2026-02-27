@@ -1,3 +1,5 @@
+import LockIcon from '@/assets/icon/LockIcon.png';
+
 interface inputbox {
   title: string;
   value: string;
@@ -32,11 +34,14 @@ export default function InputBox({
           </p>
         </>
       ) : (
-        <p
-          className={`border-1 w-full rounded-md border-[#2C2C2E] bg-[#121212] px-3 py-2 outline-none transition focus:ring-2 text-[#8E8E93]`}
-        >
-          {value}
-        </p>
+        <>
+          <img src={LockIcon} className="h-4 w-4" />
+          <p
+            className={`border-1 w-full rounded-md border-[#2C2C2E] bg-[#121212] px-3 py-2 text-[#8E8E93] outline-none transition focus:ring-2`}
+          >
+            {value}
+          </p>
+        </>
       )}
     </div>
   );
