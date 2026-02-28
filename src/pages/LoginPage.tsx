@@ -151,7 +151,7 @@ export default function LoginPage() {
         {
           onSuccess: (res) => {
             // 매칭됨 => migration
-            if (res.step === 'MIGRATION_FOUND') {
+            if (res.step === 'MIGRATION_FOUND' && res.needsStudentId) {
               const needSid = res.needsStudentId;
               const needBjid = res.needsBaekjoonId;
               navigate('/migration', { state: { idToken, Phone, needSid, needBjid } });
