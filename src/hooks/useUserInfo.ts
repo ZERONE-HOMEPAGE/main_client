@@ -20,7 +20,7 @@ export function useUserInfo() {
     };
   }
   const decoded = decodeIdToken(idToken);
-  const parsed = parsing(decoded);
+  const parsed = parsing(decoded.name);
 
   return {
     idToken,
