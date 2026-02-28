@@ -20,7 +20,7 @@ export function useUserInfo() {
     };
   }
   const decoded = decodeIdToken(idToken);
-  const parsed = parsing('조성민 | 컴퓨터학부 | 한양대(ERICA)');
+  const parsed = parsing(decoded);
 
   return {
     idToken,
