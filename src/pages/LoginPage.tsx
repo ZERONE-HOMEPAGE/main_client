@@ -11,7 +11,6 @@ import { parsing } from '@/utils/Parse';
 import { isLoggedIn } from '@/utils/token';
 import type { ValidationError422 } from '@/types/Auth';
 import { AxiosError } from 'axios';
-import DuesModal from '@/components/ui/modal/DuesModal';
 
 export default function LoginPage() {
   // 버튼 최대 길이 (가로)

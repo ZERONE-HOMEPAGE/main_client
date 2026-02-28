@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { useLogout } from '@/hooks/useLogout';
-import { isLoggedIn, removeAccessToken } from '@/utils/token';
-import { useQueryClient } from '@tanstack/react-query';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { isLoggedIn } from '@/utils/token';
 import InfoModal from '@/components/ui/modal/InfoModal';
 
 export default function Header() {
@@ -10,9 +8,6 @@ export default function Header() {
   const [isHeroVisible, setIsHeroVisible] = useState(true);
   const observerRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
-  const { mutate: LogoutMutate } = useLogout();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const [ModalOpen, setModalOpen] = useState<boolean>(false);
   const token = isLoggedIn();
 
