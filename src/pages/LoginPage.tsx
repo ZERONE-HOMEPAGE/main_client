@@ -29,9 +29,10 @@ export default function LoginPage() {
   const googleButtonWrapRef = useRef<HTMLDivElement>(null);
   const isGoogleInitializedRef = useRef(false);
 
-  const [isTextOpen, setTextOpen] = useState(false);
-  const [isInputOpen, setInputOpen] = useState<boolean>(false);
+  // 모달용 함수
   const [isPendingOpen, setPendingOpen] = useState(false);
+  const [onTextOpen, setTextOpen] = useState(false);
+  const [onInputOpen, setInputOpen] = useState<boolean>(false);
 
   // 로그인 상태면 쫓아내기
   useEffect(() => {
@@ -203,7 +204,7 @@ export default function LoginPage() {
       </div>
 
       <InputModal
-        isOpen={isInputOpen}
+        isOpen={onInputOpen}
         value={Phone}
         error={phoneError}
         onChange={handleNumberOnly_Phone}
@@ -212,7 +213,7 @@ export default function LoginPage() {
       />
 
       <TextModal
-        isOpen={isTextOpen}
+        isOpen={onTextOpen}
         title="로그인 실패"
         description="한양대학교 이메일이 아닙니다."
         onClose={() => setTextOpen(false)}

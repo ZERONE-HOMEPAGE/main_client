@@ -71,7 +71,9 @@ export default function DuesModal({ isNew, isOpen, onClose }: DuesProps) {
             <div className="h-px w-full bg-gray-700" />
             <div className="flex py-3">
               <p className="w-24 text-sm text-gray-400">{item.label}</p>
-              <p className="flex-1 text-sm font-medium text-white">{item.value ?? '불러오는 중...'}</p>
+              <p className="flex-1 text-sm font-medium text-white">
+                {item.value ?? '불러오는 중...'}
+              </p>
             </div>
           </div>
         ))}

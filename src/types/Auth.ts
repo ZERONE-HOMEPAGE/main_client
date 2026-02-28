@@ -24,6 +24,17 @@ export interface SignupResponse {
   status: string;
 }
 
+export interface SignupError {
+  step: string;
+  message: string;
+  errors: ErrorField[];
+}
+
+export interface ErrorField {
+  field: string;
+  message: string;
+}
+
 // LoginV2 types
 export type LoginV2step = 'LOGIN_SUCCESS' | 'LOGIN_BLOCKED' | 'NEED_PHONE';
 

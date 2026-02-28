@@ -536,6 +536,7 @@ export default function Hero() {
             학회비 납부 →
           </Button>
         )}
+        {cta === 'JOIN' && <></>}
       </div>
       <ScrollDownBtn />
       <DuesModal isNew={false} isOpen={isDuesOpen} onClose={() => setIsDuesOpen(false)} />

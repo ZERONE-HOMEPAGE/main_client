@@ -35,12 +35,10 @@ export default function InputBox({
         </>
       ) : (
         <>
-          <img src={LockIcon} className="h-4 w-4" />
-          <p
-            className={`border-1 w-full rounded-md border-[#2C2C2E] bg-[#121212] px-3 py-2 text-[#8E8E93] outline-none transition focus:ring-2`}
-          >
-            {value}
-          </p>
+          <div className="flex w-full items-center rounded-md border border-[#2C2C2E] bg-[#121212] px-3 py-2 text-[#8E8E93]">
+            <img src={LockIcon} className="mr-2 h-3 w-2.5" alt="lock icon" />
+            <p className="">{value}</p>
+          </div>
         </>
       )}
     </div>

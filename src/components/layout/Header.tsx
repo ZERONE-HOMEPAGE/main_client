@@ -1,17 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { useLogout } from '@/hooks/useLogout';
-import { isLoggedIn, removeAccessToken } from '@/utils/token';
-import { useQueryClient } from '@tanstack/react-query';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { isLoggedIn } from '@/utils/token';
+import InfoModal from '@/components/ui/modal/InfoModal';
 
 export default function Header() {
   const [barOpen, setBarOpen] = useState(false);
   const [isHeroVisible, setIsHeroVisible] = useState(true);
   const observerRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
-  const { mutate: LogoutMutate } = useLogout();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const [ModalOpen, setModalOpen] = useState<boolean>(false);
   const token = isLoggedIn();
 
   function barClick() {
@@ -67,12 +64,12 @@ export default function Header() {
     };
   }, [location.pathname]);
 
-  const handleLogout = () => {
+  /*   const handleLogout = () => {
     removeAccessToken();
     queryClient.removeQueries({ queryKey: ['profile'] });
     navigate('/');
     LogoutMutate();
-  };
+  }; */
 
   return (
     <>
@@ -115,8 +112,8 @@ export default function Header() {
                     로그인/회원가입
                   </NavLink>
                 ) : (
-                  <button onClick={handleLogout} className="text-white">
-                    로그아웃
+                  <button onClick={() => setModalOpen((prev) => !prev)} className="text-white">
+                    내 정보
                   </button>
                 )}
               </li>
@@ -153,7 +150,7 @@ export default function Header() {
                   </NavLink>
                 </li>
               ))}
-              <li className="p-3">
+              <li>
                 {!token ? (
                   <NavLink
                     to={'/login'}
@@ -162,8 +159,8 @@ export default function Header() {
                     로그인/회원가입
                   </NavLink>
                 ) : (
-                  <button onClick={handleLogout} className="test-white">
-                    로그아웃
+                  <button onClick={() => setModalOpen((prev) => !prev)} className="text-white">
+                    내 정보
                   </button>
                 )}
               </li>
@@ -171,6 +168,18 @@ export default function Header() {
           </div>
         </nav>
       </header>
+
+      {ModalOpen && (
+        <>
+          {/* 배경 */}
+          <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setModalOpen(false)}></div>
+
+          {/* 모달 */}
+          <div className="fixed right-6 top-20 z-50">
+            <InfoModal onClose={() => setModalOpen(false)} />
+          </div>
+        </>
+      )}
     </>
   );
 }

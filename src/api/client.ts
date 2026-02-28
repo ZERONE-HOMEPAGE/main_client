@@ -1,5 +1,5 @@
 import axios, { type AxiosRequestConfig } from 'axios';
-import { getAccessToken, setAccessToken, removeAccessToken } from '@/utils/token';
+import { getAccessToken, setAccessToken } from '@/utils/token';
 
 export const client = axios.create({
   baseURL: import.meta.env.DEV ? '/' : import.meta.env.VITE_API_BASE_URL,
@@ -75,8 +75,8 @@ client.interceptors.response.use(
     } catch {
       // 갱신 실패 → 대기열 정리 후 로그아웃 처리
       pendingRequests = [];
-      removeAccessToken();
-      window.location.href = '/login';
+      sessionStorage.removeItem('accessToken');
+      window.location.href = '/';
       return Promise.reject(error);
     } finally {
       isRefreshing = false;
