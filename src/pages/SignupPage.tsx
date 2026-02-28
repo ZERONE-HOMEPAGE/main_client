@@ -144,8 +144,13 @@ export default function SignupPage() {
 
   return (
     <>
-      <DuesModal isNew={true} isOpen={onModal} onClose={() => navigate('/')} />
-      <div className="flex h-full h-screen w-full flex-col items-center bg-black">
+      <DuesModal
+        isNew={true}
+        isOpen={onModal}
+        onClose={() => navigate('/')}
+        onConfirm={() => navigate('/')}
+      />
+      <div className="flex h-full w-full flex-col items-center bg-black">
         <div className="max-w-5xl flex-col items-center bg-black px-4 py-32">
           <p className="text-3xl font-bold text-white">회원가입</p>
           <p className="mt-2 text-xl text-[#9CA3AF]">한양대학교 이메일로만 가입할 수 있습니다.</p>

@@ -116,16 +116,28 @@ export default function MygrationPage() {
   };
 
   return onModal ? (
-    <DuesModal isNew={false} isOpen={onModal} onClose={() => setOnModal} />
+    <DuesModal
+      isNew={false}
+      isOpen={onModal}
+      onClose={() => setOnModal}
+      onConfirm={() => setOnModal}
+    />
   ) : (
-    <div className="flex h-full h-screen w-full flex-col items-center bg-black">
+    <div className="flex h-full w-full flex-col items-center bg-black">
       <div className="max-w-5xl flex-col items-center bg-black px-4 py-32">
         <p className="text-3xl font-bold text-white">오마이그레이션</p>
         <p className="mt-2 text-xl text-[#9CA3AF]">한양대학교 이메일로만 가입할 수 있습니다.</p>
 
         <div className="mt-8 flex-col gap-2">
           {/* Student ID and Phone NUmber */}
-          <div className="flex flex-row flex-wrap justify-center md:gap-8">
+          <div className="flex w-full flex-col flex-wrap justify-center md:gap-8">
+            <InputBox
+              title="전화번호"
+              value={PhoneNumber}
+              placeholder="ex) 01012345458"
+              Change={handleNumberOnly_Phone}
+              isLock={true}
+            />
             <InputBox
               title="학번"
               value={Sid}
@@ -135,25 +147,13 @@ export default function MygrationPage() {
               isLock={!SidLock}
             />
             <InputBox
-              title="전화번호"
-              value={PhoneNumber}
-              placeholder="ex) 01012345458"
-              Change={handleNumberOnly_Phone}
-              isLock={true}
+              title="백준 아이디"
+              value={BJ_id}
+              placeholder="선택"
+              errormessage={BJidError}
+              Change={setBJ_id}
+              isLock={!BJidLock}
             />
-          </div>
-          {/* Baekjoon ID */}
-          <div className="flex flex-row flex-wrap justify-center">
-            <div className="w-full">
-              <InputBox
-                title="백준 아이디"
-                value={BJ_id}
-                placeholder="선택"
-                errormessage={BJidError}
-                Change={setBJ_id}
-                isLock={!BJidLock}
-              />
-            </div>
           </div>
         </div>
       </div>

@@ -7,9 +7,10 @@ interface DuesProps {
   isNew: boolean;
   isOpen: boolean;
   onClose: () => void;
+  onConfirm: () => void;
 }
 
-export default function DuesModal({ isNew, isOpen, onClose }: DuesProps) {
+export default function DuesModal({ isNew, isOpen, onClose, onConfirm }: DuesProps) {
   const [duesInfo, setDuesInfo] = useState<DuesInfoResponse | null>(null);
 
   useEffect(() => {
@@ -47,7 +48,9 @@ export default function DuesModal({ isNew, isOpen, onClose }: DuesProps) {
         {/* 헤더 */}
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-white">학회비 납부 안내</h2>
+            <h2 className="text-2xl font-bold text-white">
+              {isNew ? '학회비 납부 안내 (신규 가입)' : '학회비 납부 안내 (재가입)'}
+            </h2>
             <p className="mt-1 text-sm text-gray-400">
               {isNew
                 ? '회원가입이 완료되었습니다. 안내된 계좌로 학회비를 입금해주세요.'
@@ -81,12 +84,17 @@ export default function DuesModal({ isNew, isOpen, onClose }: DuesProps) {
         {/* 닫기 버튼 */}
         <div className="mt-6">
           <button
-            onClick={onClose}
+            onClick={onConfirm}
             className="w-full rounded-lg bg-indigo-600 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-500"
           >
-            확인
+            {isNew ? '확인' : '재가입 신청'}
           </button>
         </div>
+        {/* 
+        <p className="mt-2 flex w-full flex-col items-center font-bold text-[#A1122F]">
+          입금 후 버튼을 꼭 눌러주세요!
+        </p> 
+        */}
       </div>
     </div>
   );

@@ -13,9 +13,9 @@ const ROLE_MAP: Record<string, string> = {
 };
 
 const DUES_LABEL: Record<string, string> = {
-  YES: 'Y',
-  NO: 'N',
-  HONOR: 'Y',
+  YES: '납부 완료',
+  NO: '미납',
+  HONOR: '명예',
 };
 
 export default function InfoModal({ onClose }: InfoProps) {
@@ -54,7 +54,7 @@ export default function InfoModal({ onClose }: InfoProps) {
     profile.profileImageUrl || sessionStorage.getItem('authUserImage') || undefined;
 
   return (
-    <div className="w-80 rounded-2xl bg-[#18181b] shadow-2xl">
+    <div className="w-72 rounded-2xl bg-[#18181b] shadow-2xl">
       {/* 프로필 */}
       <div className="flex w-full flex-row items-center px-6 pb-6 pt-8">
         <img src={profileImage} alt="profile" className="h-20 w-20 rounded-full object-cover" />

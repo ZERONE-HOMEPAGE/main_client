@@ -3,13 +3,63 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/ui/Button';
 import ScrollDownBtn from '@/components/ui/ScrollDownBtn';
 import DuesModal from '@/components/ui/modal/DuesModal';
+import TextModal from '@/components/ui/modal/TextModal';
 import { useMainCta } from '@/hooks/useMainCta';
+import { useRenew } from '@/hooks/useRenew';
 
 export default function Hero() {
   const cta = useMainCta();
   const navigate = useNavigate();
   const [isDuesOpen, setIsDuesOpen] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { mutate: RenewMutate } = useRenew();
+  const [onResult, setOnResult] = useState<boolean>(false);
+  const [resultTitle, setResultTitle] = useState('');
+  const [resultDesc, setResultDesc] = useState('');
+
+  const handleRenew = () => {
+    setIsDuesOpen(false);
+
+    RenewMutate(undefined, {
+      onSuccess: (data) => {
+        switch (data.step) {
+          case 'RENEW_REQUESTED':
+            setResultTitle('재가입 신청 완료');
+            setResultDesc('재가입 신청이 접수되었습니다.');
+            break;
+
+          case 'RENEW_PENDING':
+            setResultTitle('처리 대기 중');
+            setResultDesc(
+              '관리자가 수동으로 처리하기에, 최대 하루정도의 시간이 소요 될 수 있습니다.',
+            );
+            break;
+
+          case 'RENEW_ALREADY_COMPLETED':
+            setResultTitle('이미 재가입 완료');
+            setResultDesc('이미 재가입이 완료된 상태입니다.');
+            break;
+
+          case 'RENEW_HONOR_AUTO':
+            setResultTitle('자동 재가입');
+            setResultDesc('명예회원 자동 재가입이 완료되었습니다.');
+            break;
+
+          default:
+            setResultTitle('');
+            setResultDesc('');
+        }
+
+        setOnResult(true);
+      },
+
+      onError: () => {
+        setResultTitle('재가입 실패');
+        setResultDesc('권한이 없거나 오류가 발생했습니다.');
+        setOnResult(true);
+      },
+    });
+  };
 
   // 초기 활성 셀들
   const initialCells = new Set([
@@ -528,18 +578,33 @@ export default function Hero() {
         <h1 className="text-4xl font-bold text-white">알고리즘학회 영과일</h1>
         {cta === 'JOIN' && (
           <Button variant="primary" onClick={() => navigate('/login')}>
-            가입하기 →
+            영과일 가입 →
           </Button>
         )}
         {cta === 'RENEW' && (
           <Button variant="primary" onClick={() => setIsDuesOpen(true)}>
-            학회비 납부 →
+            영과일 재가입 →
           </Button>
         )}
         {cta === 'JOIN' && <></>}
       </div>
       <ScrollDownBtn />
-      <DuesModal isNew={false} isOpen={isDuesOpen} onClose={() => setIsDuesOpen(false)} />
+
+      {/* 계좌 알림 */}
+      <DuesModal
+        isNew={false}
+        isOpen={isDuesOpen}
+        onClose={() => setIsDuesOpen(false)}
+        onConfirm={handleRenew}
+      />
+
+      {/* Renew 모달 */}
+      <TextModal
+        isOpen={onResult}
+        title={resultTitle}
+        description={resultDesc}
+        onClose={() => setOnResult(false)}
+      />
     </div>
   );
 }

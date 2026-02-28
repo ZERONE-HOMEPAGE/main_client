@@ -17,7 +17,7 @@ export const useLookup = () => {
         );
       }
       // 매칭안됨 => signup
-      else {
+      else if (res.step === 'SIGNUP_REQUIRED') {
         console.log(
           '/auth/lookup_phone 성공했습니다. \n상태: 매칭되는 정보가 없습니다. \n/auth/signup 절차로 넘어갑니다. \n회원가입페이지로 이동합니다.',
         );

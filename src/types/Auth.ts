@@ -193,3 +193,21 @@ export interface ValidationDetail {
 export interface ValidationError422 {
   detail: ValidationDetail[];
 }
+
+// renew types
+export interface RenewSuccess {
+  step: string;
+  message: string;
+  userId: string;
+  status: string;
+  duesPending: boolean;
+  duesStatus: string;
+}
+
+export interface RenewError {
+  code: string;
+  message: string;
+  status: string | undefined;
+}
+
+export type RenewResponse = RenewSuccess;

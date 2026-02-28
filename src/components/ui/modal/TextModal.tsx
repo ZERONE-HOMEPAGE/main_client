@@ -3,9 +3,16 @@ interface TextModalProps {
   title: string;
   description: string;
   onClose: () => void;
+  children?: React.ReactNode;
 }
 
-export default function TextModal({ isOpen, title, description, onClose }: TextModalProps) {
+export default function TextModal({
+  isOpen,
+  title,
+  description,
+  onClose,
+  children,
+}: TextModalProps) {
   if (!isOpen) return null;
 
   return (
@@ -25,6 +32,8 @@ export default function TextModal({ isOpen, title, description, onClose }: TextM
 
         {/* 구분선 */}
         <div className="my-6 h-px w-full bg-gray-700" />
+
+        {children}
 
         {/* 버튼 */}
         <div className="flex justify-end">
