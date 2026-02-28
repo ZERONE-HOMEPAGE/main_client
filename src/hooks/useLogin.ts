@@ -19,7 +19,7 @@ export const useLogin = () => {
       }
       // 로그인 차단 - 컴포넌트에서 처리
       else if (data.step === 'LOGIN_BLOCKED') {
-        console.log('/auth/google 성공했습니다. \n상태: LOGIN_BLOCKED \nstatus:', data.status);
+        console.log('/auth/google 성공했습니다. \n상태: 학회비 미납 \n학회비 모달을 출력합니다.');
       }
       // 전화번호 필요
       else

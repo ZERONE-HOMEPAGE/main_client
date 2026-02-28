@@ -75,8 +75,8 @@ client.interceptors.response.use(
     } catch {
       // 갱신 실패 → 대기열 정리 후 로그아웃 처리
       pendingRequests = [];
-      removeAccessToken();
-      window.location.href = '/login';
+      sessionStorage.removeItem('accessToken');
+      window.location.href = '/';
       return Promise.reject(error);
     } finally {
       isRefreshing = false;

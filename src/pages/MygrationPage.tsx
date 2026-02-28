@@ -6,6 +6,7 @@ import { useMigration } from '@/hooks/useMigration';
 import { MigrationRequest } from '@/types/Auth';
 import { useEffect } from 'react';
 import { isLoggedIn } from '@/utils/token';
+import DuesModal from '@/components/ui/modal/DuesModal';
 
 interface MigrationState {
   idToken: string;
@@ -29,6 +30,8 @@ export default function MygrationPage() {
   const SidLock = needSid ?? false;
   const BJidLock = needBjid ?? false;
 
+  const [onModal, setOnModal] = useState<boolean>(false);
+
   // error
   const [sidError, setSidError] = useState<string>('');
   const [BJidError, setBJidError] = useState<string>('');
@@ -39,7 +42,7 @@ export default function MygrationPage() {
   };
 
   const handleNumberOnly_SID = (value: string) => {
-    setSid(value.replace(/[^0-9]/g, ''));
+    setSid(value.replace(/[^0-9]/g, '').slice(0, 10));
   };
 
   const handeleSubmit = () => {
@@ -59,8 +62,16 @@ export default function MygrationPage() {
     if (!validateFields()) return; // 필드검사)
 
     migrationMutate(body, {
-      onSuccess: (_data) => {
-        navigate('/');
+      onSuccess: (data) => {
+        // 마이그레이션 o + 학회비 지불 o
+        if (data.step === 'LOGIN_SUCCESS') {
+          sessionStorage.setItem(data.accessToken, 'accessToken');
+          navigate('/');
+        }
+        // 마이그레이션 o + 학회비 지불 x
+        else if (data.step === 'LOGIN_BLOCKED') {
+          setOnModal(true);
+        }
       },
       onError: (err) => {
         if (err.response?.data.step === 'VALIDATION_ERROR') {
@@ -78,6 +89,7 @@ export default function MygrationPage() {
     });
   };
 
+  // url접근 방지 (로그인상태)
   useEffect(() => {
     if (isLoggedIn()) {
       navigate('/', { replace: true });
@@ -88,20 +100,24 @@ export default function MygrationPage() {
   const validateFields = () => {
     let valid = true;
 
-    if (!Sid) {
-      setSidError('학번을 기입해주세요.');
-      valid = false;
-    } else if (Sid.length !== 10) {
-      setSidError('학번은 총 10자리 입니다.');
-      valid = false;
-    } else {
-      setSidError('');
+    if (needSid) {
+      if (!Sid) {
+        setSidError('학번을 기입해주세요.');
+        valid = false;
+      } else if (Sid.length !== 10) {
+        setSidError('학번은 총 10자리 입니다.');
+        valid = false;
+      } else {
+        setSidError('');
+      }
     }
 
     return valid;
   };
 
-  return (
+  return onModal ? (
+    <DuesModal isNew={false} isOpen={onModal} onClose={() => setOnModal} />
+  ) : (
     <div className="flex h-full h-screen w-full flex-col items-center bg-black">
       <div className="max-w-5xl flex-col items-center bg-black px-4 py-32">
         <p className="text-3xl font-bold text-white">오마이그레이션</p>

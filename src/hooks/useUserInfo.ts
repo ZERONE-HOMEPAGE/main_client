@@ -8,8 +8,9 @@ interface SignupState {
 }
 
 export function useUserInfo() {
-  const location = useLocation(); // loacte에 의존하여 코드가 작동하여 훅으로 넣었습니다.
-  const { idToken } = (location.state as SignupState) ?? {}; // location 받기용 Phone (사용 x)
+  const location = useLocation(); // from /login
+  const { idToken } = (location.state as SignupState) ?? {};
+
   if (!idToken) {
     return {
       idToken: '',
@@ -19,7 +20,7 @@ export function useUserInfo() {
     };
   }
   const decoded = decodeIdToken(idToken);
-  const parsed = parsing(decoded.name);
+  const parsed = parsing('조성민 | 컴퓨터학부 | 한양대(ERICA)');
 
   return {
     idToken,
