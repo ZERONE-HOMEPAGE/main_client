@@ -13,6 +13,7 @@ import { parsing } from '@/utils/Parse';
 import { isLoggedIn } from '@/utils/token';
 import type { ValidationError422 } from '@/types/Auth';
 import { AxiosError } from 'axios';
+import ActionButton from '@/components/ui/ActionButton';
 
 export default function LoginPage() {
   // 버튼 최대 길이 (가로)
@@ -208,6 +209,12 @@ export default function LoginPage() {
           <div ref={googleButtonWrapRef} className="w-full">
             <div id={googleButtonElementId} className="w-full overflow-hidden rounded-xl" />
           </div>
+          <ActionButton
+            onClick={() => window.open('https://open.kakao.com/o/gSIUi0hi', '_blank')}
+            className="w-full"
+          >
+            가두모집 링크 바로가기
+          </ActionButton>
         </div>
       </div>
 
