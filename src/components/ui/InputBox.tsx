@@ -36,7 +36,7 @@ export default function InputBox({
         </>
       ) : (
         <>
-          <div className="mb-6 flex w-full items-center rounded-md border border-[#2C2C2E] bg-[#121212] px-3 py-2 text-[#8E8E93]">
+          <div className="mb-8 flex w-full items-center rounded-md border border-[#2C2C2E] bg-[#121212] px-3 py-2 text-[#8E8E93]">
             <img src={LockIcon} className="mr-2 h-3 w-2.5" alt="lock icon" />
             <p className="">{value}</p>
           </div>

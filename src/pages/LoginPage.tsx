@@ -35,6 +35,7 @@ export default function LoginPage() {
   const [isPendingOpen, setPendingOpen] = useState(false);
   const [onTextOpen, setTextOpen] = useState(false);
   const [onInputOpen, setInputOpen] = useState<boolean>(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   // 로그인 상태면 쫓아내기
   useEffect(() => {
@@ -90,7 +91,7 @@ export default function LoginPage() {
                 onSuccess: (res) => {
                   if (res.step === 'NEED_PHONE') {
                     setInputOpen(true);
-                  } else if (res.step === 'LOGIN_BLOCKED' && res.status === 'PENDING') {
+                  } else if (res.step === 'LOGIN_BLOCKED') {
                     setPendingOpen(true);
                   }
                 },
@@ -144,6 +145,10 @@ export default function LoginPage() {
 
     if (!valid) return;
 
+    setConfirmOpen(true);
+  };
+
+  const handleLookup = async () => {
     try {
       await lookupMutate(
         {
@@ -171,6 +176,7 @@ export default function LoginPage() {
               const msg = axiosErr.response?.data?.detail?.[0]?.msg;
               setPhoneError(msg ?? '전화번호 형식이 올바르지 않습니다.');
             } else {
+              setConfirmOpen(false);
               setPhoneError(
                 '이미 다른 구글 계정과 연동된 전화번호입니다. 관리자에게 문의해주세요.',
               );
@@ -212,6 +218,14 @@ export default function LoginPage() {
         onChange={handleNumberOnly_Phone}
         onSubmit={handlePhoneSubmit}
         onClose={() => setInputOpen(false)}
+      />
+
+      <TextModal
+        isOpen={confirmOpen}
+        title="전화번호 확인"
+        description={`입력하신 번호가 ${Phone} 맞습니까?`}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={handleLookup}
       />
 
       <TextModal

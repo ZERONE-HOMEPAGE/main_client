@@ -3,6 +3,7 @@ interface TextModalProps {
   title: string;
   description: string;
   onClose: () => void;
+  onConfirm?: () => void;
   children?: React.ReactNode;
 }
 
@@ -11,6 +12,7 @@ export default function TextModal({
   title,
   description,
   onClose,
+  onConfirm,
   children,
 }: TextModalProps) {
   if (!isOpen) return null;
@@ -43,6 +45,14 @@ export default function TextModal({
           >
             닫기
           </button>
+          {onConfirm && (
+            <button
+              onClick={onConfirm}
+              className="ml-4 rounded-lg bg-[#5F63E6] px-5 py-2 text-sm text-gray-300 transition hover:bg-[#343A46]"
+            >
+              제출
+            </button>
+          )}
         </div>
       </div>
     </div>
