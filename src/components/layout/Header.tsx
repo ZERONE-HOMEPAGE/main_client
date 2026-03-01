@@ -12,6 +12,7 @@ export default function Header() {
   const token = isLoggedIn();
 
   function barClick() {
+    setModalOpen(false);
     setBarOpen(!barOpen);
   }
 
@@ -155,11 +156,18 @@ export default function Header() {
                   <NavLink
                     to={'/login'}
                     className={({ isActive }) => (isActive ? 'font-bold' : '')}
+                    onClick={() => setBarOpen(false)}
                   >
                     로그인/회원가입
                   </NavLink>
                 ) : (
-                  <button onClick={() => setModalOpen((prev) => !prev)} className="text-white">
+                  <button
+                    onClick={() => {
+                      setBarOpen(false);
+                      setModalOpen((prev) => !prev);
+                    }}
+                    className="p-3 text-black"
+                  >
                     내 정보
                   </button>
                 )}
@@ -175,7 +183,7 @@ export default function Header() {
           <div className="fixed inset-0 z-40" onClick={() => setModalOpen(false)}></div>
 
           {/* 모달 */}
-          <div className="fixed right-56 top-20 z-50">
+          <div className="fixed right-8 top-20 z-50 md:right-56">
             <InfoModal onClose={() => setModalOpen(false)} />
           </div>
         </>
