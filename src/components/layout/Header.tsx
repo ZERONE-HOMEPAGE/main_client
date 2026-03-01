@@ -172,10 +172,10 @@ export default function Header() {
       {ModalOpen && (
         <>
           {/* 배경 */}
-          <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setModalOpen(false)}></div>
+          <div className="fixed inset-0 z-40" onClick={() => setModalOpen(false)}></div>
 
           {/* 모달 */}
-          <div className="fixed right-6 top-20 z-50">
+          <div className="fixed right-56 top-20 z-50">
             <InfoModal onClose={() => setModalOpen(false)} />
           </div>
         </>

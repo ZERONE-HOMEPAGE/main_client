@@ -1,22 +1,10 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 import { useLogout } from '@/hooks/useLogout';
-import { getprofile } from '@/api/auth';
-import { removeAccessToken } from '@/utils/token';
+import { useGetInfo } from '@/hooks/useGetInfo';
+import type { StudyHistory } from '@/types/Auth';
 
 interface InfoProps {
   onClose: () => void;
 }
-
-const STATUS_MAP: Record<string, { label: string; className: string }> = {
-  ACTIVE: { label: '활성', className: 'bg-green-500/20 text-green-400 border border-green-500/30' },
-  PENDING: {
-    label: '승인 대기',
-    className: 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30',
-  },
-  SUSPENDED: { label: '정지', className: 'bg-red-500/20 text-red-400 border border-red-500/30' },
-  REJECTED: { label: '거절', className: 'bg-gray-500/20 text-gray-400 border border-gray-500/30' },
-};
 
 const ROLE_MAP: Record<string, string> = {
   ROLE_ADMIN: '관리자',
@@ -24,109 +12,74 @@ const ROLE_MAP: Record<string, string> = {
   ROLE_USER: '일반 회원',
 };
 
-const DUES_MAP: Record<string, { label: string; className: string }> = {
-  YES: {
-    label: '납부 완료',
-    className: 'bg-green-500/20 text-green-400 border border-green-500/30',
-  },
-  NO: { label: '미납', className: 'bg-red-500/20 text-red-400 border border-red-500/30' },
+const DUES_LABEL: Record<string, string> = {
+  YES: '납부 완료',
+  NO: '미납',
+  HONOR: '명예',
 };
 
 export default function InfoModal({ onClose }: InfoProps) {
   const { mutate: LogoutMutate } = useLogout();
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-
-  const { data: profile, isLoading } = useQuery({
-    queryKey: ['profile'],
-    queryFn: getprofile,
-    retry: false,
-  });
+  const { data: profile, isLoading } = useGetInfo();
 
   const handleLogout = () => {
-    removeAccessToken();
-    queryClient.removeQueries({ queryKey: ['profile'] });
     LogoutMutate();
     onClose();
-    navigate('/');
   };
 
   if (isLoading || !profile) {
     return (
-      <div className="w-72 overflow-hidden rounded-xl border border-[#30363d] bg-[#161b22]/95 shadow-2xl backdrop-blur-md">
-        <div className="space-y-3 p-5">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 animate-pulse rounded-full bg-[#30363d]" />
-            <div className="flex-1 space-y-2">
-              <div className="h-3 animate-pulse rounded-full bg-[#30363d]" />
-              <div className="h-2.5 w-3/4 animate-pulse rounded-full bg-[#30363d]" />
-            </div>
-          </div>
-          <div className="my-3 border-t border-[#30363d]" />
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-3 animate-pulse rounded-full bg-[#30363d]" />
+      <div className="w-80 rounded-2xl bg-black/60 shadow-2xl">
+        <div className="flex flex-col items-center px-6 pb-6 pt-8">
+          <div className="h-20 w-20 animate-pulse rounded-full bg-[#2a2a2e]" />
+          <div className="mt-3 h-5 w-24 animate-pulse rounded-full bg-[#2a2a2e]" />
+          <div className="mt-2 h-3.5 w-16 animate-pulse rounded-full bg-[#2a2a2e]" />
+        </div>
+        <div className="space-y-4 px-6 pb-6">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-4 animate-pulse rounded-full bg-[#2a2a2e]" />
           ))}
+        </div>
+        <div className="px-6 pb-6">
+          <div className="h-14 animate-pulse rounded-2xl bg-[#2a2a2e]" />
         </div>
       </div>
     );
   }
 
-  const status = STATUS_MAP[profile.status ?? ''] ?? {
-    label: profile.status ?? '-',
-    className: 'bg-gray-500/20 text-gray-400 border border-gray-500/30',
-  };
   const role = ROLE_MAP[profile.role ?? ''] ?? profile.role ?? '-';
-  const dues = DUES_MAP[profile.duesStatus ?? ''] ?? {
-    label: profile.duesStatus ?? '-',
-    className: 'bg-gray-500/20 text-gray-400 border border-gray-500/30',
-  };
+  const duesLabel = DUES_LABEL[profile.duesStatus ?? ''] ?? '-';
+  const currentStudies = profile.studies?.current ?? [];
+  const profileImage =
+    profile.profileImageUrl || sessionStorage.getItem('authUserImage') || undefined;
 
   return (
-    <div className="w-72 overflow-hidden rounded-xl border border-[#30363d] bg-[#161b22]/95 shadow-2xl backdrop-blur-md">
+    <div className="w-72 rounded-2xl bg-[#18181b] shadow-2xl">
       {/* 프로필 */}
-      <div className="flex items-center gap-3 border-b border-[#30363d] px-4 py-4">
-        {profile.profileImageUrl ? (
-          <img
-            src={profile.profileImageUrl}
-            alt="profile"
-            className="h-10 w-10 rounded-full object-cover ring-2 ring-[#30363d]"
-          />
-        ) : (
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#30363d] text-base font-bold text-[#e6edf3]">
-            {profile.name[0]}
-          </div>
-        )}
-        <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-[#e6edf3]">{profile.name}</p>
-          <p className="truncate text-xs text-[#8b949e]">{profile.email}</p>
+      <div className="flex w-full flex-row items-center px-6 pb-6 pt-8">
+        <img src={profileImage} alt="profile" className="h-20 w-20 rounded-full object-cover" />
+        <div className="ml-4">
+          <p className="text-xl font-bold text-white">{profile.name}</p>
+          <p className="mt-1 text-sm text-gray-400">{role}</p>
         </div>
       </div>
 
       {/* 정보 */}
-      <div className="space-y-2 px-4 py-3">
-        <InfoRow label="학번" value={profile.studentId ?? '-'} />
-        <InfoRow label="학과" value={profile.department ?? '-'} />
-        <InfoRow label="기수" value={profile.generation ? `${profile.generation}기` : '-'} />
-        <InfoRow label="역할" value={role} />
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-[#8b949e]">상태</span>
-          <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${status.className}`}>
-            {status.label}
-          </span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-[#8b949e]">학회비</span>
-          <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${dues.className}`}>
-            {dues.label}
-          </span>
+      <div className="px-6 pb-6">
+        <div className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-4">
+          <InfoRow label="학번" value={profile.studentId ?? '-'} />
+          <InfoRow label="기수" value={profile.generation ? `${profile.generation}기수` : '-'} />
+          <InfoRow label="학회비 납입" value={duesLabel} />
+          <InfoRow label="백준 아이디" value={profile.baekjoonId || '미등록'} />
+          <StudyRow studies={currentStudies} />
         </div>
       </div>
 
       {/* 로그아웃 */}
-      <div className="border-t border-[#30363d] px-4 py-3">
+      <div className="p-4">
         <button
           onClick={handleLogout}
-          className="w-full rounded-md border border-[#30363d] bg-[#21262d] py-2 text-xs font-medium text-[#e6edf3] transition hover:border-red-500/50 hover:bg-red-500/10 hover:text-red-400"
+          className="text-md flex w-full justify-center rounded-lg bg-zerone p-2 text-white transition-all transition-colors hover:bg-opacity-80"
         >
           로그아웃
         </button>
@@ -137,9 +90,28 @@ export default function InfoModal({ onClose }: InfoProps) {
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-xs text-[#8b949e]">{label}</span>
-      <span className="text-xs font-medium text-[#e6edf3]">{value}</span>
-    </div>
+    <>
+      <span className="whitespace-nowrap text-sm text-gray-400">{label}</span>
+      <span className="text-sm text-white">{value}</span>
+    </>
+  );
+}
+
+function StudyRow({ studies }: { studies: StudyHistory[] }) {
+  return (
+    <>
+      <span className="whitespace-nowrap text-sm text-gray-400">스터디</span>
+      <div className="flex flex-col gap-1">
+        {studies.length === 0 ? (
+          <span className="text-sm text-white">없음</span>
+        ) : (
+          studies.map((s) => (
+            <span key={s.studyId} className="text-sm text-white">
+              {s.name}
+            </span>
+          ))
+        )}
+      </div>
+    </>
   );
 }

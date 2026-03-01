@@ -7,6 +7,8 @@ import { initGoogleLogin, renderGoogleButton } from '@/api/google';
 import { useLogin } from '@/hooks/useLogin';
 import { useLookup } from '@/hooks/useLookup';
 import { decodeIdToken } from '@/utils/Decode';
+import { duesinfo } from '@/api/dues';
+import type { DuesInfoResponse } from '@/types/Dues';
 import { parsing } from '@/utils/Parse';
 import { isLoggedIn } from '@/utils/token';
 import type { ValidationError422 } from '@/types/Auth';
@@ -33,6 +35,7 @@ export default function LoginPage() {
   const [isPendingOpen, setPendingOpen] = useState(false);
   const [onTextOpen, setTextOpen] = useState(false);
   const [onInputOpen, setInputOpen] = useState<boolean>(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   // 로그인 상태면 쫓아내기
   useEffect(() => {
@@ -88,7 +91,7 @@ export default function LoginPage() {
                 onSuccess: (res) => {
                   if (res.step === 'NEED_PHONE') {
                     setInputOpen(true);
-                  } else if (res.step === 'LOGIN_BLOCKED' && res.status === 'PENDING') {
+                  } else if (res.step === 'LOGIN_BLOCKED') {
                     setPendingOpen(true);
                   }
                 },
@@ -142,6 +145,10 @@ export default function LoginPage() {
 
     if (!valid) return;
 
+    setConfirmOpen(true);
+  };
+
+  const handleLookup = async () => {
     try {
       await lookupMutate(
         {
@@ -151,7 +158,7 @@ export default function LoginPage() {
         {
           onSuccess: (res) => {
             // 매칭됨 => migration
-            if (res.step === 'MIGRATION_FOUND') {
+            if (res.step === 'MIGRATION_FOUND' && res.needsStudentId) {
               const needSid = res.needsStudentId;
               const needBjid = res.needsBaekjoonId;
               navigate('/migration', { state: { idToken, Phone, needSid, needBjid } });
@@ -169,6 +176,7 @@ export default function LoginPage() {
               const msg = axiosErr.response?.data?.detail?.[0]?.msg;
               setPhoneError(msg ?? '전화번호 형식이 올바르지 않습니다.');
             } else {
+              setConfirmOpen(false);
               setPhoneError(
                 '이미 다른 구글 계정과 연동된 전화번호입니다. 관리자에게 문의해주세요.',
               );
@@ -213,6 +221,14 @@ export default function LoginPage() {
       />
 
       <TextModal
+        isOpen={confirmOpen}
+        title="전화번호 확인"
+        description={`입력하신 번호가 ${Phone} 맞습니까?`}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={handleLookup}
+      />
+
+      <TextModal
         isOpen={onTextOpen}
         title="로그인 실패"
         description="한양대학교 이메일이 아닙니다."
@@ -222,9 +238,65 @@ export default function LoginPage() {
       <TextModal
         isOpen={isPendingOpen}
         title="회원가입 승인 대기중"
-        description="입금 확인 후 승인 처리됩니다. 승인 완료 후 로그인이 가능하며, 승인 완료 시 메일이 발송됩니다."
+        description="입금 확인 후 승인 처리됩니다. 승인 완료 후 로그인이 가능하며, 승인 완료 시 메일이 발송됩니다. 관리자가 수동으로 처리하기에, 최대 하루정도의 시간이 소요 될 수 있습니다."
         onClose={() => setPendingOpen(false)}
-      />
+      >
+        <Dues isNew={true} />
+      </TextModal>
     </div>
+  );
+}
+
+interface DuesProps {
+  isNew: boolean;
+}
+
+function Dues({ isNew }: DuesProps) {
+  const [onDuesOpen, setDuesOpen] = useState<boolean>(false);
+  const [duesInfo, setDuesInfo] = useState<DuesInfoResponse | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await duesinfo();
+        setDuesInfo(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const amount = isNew ? duesInfo?.amountNew : duesInfo?.amountRenew;
+
+  const infoList = [
+    { label: '계좌번호', value: duesInfo?.bankAccount },
+    { label: '예금주', value: duesInfo?.bankOwner },
+    { label: '입금금액', value: amount },
+  ];
+
+  return (
+    <>
+      <button
+        className="-mt-1 font-semibold text-gray-500 underline"
+        onClick={() => setDuesOpen((prev) => !prev)}
+      >
+        계좌를 잊으셨나요?
+      </button>
+      {onDuesOpen && (
+        <div className="ml-3 mt-2 items-center justify-center">
+          <p className="text-white">
+            {infoList[0].label} : {infoList[0].value}
+          </p>
+          <p className="text-white">
+            {infoList[1].label} : {infoList[1].value}
+          </p>
+          <p className="text-white">
+            {infoList[2].label} : {infoList[2].value}
+          </p>
+        </div>
+      )}
+    </>
   );
 }

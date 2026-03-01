@@ -14,7 +14,7 @@ export const useMigration = () => {
       }
       // migration uccesss and not pending
       else {
-        console.log('migration 성공. \n상태: 학회비 미지불 \n메인화면으로 이동합니다.');
+        console.log('migration 성공. \n상태: 학회비 미지불 \n계좌 안내를 진행합니다.');
       }
     },
     onError: (err) => {

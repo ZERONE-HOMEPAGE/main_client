@@ -22,6 +22,7 @@ function App() {
       offset: 30,
     });
   }, []);
+
   return (
     <BrowserRouter>
       <Routes>
