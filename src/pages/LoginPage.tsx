@@ -192,7 +192,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] w-full flex-col items-center justify-center overflow-hidden bg-black px-4">
+    <div className="-mt-4 flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-8">
       <div className="flex w-full max-w-lg flex-col gap-20">
         {/* zerone 로고 */}
         <div className="flex flex-col items-center gap-4">
