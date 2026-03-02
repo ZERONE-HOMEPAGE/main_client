@@ -62,7 +62,7 @@ export default function StudyIntro() {
         '람다함수, 정렬',
         '중첩 반복문, 완전탐색',
       ],
-      mentor: [['유지성', '컴퓨터학부 · 22학번', '', '']],
+      mentor: [['유지성', '컴퓨터학부 · 22학번', 'swyjs@hanyang.ac.kr', 'Not the same']],
     },
     {
       tabIdx: 2,
