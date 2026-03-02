@@ -155,7 +155,9 @@ export default function Header() {
                 {!token ? (
                   <NavLink
                     to={'/login'}
-                    className={({ isActive }) => (isActive ? 'font-bold' : '')}
+                    className={({ isActive }) =>
+                      'block w-full rounded p-3 ' + (isActive ? 'font-bold' : '')
+                    }
                     onClick={() => setBarOpen(false)}
                   >
                     로그인/회원가입
@@ -166,7 +168,7 @@ export default function Header() {
                       setBarOpen(false);
                       setModalOpen((prev) => !prev);
                     }}
-                    className="p-3 text-black"
+                    className="block w-full p-3 text-left text-black"
                   >
                     내 정보
                   </button>

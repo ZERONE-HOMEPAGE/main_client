@@ -127,7 +127,7 @@ export default function LoginPage() {
 
   // handle
   const handleNumberOnly_Phone = (value: string) => {
-    setPhone(value.replace(/[^0-9]/g, ''));
+    setPhone(value.replace(/[^0-9]/g, '').slice(0, 11));
   };
 
   const handlePhoneSubmit = async () => {
@@ -159,7 +159,7 @@ export default function LoginPage() {
         {
           onSuccess: (res) => {
             // 매칭됨 => migration
-            if (res.step === 'MIGRATION_FOUND' && res.needsStudentId) {
+            if (res.step === 'MIGRATION_FOUND') {
               const needSid = res.needsStudentId;
               const needBjid = res.needsBaekjoonId;
               navigate('/migration', { state: { idToken, Phone, needSid, needBjid } });
