@@ -112,6 +112,13 @@ export default function SignupPage() {
       setSidError('');
     }
 
+    const isValid = /^[a-zA-Z0-9_]+$/.test(BJ_id);
+
+    if (!isValid) {
+      setBj_idError('영어, 숫자, 언더바(_)만 사용할 수 있습니다.');
+      valid = false;
+    }
+
     return valid;
   };
 

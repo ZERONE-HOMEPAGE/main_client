@@ -43,7 +43,6 @@ export default function InputModal({
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
-            maxLength={11}
             className={`w-full rounded-lg bg-[#2A2F3A] px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
               error ? 'ring-red-500' : 'focus:ring-indigo-500'
             }`}

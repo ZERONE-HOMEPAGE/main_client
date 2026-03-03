@@ -38,7 +38,10 @@ export default function InfoModal({ onClose }: InfoProps) {
 
   // 재랜더링, 재요청 후 업뎃
   useEffect(() => {
-    setBjid(profile?.baekjoonId ?? '');
+    if (!profile) return;
+
+    setBjid(profile.baekjoonId ?? '');
+    setNewBjid(profile.baekjoonId ?? '');
   }, [profile]);
 
   // handle
@@ -49,6 +52,13 @@ export default function InfoModal({ onClose }: InfoProps) {
   };
 
   const handleUpdate = () => {
+    const isValid = /^[a-zA-Z0-9_]+$/.test(newBjid);
+
+    if (!isValid) {
+      setBjidError('영어, 숫자, 언더바(_)만 사용할 수 있습니다.');
+      return;
+    }
+
     UpdateMutate(
       {
         baekjoonId: newBjid,

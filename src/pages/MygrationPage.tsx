@@ -100,6 +100,7 @@ export default function MygrationPage() {
   // field검사
   const validateFields = () => {
     let valid = true;
+    const isValid = /^[a-zA-Z0-9_]+$/.test(BJ_id);
 
     if (needSid) {
       if (!Sid) {
@@ -111,6 +112,11 @@ export default function MygrationPage() {
       } else {
         setSidError('');
       }
+    }
+
+    if (!isValid) {
+      setBJidError('영어, 숫자, 언더바(_)만 사용할 수 있습니다.');
+      valid = false;
     }
 
     return valid;
