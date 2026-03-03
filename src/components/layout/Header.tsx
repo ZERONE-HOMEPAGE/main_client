@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { isLoggedIn } from '@/utils/token';
 import InfoModal from '@/components/ui/modal/InfoModal';
+import { useGetInfo } from '@/hooks/useGetInfo';
 
 export default function Header() {
   const [barOpen, setBarOpen] = useState(false);
@@ -10,6 +11,9 @@ export default function Header() {
   const location = useLocation();
   const [ModalOpen, setModalOpen] = useState<boolean>(false);
   const token = isLoggedIn();
+  const { data: profile } = useGetInfo({ enabled: !!token });
+  const [ActiveAdmin, setAdmin] = useState(false);
+  const [ActiveMentor, setMentor] = useState(false);
 
   function barClick() {
     setModalOpen(false);
@@ -65,12 +69,17 @@ export default function Header() {
     };
   }, [location.pathname]);
 
-  /*   const handleLogout = () => {
-    removeAccessToken();
-    queryClient.removeQueries({ queryKey: ['profile'] });
-    navigate('/');
-    LogoutMutate();
-  }; */
+  // 관리자 or 멘토 페이지 연결 설정
+  useEffect(() => {
+    if (!profile) return;
+
+    if (profile.role === 'ROLE_ADMIN') {
+      setAdmin(true);
+      setMentor(true);
+    } else if (profile.role === 'ROLE_MENTOR') {
+      setMentor(true);
+    }
+  }, [profile]);
 
   return (
     <>
@@ -116,6 +125,28 @@ export default function Header() {
                   <button onClick={() => setModalOpen((prev) => !prev)} className="text-white">
                     내 정보
                   </button>
+                )}
+              </li>
+              <li>
+                {/* 관리자페이지 */}
+                {token && ActiveAdmin && (
+                  <NavLink
+                    to={'/admin'}
+                    className={({ isActive }) => (isActive ? 'font-bold' : '')}
+                  >
+                    admin
+                  </NavLink>
+                )}
+              </li>
+              <li>
+                {/* 멘토페이지 */}
+                {token && ActiveMentor && (
+                  <NavLink
+                    to={'/manage_study'}
+                    className={({ isActive }) => (isActive ? 'font-bold' : '')}
+                  >
+                    mentor
+                  </NavLink>
                 )}
               </li>
             </ul>
@@ -174,6 +205,31 @@ export default function Header() {
                   </button>
                 )}
               </li>
+              {token && ActiveAdmin && (
+                <li>
+                  <NavLink
+                    to="/admin"
+                    className={({ isActive }) =>
+                      'block w-full rounded p-3 ' + (isActive ? 'font-bold' : '')
+                    }
+                  >
+                    admin
+                  </NavLink>
+                </li>
+              )}
+
+              {token && ActiveMentor && (
+                <li>
+                  <NavLink
+                    to="/manage_study"
+                    className={({ isActive }) =>
+                      'block w-full rounded p-3 ' + (isActive ? 'font-bold' : '')
+                    }
+                  >
+                    mentor
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </div>
         </nav>

@@ -4,6 +4,7 @@ import type { StudyHistory } from '@/types/Auth';
 import { useState, useEffect } from 'react';
 import { useUpdateProfile } from '@/hooks/useUpdateProfile';
 import InputModal from '@/components/ui/modal/InputModal';
+import { useNavigate } from 'react-router-dom';
 
 interface InfoProps {
   onClose: () => void;
@@ -22,6 +23,7 @@ const DUES_LABEL: Record<string, string> = {
 };
 
 export default function InfoModal({ onClose }: InfoProps) {
+  const navigate = useNavigate();
   const { mutate: LogoutMutate } = useLogout();
   const { data: profile, isLoading } = useGetInfo();
   const { mutate: UpdateMutate } = useUpdateProfile();
@@ -43,6 +45,7 @@ export default function InfoModal({ onClose }: InfoProps) {
   const handleLogout = () => {
     LogoutMutate();
     onClose();
+    navigate('/');
   };
 
   const handleUpdate = () => {
