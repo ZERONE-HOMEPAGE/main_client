@@ -30,7 +30,7 @@ export default function InfoModal({ onClose }: InfoProps) {
   const [Bjid, setBjid] = useState<string>(profile?.baekjoonId ?? '');
 
   // 백준아이디 업데이트
-  const [newBjid, setNewBjid] = useState<string>('');
+  const [newBjid, setNewBjid] = useState<string>(profile?.baekjoonId ?? '');
   const [BjidError, setBjidError] = useState<string>('');
 
   // modal
@@ -56,7 +56,7 @@ export default function InfoModal({ onClose }: InfoProps) {
       {
         onSuccess: (_data) => {
           setNew(false);
-          setNewBjid('');
+          setNewBjid(newBjid);
           setBjidError('');
         },
         onError: (_err) => {
@@ -144,14 +144,16 @@ export default function InfoModal({ onClose }: InfoProps) {
         </button>
       </div>
 
-      {/* 새로 입력 모달 사실 밑에랑 합쳐도 되긴함*/}
+      {/* 백준아이디 수정 모달*/}
       {onNew && (
         <InputModal
           isOpen={onNew}
           value={newBjid}
           error={BjidError}
-          title={'백준 ID를 입력해주세요.'}
-          description={'백준 ID를 입력해주세요.'}
+          title={
+            newBjid === '' ? '추가할 백준 ID를 입력해주세요.' : '수정할 백준 ID를 입력해주세요.'
+          }
+          description={'아래 하단 박스에다가 ID를 입력해주세요.'}
           onChange={setNewBjid}
           onSubmit={handleUpdate}
           onClose={() => setNew(false)}
