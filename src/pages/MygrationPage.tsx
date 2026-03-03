@@ -147,7 +147,7 @@ export default function MygrationPage() {
           />
           {BJidLock && (
             <InputBox
-              title="백준 아이디"
+              title="백준 ID"
               value={BJ_id}
               placeholder="선택"
               errormessage={BJidError}

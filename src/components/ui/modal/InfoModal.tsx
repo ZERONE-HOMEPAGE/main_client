@@ -33,7 +33,6 @@ export default function InfoModal({ onClose }: InfoProps) {
 
   // modal
   const [onNew, setNew] = useState(false);
-  const [onChange, setChange] = useState(false);
 
   // 재랜더링, 재요청 후 업뎃
   useEffect(() => {
@@ -58,7 +57,7 @@ export default function InfoModal({ onClose }: InfoProps) {
           setBjidError('');
         },
         onError: (_err) => {
-          setBjidError('이미 존재하는 백준아이디입니다.');
+          setBjidError('이미 존재하는 백준 ID입니다.');
         },
       },
     );
@@ -107,7 +106,7 @@ export default function InfoModal({ onClose }: InfoProps) {
           <InfoRow label="학번" value={profile.studentId ?? '-'} />
           <InfoRow label="기수" value={profile.generation ? `${profile.generation}기수` : '-'} />
           <InfoRow label="학회비 납입" value={duesLabel} />
-          <span className="whitespace-nowrap text-sm text-gray-400">백준 아이디</span>
+          <span className="whitespace-nowrap text-sm text-gray-400">백준 ID</span>
           <div className="flex w-full items-center">
             {Bjid !== '' ? (
               <>
@@ -148,27 +147,14 @@ export default function InfoModal({ onClose }: InfoProps) {
           isOpen={onNew}
           value={newBjid}
           error={BjidError}
-          title={'백준아이디를 입력해주세요.'}
-          description={'백준아이디를 입력해주세요.'}
+          title={'백준 ID를 입력해주세요.'}
+          description={'백준 ID를 입력해주세요.'}
           onChange={setNewBjid}
           onSubmit={handleUpdate}
           onClose={() => setNew(false)}
         />
       )}
 
-      {/* 수정 입력 모달 */}
-      {onChange && (
-        <InputModal
-          isOpen={onChange}
-          value={Bjid}
-          error={''}
-          title={'백준아이디를 입력해주세요.'}
-          description={'백준아이디를 입력해주세요.'}
-          onChange={setBjid}
-          onSubmit={() => {}}
-          onClose={() => setChange(false)}
-        />
-      )}
       {/* 안내 모달 */}
     </div>
   );

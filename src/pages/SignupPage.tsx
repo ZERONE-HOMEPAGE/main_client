@@ -78,11 +78,11 @@ export default function SignupPage() {
           else if (err.response?.status === 409) {
             if (errors?.length === 2) {
               setSidError('존재하는 학번입니다.');
-              setBj_idError('존재하는 백준 아이디입니다.');
+              setBj_idError('존재하는 백준 ID입니다.');
             } else if (errors?.[0]?.field === 'studentId') {
               setSidError('존재하는 학번입니다.');
             } else if (errors?.[0]?.field === 'baekjoonId') {
-              setBj_idError('존재하는 백준 아이디입니다.');
+              setBj_idError('존재하는 백준 ID입니다.');
             }
           }
         },
@@ -180,7 +180,7 @@ export default function SignupPage() {
                 Change={handleNumberOnly_SID}
               />
               <InputBox
-                title="백준 아이디"
+                title="백준 ID"
                 value={BJ_id}
                 placeholder="(선택)"
                 Change={setBJ_id}
