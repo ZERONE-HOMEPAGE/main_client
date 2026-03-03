@@ -6,6 +6,7 @@ import { LookupRequest, LookupResponse } from '@/types/Auth';
 import { ProfileResponse } from '@/types/Auth';
 import { LogoutResponse } from '@/types/Auth';
 import { RenewResponse } from '@/types/Auth';
+import { UpdateProfileRequest, UpdateProfileResponse } from '@/types/Auth';
 
 // backend login (더이상 미사용)
 export const login = (body: LoginRequest): Promise<LoginResponse> =>
@@ -37,3 +38,6 @@ export const logout = (): Promise<LogoutResponse> =>
 
 export const renew = (): Promise<RenewResponse> =>
   client.post<RenewResponse>('/api/v1/auth/renew').then((res) => res.data);
+
+export const updateprofile = (body: UpdateProfileRequest): Promise<UpdateProfileResponse> =>
+  client.patch<UpdateProfileResponse>('api/v1/auth/profile', body).then((res) => res.data);

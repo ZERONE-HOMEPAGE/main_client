@@ -2,6 +2,9 @@ interface InputModalProps {
   isOpen: boolean;
   value: string;
   error: string;
+  title: string;
+  description?: string;
+  placeholder?: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
   onClose: () => void;
@@ -11,6 +14,9 @@ export default function InputModal({
   isOpen,
   value,
   error,
+  title,
+  description,
+  placeholder,
   onChange,
   onSubmit,
   onClose,
@@ -27,8 +33,8 @@ export default function InputModal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* 타이틀 */}
-        <h2 className="text-2xl font-bold text-white">전화번호 입력</h2>
-        <p className="mt-2 text-sm text-gray-400">필요한 정보를 입력해주세요.</p>
+        <h2 className="text-2xl font-bold text-white">{title}</h2>
+        <p className="mt-2 text-sm text-gray-400">{description}</p>
 
         {/* 인풋 */}
         <div className="mt-6">
@@ -36,7 +42,7 @@ export default function InputModal({
             type="text"
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            placeholder="ex) 01012345678"
+            placeholder={placeholder}
             maxLength={11}
             className={`w-full rounded-lg bg-[#2A2F3A] px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
               error ? 'ring-red-500' : 'focus:ring-indigo-500'

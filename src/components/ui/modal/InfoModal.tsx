@@ -1,6 +1,9 @@
 import { useLogout } from '@/hooks/useLogout';
 import { useGetInfo } from '@/hooks/useGetInfo';
 import type { StudyHistory } from '@/types/Auth';
+import { useState, useEffect } from 'react';
+import { useUpdateProfile } from '@/hooks/useUpdateProfile';
+import InputModal from '@/components/ui/modal/InputModal';
 
 interface InfoProps {
   onClose: () => void;
@@ -21,10 +24,44 @@ const DUES_LABEL: Record<string, string> = {
 export default function InfoModal({ onClose }: InfoProps) {
   const { mutate: LogoutMutate } = useLogout();
   const { data: profile, isLoading } = useGetInfo();
+  const { mutate: UpdateMutate } = useUpdateProfile();
+  const [Bjid, setBjid] = useState<string>(profile?.baekjoonId ?? '');
 
+  // 백준아이디 업데이트
+  const [newBjid, setNewBjid] = useState<string>('');
+  const [BjidError, setBjidError] = useState<string>('');
+
+  // modal
+  const [onNew, setNew] = useState(false);
+  const [onChange, setChange] = useState(false);
+
+  // 재랜더링, 재요청 후 업뎃
+  useEffect(() => {
+    setBjid(profile?.baekjoonId ?? '');
+  }, [profile]);
+
+  // handle
   const handleLogout = () => {
     LogoutMutate();
     onClose();
+  };
+
+  const handleUpdate = () => {
+    UpdateMutate(
+      {
+        baekjoonId: newBjid,
+      },
+      {
+        onSuccess: (_data) => {
+          setNew(false);
+          setNewBjid('');
+          setBjidError('');
+        },
+        onError: (_err) => {
+          setBjidError('이미 존재하는 백준아이디입니다.');
+        },
+      },
+    );
   };
 
   if (isLoading || !profile) {
@@ -70,7 +107,27 @@ export default function InfoModal({ onClose }: InfoProps) {
           <InfoRow label="학번" value={profile.studentId ?? '-'} />
           <InfoRow label="기수" value={profile.generation ? `${profile.generation}기수` : '-'} />
           <InfoRow label="학회비 납입" value={duesLabel} />
-          <InfoRow label="백준 아이디" value={profile.baekjoonId || '미등록'} />
+          <span className="whitespace-nowrap text-sm text-gray-400">백준 아이디</span>
+          <div className="flex w-full items-center">
+            {Bjid !== '' ? (
+              <>
+                <span className="text-sm text-white">{Bjid}</span>
+                <button
+                  className="ml-auto text-sm font-bold italic text-gray-500 underline underline-offset-2"
+                  onClick={() => setNew(true)} // 임시
+                >
+                  수정
+                </button>
+              </>
+            ) : (
+              <button
+                className="itailc text-sm font-bold text-gray-500 underline underline-offset-2"
+                onClick={() => setNew(true)}
+              >
+                ID를 입력해주세요.
+              </button>
+            )}
+          </div>
           <StudyRow studies={currentStudies} />
         </div>
       </div>
@@ -84,6 +141,35 @@ export default function InfoModal({ onClose }: InfoProps) {
           로그아웃
         </button>
       </div>
+
+      {/* 새로 입력 모달 사실 밑에랑 합쳐도 되긴함*/}
+      {onNew && (
+        <InputModal
+          isOpen={onNew}
+          value={newBjid}
+          error={BjidError}
+          title={'백준아이디를 입력해주세요.'}
+          description={'백준아이디를 입력해주세요.'}
+          onChange={setNewBjid}
+          onSubmit={handleUpdate}
+          onClose={() => setNew(false)}
+        />
+      )}
+
+      {/* 수정 입력 모달 */}
+      {onChange && (
+        <InputModal
+          isOpen={onChange}
+          value={Bjid}
+          error={''}
+          title={'백준아이디를 입력해주세요.'}
+          description={'백준아이디를 입력해주세요.'}
+          onChange={setBjid}
+          onSubmit={() => {}}
+          onClose={() => setChange(false)}
+        />
+      )}
+      {/* 안내 모달 */}
     </div>
   );
 }

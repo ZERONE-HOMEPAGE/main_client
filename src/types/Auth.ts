@@ -211,3 +211,20 @@ export interface RenewError {
 }
 
 export type RenewResponse = RenewSuccess;
+
+// profile update Types
+export interface UpdateProfileRequest {
+  baekjoonId: string;
+}
+
+export interface UpdateProfileSuccess {
+  field: string;
+  message: string;
+}
+
+export interface UpdateProfileError {
+  field: string;
+  message: string;
+}
+
+export type UpdateProfileResponse = UpdateProfileSuccess | UpdateProfileError;
