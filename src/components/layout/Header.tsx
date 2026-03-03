@@ -73,10 +73,10 @@ export default function Header() {
   useEffect(() => {
     if (!profile) return;
 
-    if (profile.role === 'ROLE_ADMIN') {
-      setAdmin(true);
+    if (profile.role === 'ROLE_MENTOR') {
       setMentor(true);
-    } else if (profile.role === 'ROLE_MENTOR') {
+    } else if (profile.role === 'ROLE_ADMIN') {
+      setAdmin(true);
       setMentor(true);
     }
   }, [profile]);
