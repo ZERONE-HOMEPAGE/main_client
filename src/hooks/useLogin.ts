@@ -14,7 +14,7 @@ export const useLogin = () => {
       // 성공
       if (data.step === 'LOGIN_SUCCESS') {
         setAccessToken(data.accessToken);
-        console.log('/auth/google 성공했습니다. \n상태: success \naccessToken: ', data.accessToken);
+        console.log('/auth/google 성공했습니다. \n상태: success');
         navigate('/');
       }
       // 로그인 차단 - 컴포넌트에서 처리

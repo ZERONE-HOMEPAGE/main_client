@@ -13,6 +13,7 @@ interface MigrationState {
   Phone: string;
   needSid: boolean;
   needBjid: boolean;
+  maskedSid: string;
 }
 
 export default function MygrationPage() {
@@ -22,8 +23,8 @@ export default function MygrationPage() {
   const state = (location.state as MigrationState) ?? {};
 
   // 상태 (request body순으로 정렬)
-  const { idToken, Phone, needSid, needBjid } = state;
-  const [Sid, setSid] = useState<string>('');
+  const { idToken, Phone, needSid, needBjid, maskedSid } = state;
+  const [Sid, setSid] = useState<string>(needSid ? '' : (maskedSid ?? ''));
   const [PhoneNumber, setPhone] = useState<string>(Phone);
   const [BJ_id, setBJ_id] = useState<string>('');
 
@@ -59,7 +60,7 @@ export default function MygrationPage() {
       ...(needSid ? { studentId: Sid } : {}),
     };
 
-    if (!validateFields()) return; // 필드검사)
+    if (!validateFields()) return; // 필드검사
 
     migrationMutate(body, {
       onSuccess: (data) => {
@@ -99,6 +100,7 @@ export default function MygrationPage() {
   // field검사
   const validateFields = () => {
     let valid = true;
+    const isValid = /^[a-zA-Z0-9_]+$/.test(BJ_id);
 
     if (needSid) {
       if (!Sid) {
@@ -110,6 +112,11 @@ export default function MygrationPage() {
       } else {
         setSidError('');
       }
+    }
+
+    if (!isValid) {
+      setBJidError('영어, 숫자, 언더바(_)만 사용할 수 있습니다.');
+      valid = false;
     }
 
     return valid;
@@ -144,14 +151,16 @@ export default function MygrationPage() {
             Change={handleNumberOnly_SID}
             isLock={!SidLock}
           />
-          <InputBox
-            title="백준 아이디"
-            value={BJ_id}
-            placeholder="선택"
-            errormessage={BJidError}
-            Change={setBJ_id}
-            isLock={!BJidLock}
-          />
+          {BJidLock && (
+            <InputBox
+              title="백준 ID"
+              value={BJ_id}
+              placeholder="선택"
+              errormessage={BJidError}
+              Change={setBJ_id}
+              isLock={!BJidLock}
+            />
+          )}
         </div>
 
         {/* submit */}

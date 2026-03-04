@@ -33,10 +33,7 @@ export default function SignupPage() {
   const [onModal, setOnModal] = useState<boolean>(false);
 
   // error
-  const [nameError, setNameError] = useState('');
   const [sidError, setSidError] = useState<string>('');
-  const [majorError, setMajorError] = useState<string>('');
-  const [phoneError, setPhoneError] = useState<string>('');
   const [Bj_idError, setBj_idError] = useState<string>('');
 
   useEffect(() => {
@@ -81,11 +78,11 @@ export default function SignupPage() {
           else if (err.response?.status === 409) {
             if (errors?.length === 2) {
               setSidError('존재하는 학번입니다.');
-              setBj_idError('존재하는 백준 아이디입니다.');
+              setBj_idError('존재하는 백준 ID입니다.');
             } else if (errors?.[0]?.field === 'studentId') {
               setSidError('존재하는 학번입니다.');
             } else if (errors?.[0]?.field === 'baekjoonId') {
-              setBj_idError('존재하는 백준 아이디입니다.');
+              setBj_idError('존재하는 백준 ID입니다.');
             }
           }
         },
@@ -105,13 +102,6 @@ export default function SignupPage() {
   const validateFields = () => {
     let valid = true;
 
-    if (!Name) {
-      setNameError('이름을 기입해주세요.');
-      valid = false;
-    } else {
-      setNameError('');
-    }
-
     if (!Sid) {
       setSidError('학번을 기입해주세요.');
       valid = false;
@@ -122,21 +112,11 @@ export default function SignupPage() {
       setSidError('');
     }
 
-    if (!PhoneNumber) {
-      setPhoneError('전화번호를 기입해주세요.');
-      valid = false;
-    } else if (PhoneNumber.length !== 11) {
-      setPhoneError('전화번호 11자리를 기입해주세요.');
-      valid = false;
-    } else {
-      setPhoneError('');
-    }
+    const isValid = /^[a-zA-Z0-9_]+$/.test(BJ_id);
 
-    if (!Major) {
-      setMajorError('학과를 입력해주세요.');
+    if (!isValid) {
+      setBj_idError('영어, 숫자, 언더바(_)만 사용할 수 있습니다.');
       valid = false;
-    } else {
-      setMajorError('');
     }
 
     return valid;
@@ -144,13 +124,15 @@ export default function SignupPage() {
 
   return (
     <>
-      <DuesModal
-        isNew={true}
-        isOpen={onModal}
-        onClose={() => navigate('/')}
-        onConfirm={() => navigate('/')}
-      />
-      <div className="flex h-full h-screen w-full flex-col items-center bg-black">
+      <div className="flex h-full h-screen w-full flex-col items-center bg-black"></div>
+      {onModal ? ( // 테스트 해봐
+        <DuesModal
+          isNew={true}
+          isOpen={onModal}
+          onClose={() => navigate('/')}
+          onConfirm={() => navigate('/')}
+        />
+      ) : (
         <div className="max-w-5xl flex-col items-center bg-black px-4 py-32">
           <p className="text-3xl font-bold text-white">회원가입</p>
           <p className="mt-2 text-xl text-[#9CA3AF]">한양대학교 이메일로만 가입할 수 있습니다.</p>
@@ -162,7 +144,7 @@ export default function SignupPage() {
                 title="이름"
                 value={Name}
                 placeholder="ex)홍길동"
-                errormessage={nameError}
+                errormessage={''}
                 Change={setName}
                 isLock={true}
               />
@@ -170,7 +152,7 @@ export default function SignupPage() {
                 title="전화번호"
                 value={PhoneNumber}
                 placeholder="ex) 01012345458"
-                errormessage={phoneError}
+                errormessage={''}
                 Change={handleNumberOnly_Phone}
                 isLock={true}
               />
@@ -182,7 +164,7 @@ export default function SignupPage() {
                 title="학과"
                 value={Major}
                 placeholder="학과를 입력하세요"
-                errormessage={majorError}
+                errormessage={''}
                 Change={setMajor}
                 isLock={true}
               />
@@ -205,7 +187,7 @@ export default function SignupPage() {
                 Change={handleNumberOnly_SID}
               />
               <InputBox
-                title="백준 아이디"
+                title="백준 ID"
                 value={BJ_id}
                 placeholder="(선택)"
                 Change={setBJ_id}
@@ -225,7 +207,7 @@ export default function SignupPage() {
             </ActionButton>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

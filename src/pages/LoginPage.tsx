@@ -127,7 +127,7 @@ export default function LoginPage() {
 
   // handle
   const handleNumberOnly_Phone = (value: string) => {
-    setPhone(value.replace(/[^0-9]/g, ''));
+    setPhone(value.replace(/[^0-9]/g, '').slice(0, 11));
   };
 
   const handlePhoneSubmit = async () => {
@@ -159,10 +159,11 @@ export default function LoginPage() {
         {
           onSuccess: (res) => {
             // 매칭됨 => migration
-            if (res.step === 'MIGRATION_FOUND' && res.needsStudentId) {
+            if (res.step === 'MIGRATION_FOUND') {
               const needSid = res.needsStudentId;
               const needBjid = res.needsBaekjoonId;
-              navigate('/migration', { state: { idToken, Phone, needSid, needBjid } });
+              const maskedSid = res.maskedStudentId;
+              navigate('/migration', { state: { idToken, Phone, needSid, needBjid, maskedSid } });
             }
             // 매칭안됨 => signup
             else {
@@ -222,6 +223,9 @@ export default function LoginPage() {
         isOpen={onInputOpen}
         value={Phone}
         error={phoneError}
+        title={'전화번호 확인'}
+        description={'전화번호를 입력해주세요.'}
+        placeholder={'ex) 01012345678'}
         onChange={handleNumberOnly_Phone}
         onSubmit={handlePhoneSubmit}
         onClose={() => setInputOpen(false)}

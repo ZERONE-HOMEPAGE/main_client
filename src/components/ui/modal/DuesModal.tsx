@@ -42,7 +42,7 @@ export default function DuesModal({ isNew, isOpen, onClose, onConfirm }: DuesPro
       onClick={onClose}
     >
       <div
-        className="w-[420px] rounded-2xl bg-[#1C1F26] px-8 pb-8 pt-6 shadow-2xl"
+        className="w-[560px] rounded-2xl bg-[#1C1F26] px-8 pb-8 pt-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 헤더 */}
