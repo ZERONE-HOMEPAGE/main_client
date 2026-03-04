@@ -32,7 +32,7 @@ export default function Awards() {
     {
       tabIdx: 0,
       year: 2025,
-      type: [2, 0, 2, 4],
+      type: [0, 0, 0, 1],
     },
     {
       tabIdx: 1,
@@ -43,6 +43,11 @@ export default function Awards() {
       tabIdx: 1,
       year: 2024,
       type: [2, 2, 4, 0],
+    },
+    {
+      tabIdx: 1,
+      year: 2025,
+      type: [2, 0, 2, 4],
     },
   ];
 
@@ -97,7 +102,8 @@ export default function Awards() {
                           ))}
                         </div>
                         <span className="whitespace-nowrap text-xs font-bold sm:text-sm">
-                          {award.year >= 2025 ? newLabels[i] : labels[i]} {count}회
+                          {award.year >= 2025 && award.tabIdx === 1 ? newLabels[i] : labels[i]}{' '}
+                          {count}회
                         </span>
                       </div>
                     );
