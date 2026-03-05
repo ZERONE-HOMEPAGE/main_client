@@ -26,10 +26,6 @@ export default function Header() {
     //{ name: '게시판', path: null },
     //{ name: '컴파일러', path: 'https://zerone01.kr/compiler', external: true },
     { name: 'Q&A', path: '/QnA' },
-
-    // 로그인 - 로그아웃버튼 토글을 위해 따로 빼도록 하겠습니다.
-    //{ name: '로그인/회원가입', path: '/login' },
-
     //로그인 페이지 연결 임시 처리
   ];
 
@@ -112,7 +108,7 @@ export default function Header() {
                   </NavLink>
                 </li>
               ))}
-
+              {/* 로그인 & 내정보 */}
               <li>
                 {!token ? (
                   <NavLink
@@ -127,26 +123,15 @@ export default function Header() {
                   </button>
                 )}
               </li>
+
               <li>
                 {/* 관리자페이지 */}
-                {token && ActiveAdmin && (
-                  <NavLink
-                    to={'/admin'}
-                    className={({ isActive }) => (isActive ? 'font-bold' : '')}
-                  >
-                    admin
-                  </NavLink>
-                )}
+                {token && ActiveAdmin && <a href={'https://zerone01.kr/admin'}>관리자페이지</a>}
               </li>
               <li>
                 {/* 멘토페이지 */}
                 {token && ActiveMentor && (
-                  <NavLink
-                    to={'/manage_study'}
-                    className={({ isActive }) => (isActive ? 'font-bold' : '')}
-                  >
-                    mentor
-                  </NavLink>
+                  <a href={'https://zerone01.kr/manage_study'}>스터디 관리</a>
                 )}
               </li>
             </ul>
@@ -207,27 +192,13 @@ export default function Header() {
               </li>
               {token && ActiveAdmin && (
                 <li>
-                  <NavLink
-                    to="/admin"
-                    className={({ isActive }) =>
-                      'block w-full rounded p-3 ' + (isActive ? 'font-bold' : '')
-                    }
-                  >
-                    admin
-                  </NavLink>
+                  <a href={'https://zerone01.kr/admin'}>관리자페이지</a>
                 </li>
               )}
 
               {token && ActiveMentor && (
                 <li>
-                  <NavLink
-                    to="/manage_study"
-                    className={({ isActive }) =>
-                      'block w-full rounded p-3 ' + (isActive ? 'font-bold' : '')
-                    }
-                  >
-                    mentor
-                  </NavLink>
+                  <a href={'https://zerone01.kr/manage_study'}>스터디 관리</a>
                 </li>
               )}
             </ul>
