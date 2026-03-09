@@ -2,11 +2,13 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import * as path from 'path';
 import { writeFileSync } from 'fs';
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
+    ViteImageOptimizer(),
     {
       name: 'generate-spa-files',
       writeBundle() {
@@ -29,9 +31,12 @@ RewriteRule ^ index.html [QSA,L]`;
   },
   server: {
     proxy: {
+      // 로컬에서 /api로 시작하는 요청을 서버로 전달
       '/api': {
-        target: 'https://zerone01.kr',
-        changeOrigin: true,
+        target: 'https://zerone01.kr', // 실제 서버
+        changeOrigin: true,             // 서버는 요청이 localhost에서 왔다고 생각하지 않음
+        secure: true,                   // HTTPS 서버
+        rewrite: (path) => path.replace(/^\/api/, '/api'), // 경로 그대로 전달
       },
     },
   },

@@ -24,6 +24,17 @@ export interface SignupResponse {
   status: string;
 }
 
+export interface SignupError {
+  step: string;
+  message: string;
+  errors: ErrorField[];
+}
+
+export interface ErrorField {
+  field: string;
+  message: string;
+}
+
 // LoginV2 types
 export type LoginV2step = 'LOGIN_SUCCESS' | 'LOGIN_BLOCKED' | 'NEED_PHONE';
 
@@ -74,6 +85,11 @@ export interface MigrationBlocked {
 
 export interface MigrationError {
   step: 'VALIDATION_ERROR';
+  message: string;
+  errors: ErrorField[];
+}
+
+export interface ErrorField {
   field: string;
   message: string;
 }
@@ -107,3 +123,108 @@ export interface LookupError {
   message: string;
   status: null;
 }
+
+// get profile types
+export interface ProfileResponse {
+  userId: string;
+  name: string;
+  email: string;
+  studentId?: string;
+  generation?: number | string;
+  department?: string;
+  baekjoonId?: string;
+  phoneNumber?: string;
+  role?: 'ROLE_USER' | 'ROLE_ADMIN' | 'ROLE_MENTOR' | string;
+  status?: 'ACTIVE' | 'PENDING' | 'REJECTED' | 'SUSPENDED' | string;
+  duesStatus?: DuesStatus;
+  duesPending?: boolean;
+  profileImageUrl?: string;
+  createdAt?: string;
+  activitySemesters?: ActivitySemester[];
+  currentSemester?: CurrentSemester;
+  studies?: {
+    all: StudyHistory[];
+    current: StudyHistory[];
+  };
+}
+
+// (이해못함)
+export type DuesStatus = 'YES' | 'NO' | 'HONOR';
+
+export interface ActivitySemester {
+  year: number;
+  semester: number;
+  duesStatus: DuesStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CurrentSemester {
+  year: number;
+  semester: number;
+  isMember: boolean;
+  duesStatus: DuesStatus | null;
+  duesPending: boolean;
+}
+
+export interface StudyHistory {
+  studyId: string;
+  name: string;
+  year: number;
+  semester: number;
+  studyStatus: string;
+  memberStatus: string;
+  joinedAt: string;
+  isCurrentSemester: boolean;
+}
+
+// logout types
+export interface LogoutResponse {
+  message: string;
+}
+
+// FastAPI 422 Validation Error
+export interface ValidationDetail {
+  loc: (string | number)[];
+  msg: string;
+  type: string;
+}
+
+export interface ValidationError422 {
+  detail: ValidationDetail[];
+}
+
+// renew types
+export interface RenewSuccess {
+  step: string;
+  message: string;
+  userId: string;
+  status: string;
+  duesPending: boolean;
+  duesStatus: string;
+}
+
+export interface RenewError {
+  code: string;
+  message: string;
+  status: string | undefined;
+}
+
+export type RenewResponse = RenewSuccess;
+
+// profile update Types
+export interface UpdateProfileRequest {
+  baekjoonId: string;
+}
+
+export interface UpdateProfileSuccess {
+  field: string;
+  message: string;
+}
+
+export interface UpdateProfileError {
+  field: string;
+  message: string;
+}
+
+export type UpdateProfileResponse = UpdateProfileSuccess | UpdateProfileError;

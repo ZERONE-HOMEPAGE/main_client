@@ -4,12 +4,16 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useMigration } from '@/hooks/useMigration';
 import { MigrationRequest } from '@/types/Auth';
+import { useEffect } from 'react';
+import { isLoggedIn } from '@/utils/token';
+import DuesModal from '@/components/ui/modal/DuesModal';
 
 interface MigrationState {
   idToken: string;
   Phone: string;
   needSid: boolean;
   needBjid: boolean;
+  maskedSid: string;
 }
 
 export default function MygrationPage() {
@@ -19,13 +23,15 @@ export default function MygrationPage() {
   const state = (location.state as MigrationState) ?? {};
 
   // 상태 (request body순으로 정렬)
-  const { idToken, Phone, needSid, needBjid } = state;
-  const [Sid, setSid] = useState<string>('');
+  const { idToken, Phone, needSid, needBjid, maskedSid } = state;
+  const [Sid, setSid] = useState<string>(needSid ? '' : (maskedSid ?? ''));
   const [PhoneNumber, setPhone] = useState<string>(Phone);
   const [BJ_id, setBJ_id] = useState<string>('');
 
   const SidLock = needSid ?? false;
   const BJidLock = needBjid ?? false;
+
+  const [onModal, setOnModal] = useState<boolean>(false);
 
   // error
   const [sidError, setSidError] = useState<string>('');
@@ -37,7 +43,7 @@ export default function MygrationPage() {
   };
 
   const handleNumberOnly_SID = (value: string) => {
-    setSid(value.replace(/[^0-9]/g, ''));
+    setSid(value.replace(/[^0-9]/g, '').slice(0, 10));
   };
 
   const handeleSubmit = () => {
@@ -50,21 +56,33 @@ export default function MygrationPage() {
     const body: MigrationRequest = {
       idToken: idToken,
       phoneNumber: PhoneNumber,
-      ...(needSid ? { studentId: Sid } : {}),
       ...(needBjid ? { baekjoonId: BJ_id } : {}),
+      ...(needSid ? { studentId: Sid } : {}),
     };
 
-    if (!validateFields()) return; // 필드검사)
+    if (!validateFields()) return; // 필드검사
 
     migrationMutate(body, {
-      onSuccess: (_data) => {
-        navigate('/');
+      onSuccess: (data) => {
+        // 마이그레이션 o + 학회비 지불 o
+        if (data.step === 'LOGIN_SUCCESS') {
+          sessionStorage.setItem(data.accessToken, 'accessToken');
+          navigate('/');
+        }
+        // 마이그레이션 o + 학회비 지불 x
+        else if (data.step === 'LOGIN_BLOCKED') {
+          setOnModal(true);
+        }
       },
       onError: (err) => {
         if (err.response?.data.step === 'VALIDATION_ERROR') {
-          if (err.response?.data.field === 'studentId') {
-            setSidError('이미 등록되 학번입니다.');
-          } else if (err.response?.data.field === 'baekjoonId') {
+          // (리팩토링 필요)
+          if (err.response?.data.errors.length === 2) {
+            setSidError('이미 등록된 학번입니다.');
+            setBJidError('이미 등록된 백준 아이디 입니다.');
+          } else if (err.response?.data.errors[0]?.field === 'studentId') {
+            setSidError('이미 등록된 학번입니다.');
+          } else if (err.response?.data.errors[0]?.field === 'baekjoonId') {
             setBJidError('이미 등록된 백준 아이디 입니다.');
           }
         }
@@ -72,74 +90,90 @@ export default function MygrationPage() {
     });
   };
 
+  // url접근 방지 (로그인상태)
+  useEffect(() => {
+    if (isLoggedIn()) {
+      navigate('/', { replace: true });
+    }
+  }, [navigate]);
+
   // field검사
   const validateFields = () => {
     let valid = true;
+    const isValid = /^[a-zA-Z0-9_]+$/.test(BJ_id);
 
-    if (!Sid) {
-      setSidError('학번을 기입해주세요.');
+    if (needSid) {
+      if (!Sid) {
+        setSidError('학번을 기입해주세요.');
+        valid = false;
+      } else if (Sid.length !== 10) {
+        setSidError('학번은 총 10자리 입니다.');
+        valid = false;
+      } else {
+        setSidError('');
+      }
+    }
+
+    if (!isValid) {
+      setBJidError('영어, 숫자, 언더바(_)만 사용할 수 있습니다.');
       valid = false;
-    } else if (Sid.length !== 10) {
-      setSidError('학번은 총 10자리 입니다.');
-      valid = false;
-    } else {
-      setSidError('');
     }
 
     return valid;
   };
 
-  return (
+  return onModal ? (
+    <DuesModal
+      isNew={false}
+      isOpen={onModal}
+      onClose={() => setOnModal}
+      onConfirm={() => setOnModal}
+    />
+  ) : (
     <div className="flex h-full h-screen w-full flex-col items-center bg-black">
       <div className="max-w-5xl flex-col items-center bg-black px-4 py-32">
-        <p className="text-3xl font-bold text-white">오마이그레이션</p>
-        <p className="mt-2 text-xl text-[#9CA3AF]">한양대학교 이메일로만 가입할 수 있습니다.</p>
+        <p className="flex justify-center text-3xl font-bold text-white">마이그레이션</p>
+        <p className="mt-2 flex justify-center text-xl text-[#9CA3AF]">누락된 정보가 있습니다.</p>
 
-        <div className="mt-8 flex-col gap-2">
-          {/* Student ID and Phone NUmber */}
-          <div className="flex flex-row flex-wrap justify-center md:gap-8">
+        <div className="mt-4 flex w-full flex-col flex-wrap justify-center gap-2">
+          <InputBox
+            title="전화번호"
+            value={PhoneNumber}
+            placeholder="ex) 01012345458"
+            Change={handleNumberOnly_Phone}
+            isLock={true}
+          />
+          <InputBox
+            title="학번"
+            value={Sid}
+            placeholder="ex) 2026012345"
+            errormessage={sidError}
+            Change={handleNumberOnly_SID}
+            isLock={!SidLock}
+          />
+          {BJidLock && (
             <InputBox
-              title="학번"
-              value={Sid}
-              placeholder="ex) 2026012345"
-              errormessage={sidError}
-              Change={handleNumberOnly_SID}
-              isLock={!SidLock}
+              title="백준 ID"
+              value={BJ_id}
+              placeholder="선택"
+              errormessage={BJidError}
+              Change={setBJ_id}
+              isLock={!BJidLock}
             />
-            <InputBox
-              title="전화번호"
-              value={PhoneNumber}
-              placeholder="ex) 01012345458"
-              Change={handleNumberOnly_Phone}
-              isLock={true}
-            />
-          </div>
-          {/* Baekjoon ID */}
-          <div className="flex flex-row flex-wrap justify-center">
-            <div className="w-full">
-              <InputBox
-                title="백준 아이디"
-                value={BJ_id}
-                placeholder="선택"
-                errormessage={BJidError}
-                Change={setBJ_id}
-                isLock={!BJidLock}
-              />
-            </div>
-          </div>
+          )}
         </div>
-      </div>
 
-      {/* submit */}
-      <div className="mt-8 flex w-full justify-center">
-        <ActionButton
-          variant="primary"
-          size="lg"
-          onClick={handeleSubmit}
-          className="flex justify-center"
-        >
-          제출하기
-        </ActionButton>
+        {/* submit */}
+        <div className="mt-4 flex w-full justify-center">
+          <ActionButton
+            variant="primary"
+            size="lg"
+            onClick={handeleSubmit}
+            className="flex justify-center"
+          >
+            제출하기
+          </ActionButton>
+        </div>
       </div>
     </div>
   );

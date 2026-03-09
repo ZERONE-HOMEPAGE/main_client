@@ -1,9 +1,10 @@
 import oneAndN from '@/assets/eventImg/1&N.png';
-import baekjoonbingo from '@/assets/eventImg/baekjoonbingo.png';
-import mogakco from '@/assets/eventImg/mogakco.png';
-import study from '@/assets/eventImg/study.png';
+import mogakco from '@/assets/eventImg/mogakco.webp';
+import marathon from '@/assets/eventImg/marathon.webp';
+import study from '@/assets/eventImg/study.webp';
 import clockIcon from '@/assets/icon/clock.png';
 import zeroneCharacter from '@/assets/images/zerone_character.png';
+import MT from '@/assets/eventImg/MT.webp';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -39,40 +40,40 @@ function EventBox({ title, start, end, imgUrl, className }: EventBoxProps) {
 export default function Event() {
   const events = [
     {
-      title: '가두모집',
-      start: '2025.09.01',
-      end: '2025.09.14',
+      title: '개강총회',
+      start: '2026.03.19',
+      end: '2026.03.19',
       imgUrl: '',
     },
     {
-      title: '개강총회',
-      start: '2025.09.22',
-      end: '2025.09.22',
-      imgUrl: '',
+      title: 'MT',
+      start: '2026.05.29',
+      end: '2026.05.30',
+      imgUrl: MT,
     },
     {
       title: '1&N 네트워킹데이',
-      start: '2025.09.27',
-      end: '2025.09.27',
+      start: '2026.05.09',
+      end: '2026.05.09',
       imgUrl: oneAndN,
     },
     {
       title: '스터디',
-      start: '2025.09.29',
-      end: '2025.12.07',
+      start: '2026.03.23',
+      end: '2026.06.05',
       imgUrl: study,
     },
     {
-      title: '모.각.코',
-      start: '2025.09.29',
-      end: '2025.12.07',
-      imgUrl: mogakco,
+      title: '백준마라톤',
+      start: '2026.03.23',
+      end: '2026.06.05',
+      imgUrl: marathon,
     },
     {
-      title: '백준마라톤',
-      start: '2025.09.29',
-      end: '2025.12.07',
-      imgUrl: baekjoonbingo,
+      title: '모.각.코',
+      start: '2026.03.23',
+      end: '2026.06.19',
+      imgUrl: mogakco,
     },
   ];
 
@@ -81,7 +82,7 @@ export default function Event() {
       id="event"
       className="flex h-full w-full flex-col items-center justify-center gap-5 px-4 pb-20"
     >
-      <p className="mb-6 mt-10 text-center text-3xl font-bold">이달의 주요 이벤트</p>
+      <p className="mb-6 mt-10 text-center text-3xl font-bold">주요 이벤트</p>
 
       <div className="block w-full md:hidden">
         {' '}

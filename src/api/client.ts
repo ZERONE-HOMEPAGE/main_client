@@ -1,4 +1,5 @@
 import axios, { type AxiosRequestConfig } from 'axios';
+import { getAccessToken, setAccessToken } from '@/utils/token';
 
 export const client = axios.create({
   baseURL: import.meta.env.DEV ? '/' : import.meta.env.VITE_API_BASE_URL,
@@ -9,7 +10,7 @@ export const client = axios.create({
 
 // 요청 인터셉터: access token 자동 첨부
 client.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('accessToken');
+  const token = getAccessToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -33,7 +34,8 @@ client.interceptors.response.use(
       _retry?: boolean;
     };
 
-    if (error.response?.status !== 401 || originalRequest._retry) {
+    const isLogoutRequest = originalRequest.url?.includes('/auth/logout');
+    if (error.response?.status !== 401 || originalRequest._retry || isLogoutRequest) {
       return Promise.reject(error);
     }
 
@@ -61,7 +63,7 @@ client.interceptors.response.use(
         { withCredentials: true },
       );
 
-      sessionStorage.setItem('accessToken', data.accessToken);
+      setAccessToken(data.accessToken);
 
       processQueue(data.accessToken);
 
@@ -74,7 +76,7 @@ client.interceptors.response.use(
       // 갱신 실패 → 대기열 정리 후 로그아웃 처리
       pendingRequests = [];
       sessionStorage.removeItem('accessToken');
-      window.location.href = '/login';
+      window.location.href = '/';
       return Promise.reject(error);
     } finally {
       isRefreshing = false;

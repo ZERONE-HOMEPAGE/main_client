@@ -1,9 +1,9 @@
 import Check_algo from '@/assets/icon/CheckIcon_algo.png';
 import Check_dev from '@/assets/icon/CheckIcon_dev.png';
 import HomeIcon from '@/assets/icon/home.png';
-import LineIcon from '@/assets/icon/line.png';
+import lineIcon from '@/assets/icon/line.png';
 import UserIcon from '@/assets/icon/user.png';
-import PillTab_study from '@/components/ui/PillTab_study';
+import PillTab_study from '@/components/ui/PillTab/PillTab_study';
 import MailIcon from '@/assets/icon/mail.png';
 import { useState } from 'react';
 import { useStudies } from '@/hooks/useStudy';
@@ -149,7 +149,7 @@ function StatusBadge({ status }: { status: Study['status'] }) {
 function WeekRow({ week }: { week: Week }) {
   return (
     <div className="flex h-full w-full flex-row items-center">
-      <img src={LineIcon} alt="라인아이콘" className="h-18 w-3" />
+      <img src={lineIcon} alt="라인아이콘" className="h-18 w-3" />
       <div className="ml-8 flex w-full flex-row items-center rounded-xl border-2 border-[#D9D9D9] p-3">
         <p className="mx-4 text-sm font-semibold text-[#919191]">{week.weekNo}주차</p>
         <p className="mx-4 font-semibold">{week.description}</p>
