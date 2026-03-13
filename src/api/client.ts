@@ -5,7 +5,7 @@ export const client = axios.create({
   baseURL: import.meta.env.DEV ? '/' : import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
   withCredentials: true, // 쿠키 포함
-  headers: { 'Content-Type': 'application/json' },
+  headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache', Pragma: 'no-cache' },
 });
 
 // 요청 인터셉터: access token 자동 첨부
