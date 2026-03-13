@@ -6,31 +6,26 @@ import UserIcon from '@/assets/icon/user.png';
 import PillTab_study from '@/components/ui/PillTab/PillTab_study';
 import MailIcon from '@/assets/icon/mail.png';
 import { useState } from 'react';
+import { useMyStudies } from '@/hooks/useMyStudies';
+import { useJoinStudy } from '@/hooks/useJoinStudy';
+import { useLeaveStudy } from '@/hooks/useLeaveStudy';
+import { isLoggedIn } from '@/utils/token';
+import { CheckTextProps, ContentsProps, MentorProps } from '@/types/study';
 
-interface CheckTextProps {
-  text: string;
-  divClassName?: string;
-  iconClassName?: string;
-  textClassName?: string;
-  iconSrc?: string;
-}
-
-interface ContentsProps {
-  Week: number;
-  Content: string;
-}
-
-interface MentorProps {
-  Name: string;
-  Department: string;
-  Email: string;
-  Message?: string;
-}
+const STUDY_ID = '0595fd5d-ba81-46c6-8c3c-cf0034a4845c';
 
 export default function StudyIntro() {
+  const { data: myStudies } = useMyStudies();
+  const { mutate: join, isPending: isJoining } = useJoinStudy();
+  const { mutate: leave, isPending: isLeaving } = useLeaveStudy();
+
+  const isJoined = (studyId: string) =>
+    myStudies?.items.some((s) => s.studyId === studyId) ?? false;
+
   const Class = [
     {
       tabIdx: 0,
+      studyId: STUDY_ID,
       name: 'C언어 기초반',
       tag: 'algorithm',
       intro: [
@@ -46,6 +41,7 @@ export default function StudyIntro() {
     },
     {
       tabIdx: 1,
+      studyId: STUDY_ID,
       name: '파이썬 기초반',
       tag: 'algorithm',
       intro: [
@@ -66,6 +62,7 @@ export default function StudyIntro() {
     },
     {
       tabIdx: 2,
+      studyId: STUDY_ID,
       name: '브릿지반',
       tag: 'algorithm',
       intro: [
@@ -92,6 +89,7 @@ export default function StudyIntro() {
     },
     {
       tabIdx: 3,
+      studyId: STUDY_ID,
       name: '자료구조반',
       tag: 'algorithm',
       intro: [
@@ -112,6 +110,7 @@ export default function StudyIntro() {
     },
     {
       tabIdx: 4,
+      studyId: STUDY_ID,
       name: '알고리즘반',
       tag: 'algorithm',
       intro: ['C++ 기반 문제풀이에 주로 쓰이는 알고리즘 위주의 문제 해결 및 설명'],
@@ -124,6 +123,7 @@ export default function StudyIntro() {
     },
     {
       tabIdx: 5,
+      studyId: STUDY_ID,
       name: '코드포스반',
       tag: 'algorithm',
       intro: [
@@ -144,6 +144,7 @@ export default function StudyIntro() {
     },
     {
       tabIdx: 6,
+      studyId: STUDY_ID,
       name: '웹개발 스터디',
       tag: 'development',
       intro: [
@@ -219,6 +220,33 @@ export default function StudyIntro() {
               />
             ))}
           </div>
+
+          {/* 가입/취소 버튼 */}
+          {isLoggedIn() && (
+            <div className="mt-8 flex w-full justify-end">
+              {isJoined(item.studyId) ? (
+                <button
+                  onClick={() => leave(item.studyId)}
+                  disabled={isLeaving}
+                  className="rounded-lg bg-gray-200 px-6 py-2 font-semibold text-gray-600 hover:bg-gray-300 disabled:opacity-50"
+                >
+                  {isLeaving ? '처리 중...' : '취소하기'}
+                </button>
+              ) : (
+                <button
+                  onClick={() => join(item.studyId)}
+                  disabled={isJoining}
+                  className={`rounded-lg px-6 py-2 font-semibold text-white disabled:opacity-50 ${
+                    item.tag === 'algorithm'
+                      ? 'bg-[#9747FF] hover:bg-[#8030ee]'
+                      : 'bg-[#5F5CFF] hover:bg-[#4a47ee]'
+                  }`}
+                >
+                  {isJoining ? '처리 중...' : '신청하기'}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       ))}
     </div>
