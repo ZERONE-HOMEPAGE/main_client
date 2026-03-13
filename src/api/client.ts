@@ -2,7 +2,7 @@ import axios, { type AxiosRequestConfig } from 'axios';
 import { getAccessToken, setAccessToken } from '@/utils/token';
 
 export const client = axios.create({
-  baseURL: import.meta.env.DEV ? '/' : import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.DEV ? '/api/v1' : import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
   withCredentials: true, // 쿠키 포함
   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache', Pragma: 'no-cache' },
