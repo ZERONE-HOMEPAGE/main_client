@@ -7,39 +7,33 @@ export interface Mentor {
   name: string;
   department: string;
   studentId: string;
-  email: string | null; // null 가능 (실제 응답 확인됨)
-  note: string; // 멘토 한마디
+  email: string | null;
+  note: string;
 }
 
-export interface Week {
-  weekId: number;
-  studyId: string;
-  weekNo: number;
-  startDate: string;
-  endDate: string;
-  allowedWeekdays: string;
-  studyDate: string[];
-  requiredCount: number;
-  description: string; // 주차별 내용 (예: "입출력", "조건문")
-  createdAt: string;
-  updatedAt: string;
+export interface OperationTime {
+  weekday: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface StudyClass {
+  classId: string;
+  mentors: Mentor[];
+  operationTimes: OperationTime[];
 }
 
 export interface Study {
   studyId: string;
-  name: string;
-  year: number;
-  semester: number;
-  status: 'OPEN' | 'CLOSED' | 'ARCHIVED';
-  target: string;
-  description: string; // \n 구분으로 여러 줄 intro
+  studyName: string;
+  operation: {
+    year: number;
+    semester: number;
+  };
+  description: string;
   displayOrder: number;
-  memberCount: number;
-  mentorCount: number;
-  mentors: Mentor[];
-  weeks: Week[]; // 주차별 내용 배열
-  createdAt: string;
-  updatedAt: string;
+  joinable: boolean;
+  classes: StudyClass[];
 }
 
 export interface StudyListResponse {
@@ -49,7 +43,6 @@ export interface StudyListResponse {
 export interface StudyListParams {
   year?: number;
   semester?: number;
-  includeMentors?: boolean;
 }
 
 // ─── API 호출 함수 ────────────────────────────────────────

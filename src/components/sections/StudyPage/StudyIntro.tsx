@@ -1,13 +1,12 @@
 import Check_algo from '@/assets/icon/CheckIcon_algo.png';
 import Check_dev from '@/assets/icon/CheckIcon_dev.png';
 import HomeIcon from '@/assets/icon/home.png';
-import lineIcon from '@/assets/icon/line.png';
 import UserIcon from '@/assets/icon/user.png';
 import PillTab_study from '@/components/ui/PillTab/PillTab_study';
 import MailIcon from '@/assets/icon/mail.png';
 import { useState } from 'react';
 import { useStudies } from '@/hooks/useStudy';
-import type { Mentor, Study, Week } from '@/api/study';
+import type { Mentor, Study } from '@/api/study';
 
 interface IconTextBoxProps {
   text: string;
@@ -24,7 +23,7 @@ const getTag = (name: string): 'algorithm' | 'development' => {
 };
 
 export default function StudyIntro() {
-  const { data: studies, isLoading, isError } = useStudies({ includeMentors: true });
+  const { data: studies, isLoading, isError } = useStudies();
   const [activeTabIdx, setActiveTabIdx] = useState<number>(0);
 
   if (isLoading) {
@@ -56,9 +55,9 @@ export default function StudyIntro() {
       {/* 탭 */}
       <PillTab_study
         tabElements={studies.map((study, idx) => ({
-          label: study.name,
+          label: study.studyName,
           active: activeTabIdx === idx,
-          tag: getTag(study.name),
+          tag: getTag(study.studyName),
         }))}
         clickHandler={(idx) => setActiveTabIdx(idx)}
         activeTabIdx={activeTabIdx}
@@ -74,17 +73,21 @@ export default function StudyIntro() {
 // ─── 스터디 카드 ──────────────────────────────────────────
 
 function StudyCard({ study }: { study: Study }) {
-  const tag = getTag(study.name);
+  const tag = getTag(study.studyName);
 
   // description을 \n 기준으로 나눠 여러 줄 intro로 표시
   const introLines = study.description ? study.description.split('\n').filter(Boolean) : [];
 
+  // 모든 클래스의 멘토를 합산 (userId 기준 중복 제거)
+  const allMentors = study.classes
+    .flatMap((c) => c.mentors)
+    .filter((m, i, arr) => arr.findIndex((x) => x.userId === m.userId) === i);
+
   return (
     <div className="mx-8 mt-10 flex w-full max-w-5xl flex-col items-start rounded-lg border-2 border-[#E0D7F1] p-10">
-      {/* 스터디명 + 상태 뱃지 */}
+      {/* 스터디명 */}
       <div className="my-4 flex items-center gap-3">
-        <p className="text-2xl font-bold">{study.name}</p>
-        <StatusBadge status={study.status} />
+        <p className="text-2xl font-bold">{study.studyName}</p>
       </div>
 
       {/* 소개 */}
@@ -99,61 +102,17 @@ function StudyCard({ study }: { study: Study }) {
         />
       ))}
 
-      {/* 대상 */}
-      <div className="mt-5 w-full self-center rounded-lg bg-[#EBEBEB] p-6">
-        <p className="mb-2">대상</p>
-        <p className="text-lg font-semibold">{study.target}</p>
-      </div>
-
-      {/* 주차별 내용 — weeks 배열 활용 */}
-      {study.weeks && study.weeks.length > 0 && (
-        <>
-          <p className="mb-5 mt-10 text-lg font-semibold">주차별 내용</p>
-          {study.weeks.map((week) => (
-            <WeekRow key={week.weekId} week={week} />
-          ))}
-        </>
-      )}
-
       {/* 멘토진 */}
-      {study.mentors && study.mentors.length > 0 && (
+      {allMentors.length > 0 && (
         <>
           <p className="mb-5 mt-10 text-lg font-semibold">멘토진</p>
           <div className="flex flex-wrap gap-8">
-            {study.mentors.map((mentor) => (
+            {allMentors.map((mentor) => (
               <MentorCard key={mentor.userId} mentor={mentor} />
             ))}
           </div>
         </>
       )}
-    </div>
-  );
-}
-
-// ─── 상태 뱃지 ────────────────────────────────────────────
-
-function StatusBadge({ status }: { status: Study['status'] }) {
-  const config = {
-    OPEN: { label: '모집중', className: 'bg-green-100 text-green-700' },
-    CLOSED: { label: '마감', className: 'bg-red-100 text-red-600' },
-    ARCHIVED: { label: '종료', className: 'bg-gray-100 text-gray-500' },
-  };
-  const { label, className } = config[status];
-  return (
-    <span className={`rounded-full px-3 py-0.5 text-sm font-semibold ${className}`}>{label}</span>
-  );
-}
-
-// ─── 주차별 행 ────────────────────────────────────────────
-
-function WeekRow({ week }: { week: Week }) {
-  return (
-    <div className="flex h-full w-full flex-row items-center">
-      <img src={lineIcon} alt="라인아이콘" className="h-18 w-3" />
-      <div className="ml-8 flex w-full flex-row items-center rounded-xl border-2 border-[#D9D9D9] p-3">
-        <p className="mx-4 text-sm font-semibold text-[#919191]">{week.weekNo}주차</p>
-        <p className="mx-4 font-semibold">{week.description}</p>
-      </div>
     </div>
   );
 }
