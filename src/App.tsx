@@ -21,6 +21,16 @@ function App() {
       once: true,
       offset: 30,
     });
+
+    function isKakaoTalkInAppBrowser() {
+      return navigator.userAgent.toLowerCase().includes('kakaotalk');
+    }
+
+    if (isKakaoTalkInAppBrowser()) {
+      const targetUrl = 'https://zerone01.kr';
+      // 카카오톡 인앱 브라우저에서 외부 브라우저 열기
+      window.location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(targetUrl);
+    }
   }, []);
 
   return (
