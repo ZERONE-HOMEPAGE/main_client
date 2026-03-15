@@ -6,21 +6,56 @@ import UserIcon from '@/assets/icon/user.png';
 import PillTab_study from '@/components/ui/PillTab/PillTab_study';
 import MailIcon from '@/assets/icon/mail.png';
 import { useState } from 'react';
+import axios from 'axios';
 import { useMyStudies } from '@/hooks/useMyStudies';
 import { useJoinStudy } from '@/hooks/useJoinStudy';
 import { useLeaveStudy } from '@/hooks/useLeaveStudy';
 import { isLoggedIn } from '@/utils/token';
 import { CheckTextProps, ContentsProps, MentorProps } from '@/types/study';
+import TextModal from '@/components/ui/modal/TextModal';
 
-const STUDY_ID = '0595fd5d-ba81-46c6-8c3c-cf0034a4845c';
+const STUDY_ID = '11b7add5-a624-42d8-ae8b-b5a41b46391f';
 
 export default function StudyIntro() {
   const { data: myStudies } = useMyStudies();
-  const { mutate: join, isPending: isJoining } = useJoinStudy();
-  const { mutate: leave, isPending: isLeaving } = useLeaveStudy();
+  const { mutate: join } = useJoinStudy();
+  const { mutate: leave } = useLeaveStudy();
+  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [errorModal, setErrorModal] = useState<{ open: boolean; message: string }>({
+    open: false,
+    message: '',
+  });
 
   const isJoined = (studyId: string) =>
     myStudies?.items.some((s) => s.studyId === studyId) ?? false;
+
+  const handleJoin = (studyId: string) => {
+    setPendingId(studyId);
+    join(studyId, {
+      onSettled: () => setPendingId(null),
+      onError: (error) =>
+        setErrorModal({
+          open: true,
+          message: axios.isAxiosError(error)
+            ? (error.response?.data?.message ?? '스터디 신청 중 오류가 발생했습니다.')
+            : '스터디 신청 중 오류가 발생했습니다.',
+        }),
+    });
+  };
+
+  const handleLeave = (studyId: string) => {
+    setPendingId(studyId);
+    leave(studyId, {
+      onSettled: () => setPendingId(null),
+      onError: (error) =>
+        setErrorModal({
+          open: true,
+          message: axios.isAxiosError(error)
+            ? (error.response?.data?.message ?? '스터디 취소 중 오류가 발생했습니다.')
+            : '스터디 취소 중 오류가 발생했습니다.',
+        }),
+    });
+  };
 
   const Class = [
     {
@@ -226,29 +261,36 @@ export default function StudyIntro() {
             <div className="mt-8 flex w-full justify-end">
               {isJoined(item.studyId) ? (
                 <button
-                  onClick={() => leave(item.studyId)}
-                  disabled={isLeaving}
+                  onClick={() => handleLeave(item.studyId)}
+                  disabled={pendingId === item.studyId}
                   className="rounded-lg bg-gray-200 px-6 py-2 font-semibold text-gray-600 hover:bg-gray-300 disabled:opacity-50"
                 >
-                  {isLeaving ? '처리 중...' : '취소하기'}
+                  {pendingId === item.studyId ? '처리 중...' : '취소하기'}
                 </button>
               ) : (
                 <button
-                  onClick={() => join(item.studyId)}
-                  disabled={isJoining}
+                  onClick={() => handleJoin(item.studyId)}
+                  disabled={pendingId === item.studyId}
                   className={`rounded-lg px-6 py-2 font-semibold text-white disabled:opacity-50 ${
                     item.tag === 'algorithm'
                       ? 'bg-[#9747FF] hover:bg-[#8030ee]'
                       : 'bg-[#5F5CFF] hover:bg-[#4a47ee]'
                   }`}
                 >
-                  {isJoining ? '처리 중...' : '신청하기'}
+                  {pendingId === item.studyId ? '처리 중...' : '신청하기'}
                 </button>
               )}
             </div>
           )}
         </div>
       ))}
+
+      <TextModal
+        isOpen={errorModal.open}
+        title="오류"
+        description={errorModal.message}
+        onClose={() => setErrorModal({ open: false, message: '' })}
+      />
     </div>
   );
 }

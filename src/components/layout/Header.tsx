@@ -125,7 +125,9 @@ export default function Header() {
 
               <li>
                 {/* 관리자페이지 */}
-                {isLoggedIn() && ActiveAdmin && <a href={'https://zerone01.kr/admin'}>관리자페이지</a>}
+                {isLoggedIn() && ActiveAdmin && (
+                  <a href={'https://zerone01.kr/admin'}>관리자페이지</a>
+                )}
               </li>
               <li>
                 {/* 멘토페이지 */}
