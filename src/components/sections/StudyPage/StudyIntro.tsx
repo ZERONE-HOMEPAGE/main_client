@@ -1,5 +1,4 @@
 import Check_algo from '@/assets/icon/CheckIcon_algo.png';
-import Check_dev from '@/assets/icon/CheckIcon_dev.png';
 import HomeIcon from '@/assets/icon/home.png';
 import UserIcon from '@/assets/icon/user.png';
 import MailIcon from '@/assets/icon/mail.png';
@@ -18,12 +17,6 @@ interface IconTextBoxProps {
   iconSrc?: string;
   noContainer?: boolean;
 }
-
-const getTag = (name: string | undefined): 'algorithm' | 'development' => {
-  if (!name) return 'algorithm';
-  const devKeywords = ['웹', 'web', '앱', 'app', '개발', 'dev'];
-  return devKeywords.some((kw) => name.toLowerCase().includes(kw)) ? 'development' : 'algorithm';
-};
 
 const WEEKDAY_KO: Record<string, string> = {
   MON: '월',
@@ -69,7 +62,6 @@ export default function StudyIntro() {
         tabElements={studies.map((study, idx) => ({
           label: study.name,
           active: activeTabIdx === idx,
-          tag: getTag(study.name),
         }))}
         clickHandler={(idx) => setActiveTabIdx(idx)}
         activeTabIdx={activeTabIdx}
@@ -84,7 +76,6 @@ export default function StudyIntro() {
 // ─── 스터디 카드 ──────────────────────────────────────────
 
 function StudyCard({ study }: { study: Study }) {
-  const tag = getTag(study.name);
   const introLines = study.description ? study.description.split(/\\n|\n/).filter(Boolean) : [];
 
   return (
@@ -96,8 +87,8 @@ function StudyCard({ study }: { study: Study }) {
           text={line}
           divClassName="m-2"
           iconClassName="w-6 h-6"
-          textClassName={`md:text-lg text-md ${tag === 'algorithm' ? 'text-[#9747FF]' : 'text-[#5F5CFF]'} font-semibold max-w-7xl`}
-          iconSrc={tag === 'algorithm' ? Check_algo : Check_dev}
+          textClassName={`md:text-lg text-md text-[#9747FF] font-semibold max-w-7xl`}
+          iconSrc={Check_algo}
         />
       ))}
 
@@ -141,8 +132,8 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
         text={mentor.name}
         iconSrc={UserIcon}
         divClassName="mb-1"
-        textClassName="font-semibold text-base"
-        iconClassName="w-8 h-8"
+        textClassName="font-bold text-sm"
+        iconClassName="w-7 h-7"
         noContainer
       />
       <div className="p-1"></div>
@@ -150,7 +141,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
         text={`${mentor.department} · ${mentor.studentId}학번`}
         iconSrc={HomeIcon}
         divClassName="mb-1"
-        textClassName="text-[#919191] text-xs md:text-sm"
+        textClassName="text-[#919191] text-sm"
         iconClassName="w-4 h-4"
       />
       {mentor.email && (
@@ -158,7 +149,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
           text={mentor.email}
           iconSrc={MailIcon}
           divClassName="mb-1"
-          textClassName="text-[#919191] text-xs md:text-sm"
+          textClassName="text-[#919191] text-sm"
           iconClassName="w-4 h-4"
         />
       )}
@@ -172,7 +163,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
             key={weekday}
             text={`${WEEKDAY_KO[weekday] ?? weekday}요일 ${slot.startTime} ~ ${slot.endTime}`}
             iconSrc={ClockIcon}
-            textClassName="text-[#919191] text-xs md:text-sm"
+            textClassName="text-[#919191] text-sm"
             iconClassName="w-4 h-4"
           />
         ))}
@@ -183,7 +174,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
         text={mentor.maxCapacity === null ? '제한 없음' : `제한인원 ${mentor.maxCapacity}명`}
         iconSrc={MaxUserIcon}
         divClassName="mt-1"
-        textClassName="text-[#919191] text-xs md:text-sm"
+        textClassName="text-[#919191] text-sm"
         iconClassName="h-4"
       />
     </div>
