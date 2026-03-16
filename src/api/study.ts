@@ -64,7 +64,7 @@ function normalizeStudy(raw: any): Study {
           { startTime: t.startTime, endTime: t.endTime },
         ]),
       ),
-      maxCapacity: 0,
+      maxCapacity: cls.operationTimes[0].maxMembers,
       currentEnrollment: 0,
       applyButton: raw.joinable ?? false,
     })),
