@@ -112,19 +112,19 @@ export default function SignupPage() {
       setSidError('');
     }
 
-    const isValid = /^[a-zA-Z0-9_]+$/.test(BJ_id);
-
-    if (!isValid) {
+    if (BJ_id && !/^[a-zA-Z0-9_]+$/.test(BJ_id)) {
       setBj_idError('영어, 숫자, 언더바(_)만 사용할 수 있습니다.');
       valid = false;
+    } else {
+      setBj_idError('');
     }
 
     return valid;
   };
 
   return (
-    <>
-      <div className="flex h-full h-screen w-full flex-col items-center bg-black"></div>
+    <div className="flex h-full h-screen w-full flex-col items-center bg-black">
+      <div className=""></div>
       {onModal ? ( // 테스트 해봐
         <DuesModal
           isNew={true}
@@ -208,6 +208,6 @@ export default function SignupPage() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
