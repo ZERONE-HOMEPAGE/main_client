@@ -132,7 +132,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
         text={mentor.name}
         iconSrc={UserIcon}
         divClassName="mb-1"
-        textClassName="font-bold text-sm"
+        textClassName="font-semibold text-sm"
         iconClassName="w-7 h-7"
         noContainer
       />
@@ -141,7 +141,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
         text={`${mentor.department} · ${mentor.studentId}학번`}
         iconSrc={HomeIcon}
         divClassName="mb-1"
-        textClassName="text-[#919191] text-sm"
+        textClassName="text-[#919191] text-sm font-medium"
         iconClassName="w-4 h-4"
       />
       {mentor.email && (
@@ -149,7 +149,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
           text={mentor.email}
           iconSrc={MailIcon}
           divClassName="mb-1"
-          textClassName="text-[#919191] text-sm"
+          textClassName="text-[#919191] text-sm font-medium"
           iconClassName="w-4 h-4"
         />
       )}
@@ -163,7 +163,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
             key={weekday}
             text={`${WEEKDAY_KO[weekday] ?? weekday}요일 ${slot.startTime} ~ ${slot.endTime}`}
             iconSrc={index === 0 ? ClockIcon : undefined}
-            textClassName="text-[#919191] text-sm"
+            textClassName="text-[#919191] text-sm font-medium"
             iconClassName="w-4 h-4"
           />
         ))}
@@ -174,7 +174,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
         text={mentor.maxCapacity === null ? '제한 없음' : `제한인원 ${mentor.maxCapacity}명`}
         iconSrc={MaxUserIcon}
         divClassName="mt-1"
-        textClassName="text-[#919191] text-sm"
+        textClassName="text-[#919191] text-sm font-medium"
         iconClassName="h-4"
       />
     </div>
@@ -192,7 +192,7 @@ function IconTextBox({
   noContainer = false,
 }: IconTextBoxProps) {
   return (
-    <div className={`flex items-center gap-3 font-medium ${divClassName}`}>
+    <div className={`flex items-center gap-3 ${divClassName}`}>
       {iconSrc ? (
         noContainer ? (
           <img src={iconSrc} alt="Icon" className={iconClassName} />
