@@ -158,11 +158,11 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
 
       {/* 수업 시간 */}
       <div className="mt-3 flex flex-col gap-0.5">
-        {scheduleEntries.map(([weekday, slot]) => (
+        {scheduleEntries.map(([weekday, slot], index) => (
           <IconTextBox
             key={weekday}
             text={`${WEEKDAY_KO[weekday] ?? weekday}요일 ${slot.startTime} ~ ${slot.endTime}`}
-            iconSrc={ClockIcon}
+            iconSrc={index === 0 ? ClockIcon : undefined}
             textClassName="text-[#919191] text-sm"
             iconClassName="w-4 h-4"
           />
@@ -193,12 +193,16 @@ function IconTextBox({
 }: IconTextBoxProps) {
   return (
     <div className={`flex items-center gap-3 font-medium ${divClassName}`}>
-      {noContainer ? (
-        <img src={iconSrc} alt="Icon" className={iconClassName} />
-      ) : (
-        <div className="flex w-6 flex-shrink-0 items-center justify-center">
+      {iconSrc ? (
+        noContainer ? (
           <img src={iconSrc} alt="Icon" className={iconClassName} />
-        </div>
+        ) : (
+          <div className="flex w-6 flex-shrink-0 items-center justify-center">
+            <img src={iconSrc} alt="Icon" className={iconClassName} />
+          </div>
+        )
+      ) : (
+        <div className="w-6 flex-shrink-0" />
       )}
       <p className={textClassName}>{text}</p>
     </div>
