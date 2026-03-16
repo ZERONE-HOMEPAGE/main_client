@@ -16,6 +16,7 @@ interface IconTextBoxProps {
   iconClassName?: string;
   textClassName?: string;
   iconSrc?: string;
+  noContainer?: boolean;
 }
 
 const getTag = (name: string | undefined): 'algorithm' | 'development' => {
@@ -95,7 +96,7 @@ function StudyCard({ study }: { study: Study }) {
           text={line}
           divClassName="m-2"
           iconClassName="w-6 h-6"
-          textClassName={`text-lg ${tag === 'algorithm' ? 'text-[#9747FF]' : 'text-[#5F5CFF]'} font-semibold max-w-7xl`}
+          textClassName={`md:text-lg text-md ${tag === 'algorithm' ? 'text-[#9747FF]' : 'text-[#5F5CFF]'} font-semibold max-w-7xl`}
           iconSrc={tag === 'algorithm' ? Check_algo : Check_dev}
         />
       ))}
@@ -103,25 +104,27 @@ function StudyCard({ study }: { study: Study }) {
       {/* 대상 */}
       {study.target && (
         <div className="mt-6 w-full rounded-lg bg-[#F5F5F5] px-6 py-4">
-          <p className="mb-1 text-sm font-semibold text-[#919191]">대상</p>
+          <p className="text-md mb-1 font-semibold text-[#919191]">대상</p>
           <p className="text-base text-[#333]">{study.target}</p>
         </div>
       )}
 
       {/* 신청하기 */}
       {(study.mentors?.length ?? 0) > 0 && (
-        <>
-          <p className="mb-1 mt-10 text-lg font-semibold text-[#0E0E0E]">신청하기</p>
-          <p className="text-sm text-[#6B6B6B]">
+        <div className="font-medium">
+          <p className="text-md mb-1 mt-10 font-semibold text-[#0E0E0E] md:text-lg">신청하기</p>
+          <p className="md:text-md text-sm text-[#6B6B6B]">
             스터디 요일 교차 신청은 카카오톡 영과일로 문의 부탁드립니다
           </p>
-          <p className="mb-6 text-sm text-[#6B6B6B]">(스터디 중 하나는 신청하셔야합니다)</p>
+          <p className="md:text-md mb-10 text-sm text-[#6B6B6B]">
+            (스터디 중 하나는 신청하셔야합니다)
+          </p>
           <div className="flex flex-wrap gap-6">
             {(study.mentors ?? []).map((mentor) => (
               <MentorCard key={mentor.userId} mentor={mentor} />
             ))}
           </div>
-        </>
+        </div>
       )}
     </div>
   );
@@ -139,13 +142,15 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
         iconSrc={UserIcon}
         divClassName="mb-1"
         textClassName="font-semibold text-base"
-        iconClassName="w-6 h-6"
+        iconClassName="w-8 h-8"
+        noContainer
       />
+      <div className="p-1"></div>
       <IconTextBox
         text={`${mentor.department} · ${mentor.studentId}학번`}
         iconSrc={HomeIcon}
         divClassName="mb-1"
-        textClassName="text-[#919191] text-sm"
+        textClassName="text-[#919191] text-xs md:text-sm"
         iconClassName="w-4 h-4"
       />
       {mentor.email && (
@@ -153,10 +158,12 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
           text={mentor.email}
           iconSrc={MailIcon}
           divClassName="mb-1"
-          textClassName="text-[#919191] text-sm"
+          textClassName="text-[#919191] text-xs md:text-sm"
           iconClassName="w-4 h-4"
         />
       )}
+
+      <div className="my-1 w-[85%] border-t border-[#D9D9D9] md:w-full" />
 
       {/* 수업 시간 */}
       <div className="mt-3 flex flex-col gap-0.5">
@@ -165,7 +172,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
             key={weekday}
             text={`${WEEKDAY_KO[weekday] ?? weekday}요일 ${slot.startTime} ~ ${slot.endTime}`}
             iconSrc={ClockIcon}
-            textClassName="text-[#919191] text-sm"
+            textClassName="text-[#919191] text-xs md:text-sm"
             iconClassName="w-4 h-4"
           />
         ))}
@@ -176,7 +183,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
         text={mentor.maxCapacity === null ? '제한 없음' : `제한인원 ${mentor.maxCapacity}명`}
         iconSrc={MaxUserIcon}
         divClassName="mt-1"
-        textClassName="text-[#919191] text-sm"
+        textClassName="text-[#919191] text-xs md:text-sm"
         iconClassName="h-4"
       />
     </div>
@@ -191,12 +198,17 @@ function IconTextBox({
   iconClassName = '',
   textClassName = '',
   iconSrc,
+  noContainer = false,
 }: IconTextBoxProps) {
   return (
-    <div className={`flex items-center gap-3 ${divClassName}`}>
-      <div className="flex w-6 flex-shrink-0 items-center justify-center">
+    <div className={`flex items-center gap-3 font-medium ${divClassName}`}>
+      {noContainer ? (
         <img src={iconSrc} alt="Icon" className={iconClassName} />
-      </div>
+      ) : (
+        <div className="flex w-6 flex-shrink-0 items-center justify-center">
+          <img src={iconSrc} alt="Icon" className={iconClassName} />
+        </div>
+      )}
       <p className={textClassName}>{text}</p>
     </div>
   );
