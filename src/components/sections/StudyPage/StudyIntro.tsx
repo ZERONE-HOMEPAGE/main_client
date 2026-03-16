@@ -4,6 +4,7 @@ import HomeIcon from '@/assets/icon/home.png';
 import UserIcon from '@/assets/icon/user.png';
 import MailIcon from '@/assets/icon/mail.png';
 import ClockIcon from '@/assets/icon/clock.png';
+import MaxUserIcon from '@/assets/icon/maxUser.png';
 import PillTab_study from '@/components/ui/PillTab/PillTab_study';
 import { useState } from 'react';
 import { useStudies } from '@/hooks/useStudy';
@@ -24,7 +25,13 @@ const getTag = (name: string | undefined): 'algorithm' | 'development' => {
 };
 
 const WEEKDAY_KO: Record<string, string> = {
-  MON: '월', TUE: '화', WED: '수', THU: '목', FRI: '금', SAT: '토', SUN: '일',
+  MON: '월',
+  TUE: '화',
+  WED: '수',
+  THU: '목',
+  FRI: '금',
+  SAT: '토',
+  SUN: '일',
 };
 
 export default function StudyIntro() {
@@ -44,7 +51,9 @@ export default function StudyIntro() {
     return (
       <div className="my-20 flex w-full flex-col items-center px-4">
         <h1 className="mb-8 text-3xl font-bold">스터디 소개</h1>
-        <p className="text-red-400">스터디 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</p>
+        <p className="text-red-400">
+          스터디 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
+        </p>
       </div>
     );
   }
@@ -94,7 +103,7 @@ function StudyCard({ study }: { study: Study }) {
       {/* 대상 */}
       {study.target && (
         <div className="mt-6 w-full rounded-lg bg-[#F5F5F5] px-6 py-4">
-          <p className="mb-1 text-sm font-semibold text-[#555]">대상</p>
+          <p className="mb-1 text-sm font-semibold text-[#919191]">대상</p>
           <p className="text-base text-[#333]">{study.target}</p>
         </div>
       )}
@@ -102,9 +111,11 @@ function StudyCard({ study }: { study: Study }) {
       {/* 신청하기 */}
       {(study.mentors?.length ?? 0) > 0 && (
         <>
-          <p className="mb-1 mt-10 text-lg font-semibold">신청하기</p>
-          <p className="text-sm text-[#555]">스터디 요일 교차 신청은 카카오톡 영과일로 문의 부탁드립니다</p>
-          <p className="mb-6 text-sm text-[#555]">(스터디 중 하나는 신청하셔야합니다)</p>
+          <p className="mb-1 mt-10 text-lg font-semibold text-[#0E0E0E]">신청하기</p>
+          <p className="text-sm text-[#6B6B6B]">
+            스터디 요일 교차 신청은 카카오톡 영과일로 문의 부탁드립니다
+          </p>
+          <p className="mb-6 text-sm text-[#6B6B6B]">(스터디 중 하나는 신청하셔야합니다)</p>
           <div className="flex flex-wrap gap-6">
             {(study.mentors ?? []).map((mentor) => (
               <MentorCard key={mentor.userId} mentor={mentor} />
@@ -128,7 +139,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
         iconSrc={UserIcon}
         divClassName="mb-1"
         textClassName="font-semibold text-base"
-        iconClassName="w-4 h-4"
+        iconClassName="w-6 h-6"
       />
       <IconTextBox
         text={`${mentor.department} · ${mentor.studentId}학번`}
@@ -154,7 +165,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
             key={weekday}
             text={`${WEEKDAY_KO[weekday] ?? weekday}요일 ${slot.startTime} ~ ${slot.endTime}`}
             iconSrc={ClockIcon}
-            textClassName="text-[#555] text-sm"
+            textClassName="text-[#919191] text-sm"
             iconClassName="w-4 h-4"
           />
         ))}
@@ -163,10 +174,10 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
       {/* 제한 인원 */}
       <IconTextBox
         text={mentor.maxCapacity === null ? '제한 없음' : `제한인원 ${mentor.maxCapacity}명`}
-        iconSrc={UserIcon}
+        iconSrc={MaxUserIcon}
         divClassName="mt-1"
-        textClassName="text-[#555] text-sm"
-        iconClassName="w-4 h-4"
+        textClassName="text-[#919191] text-sm"
+        iconClassName="h-4"
       />
     </div>
   );
@@ -183,7 +194,9 @@ function IconTextBox({
 }: IconTextBoxProps) {
   return (
     <div className={`flex items-center gap-3 ${divClassName}`}>
-      <img src={iconSrc} alt="Icon" className={iconClassName} />
+      <div className="flex w-6 flex-shrink-0 items-center justify-center">
+        <img src={iconSrc} alt="Icon" className={iconClassName} />
+      </div>
       <p className={textClassName}>{text}</p>
     </div>
   );
