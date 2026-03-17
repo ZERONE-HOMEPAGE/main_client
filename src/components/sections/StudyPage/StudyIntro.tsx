@@ -3,7 +3,6 @@ import HomeIcon from '@/assets/icon/home.png';
 import UserIcon from '@/assets/icon/user.png';
 import MailIcon from '@/assets/icon/mail.png';
 import ClockIcon from '@/assets/icon/clock.png';
-import MaxUserIcon from '@/assets/icon/maxUser.png';
 import lineIcon from '@/assets/icon/line.png';
 import PillTab_study from '@/components/ui/PillTab/PillTab_study';
 import { useState } from 'react';
@@ -120,12 +119,12 @@ function StudyCard({ study }: { study: Study }) {
           <p className="md:text-md text-sm text-[#6B6B6B]">
             스터디 요일 교차 신청은 카카오톡 영과일로 문의 부탁드립니다
           </p>
-          <p className="md:text-md mb-10 text-sm text-[#6B6B6B]">
+          <p className="md:text-md mb-10 mt-1 text-sm text-[#6B6B6B]">
             (스터디 중 하나는 신청하셔야합니다)
           </p>
           <div className="flex flex-wrap gap-6">
             {(study.mentors ?? []).map((mentor) => (
-              <MentorCard key={mentor.userId} mentor={mentor} />
+              <MentorCard key={mentor.classId} mentor={mentor} />
             ))}
           </div>
         </div>
