@@ -79,7 +79,7 @@ function StudyCard({ study }: { study: Study }) {
   const introLines = study.description ? study.description.split(/\\n|\n/).filter(Boolean) : [];
 
   return (
-    <div className="mx-8 mt-10 flex w-full max-w-5xl flex-col items-start rounded-lg border-2 border-[#E0D7F1] p-10">
+    <div className="mt-10 flex w-full max-w-5xl flex-col items-start rounded-lg border-2 border-[#E0D7F1] p-10">
       {/* 소개 */}
       {introLines.map((line, i) => (
         <IconTextBox
