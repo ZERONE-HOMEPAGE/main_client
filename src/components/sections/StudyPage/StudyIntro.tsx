@@ -96,8 +96,8 @@ function StudyCard({ study }: { study: Study }) {
       {/* 대상 */}
       {study.target && (
         <div className="mt-5 w-full self-center rounded-lg bg-[#EBEBEB] p-6">
-          <p className="mb-2">대상</p>
-          <p className="text-lg font-semibold">{study.target}</p>
+          <p className="md:text-md mb-2 text-sm">대상</p>
+          <p className="text-md font-semibold md:text-lg">{study.target}</p>
         </div>
       )}
 
@@ -142,8 +142,10 @@ function WeekRow({ week }: { week: Week }) {
       <img src={lineIcon} alt="라인아이콘" className="h-18 w-3" />
       <div className="ml-8 flex w-full flex-row items-center justify-between rounded-xl border-2 border-[#D9D9D9] p-3">
         <div className="flex items-center">
-          <p className="mx-4 text-sm font-semibold text-[#919191]">{week.weekNo}주차</p>
-          <p className="mx-4 font-semibold">{week.description}</p>{' '}
+          <p className="mx-3 text-sm font-semibold text-[#919191] md:text-base">
+            {week.weekNo}주차
+          </p>
+          <p className="mx-3 text-sm font-semibold md:text-base">{week.description}</p>{' '}
         </div>
       </div>
     </div>
@@ -183,7 +185,14 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
         />
       )}
 
-      <div className="my-1 w-[85%] border-t border-[#D9D9D9] md:w-full" />
+      {/* note 한마디 */}
+      {mentor.note && mentor.note.trim() && (
+        <div className="mt-2 w-full rounded-lg border border-[#E0D7F1] bg-[#F8F4FF] px-4 py-2.5">
+          <p className="text-sm text-[#6B6B6B]">"{mentor.note}"</p>
+        </div>
+      )}
+
+      <div className="my-1 mt-3 w-[85%] border-t border-[#D9D9D9] md:w-full" />
 
       {/* 수업 시간 */}
       <div className="mt-3 flex flex-col gap-0.5">
