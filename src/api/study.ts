@@ -5,6 +5,7 @@ import { client } from '@/api/client';
 export interface StudyTimeSlot {
   startTime: string;
   endTime: string;
+  maxCapacity: number | null;
 }
 
 export interface Mentor {
@@ -16,7 +17,6 @@ export interface Mentor {
   email: string | null;
   note: string;
   studyTime: Record<string, StudyTimeSlot>;
-  maxCapacity: number | null;
 }
 
 export interface Week {
@@ -70,10 +70,9 @@ function toStudy(raw: any): Study {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (cls.operationTimes ?? []).map((t: any) => [
           t.weekday,
-          { startTime: t.startTime, endTime: t.endTime },
+          { startTime: t.startTime, endTime: t.endTime, maxCapacity: t.maxMembers ?? null },
         ]),
       ),
-      maxCapacity: cls.operationTimes[0]?.maxMembers ?? null,
     })),
   );
 

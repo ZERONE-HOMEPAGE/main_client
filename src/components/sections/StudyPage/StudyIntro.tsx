@@ -199,22 +199,13 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
         {scheduleEntries.map(([weekday, slot], index) => (
           <IconTextBox
             key={weekday}
-            text={`${WEEKDAY_KO[weekday] ?? weekday}요일 ${slot.startTime} ~ ${slot.endTime}`}
+            text={`${WEEKDAY_KO[weekday] ?? weekday}요일 ${slot.startTime} ~ ${slot.endTime} / ${slot.maxCapacity == null ? '제한없음' : ` ${slot.maxCapacity}명`}`}
             iconSrc={index === 0 ? ClockIcon : undefined}
             textClassName="text-[#919191] text-sm font-medium"
             iconClassName="w-4 h-4"
           />
         ))}
       </div>
-
-      {/* 제한 인원 */}
-      <IconTextBox
-        text={mentor.maxCapacity === null ? '제한 없음' : `제한인원 ${mentor.maxCapacity}명`}
-        iconSrc={MaxUserIcon}
-        divClassName="mt-1"
-        textClassName="text-[#919191] text-sm font-medium"
-        iconClassName="h-4"
-      />
     </div>
   );
 }
