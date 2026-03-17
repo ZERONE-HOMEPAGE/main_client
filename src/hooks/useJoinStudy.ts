@@ -5,9 +5,11 @@ export const useJoinStudy = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (studyId: string) => joinStudy(studyId),
+    mutationFn: ({ studyId, selectedWeekdays }: { studyId: string; selectedWeekdays: string[] }) =>
+      joinStudy(studyId, selectedWeekdays),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myStudies'] });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });
 };

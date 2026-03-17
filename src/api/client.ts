@@ -3,7 +3,7 @@ import { getAccessToken, setAccessToken } from '@/utils/token';
 
 //개발환경에서 프록시 설정이 되어있는데, 이것의 필요성 파악할 필요 있음.(2026-03-15)
 export const client = axios.create({
-  baseURL: import.meta.env.DEV ? '/api/v1' : import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.DEV ? '/' : import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
   withCredentials: true, // 쿠키 포함
   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache', Pragma: 'no-cache' },

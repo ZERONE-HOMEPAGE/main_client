@@ -5,6 +5,7 @@ export interface MyStudyItem {
   semester: number;
   status: string;
   memberStatus: string;
+  selectedWeekdays: string[];
 }
 
 export interface MyStudiesResponse {

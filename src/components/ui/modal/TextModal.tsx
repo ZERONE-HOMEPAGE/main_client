@@ -50,7 +50,7 @@ export default function TextModal({
               onClick={onConfirm}
               className="ml-4 rounded-lg bg-[#5F63E6] px-5 py-2 text-sm text-gray-300 transition hover:bg-[#343A46]"
             >
-              제출
+              확인
             </button>
           )}
         </div>

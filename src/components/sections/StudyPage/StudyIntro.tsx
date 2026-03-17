@@ -14,6 +14,7 @@ import { useLeaveStudy } from '@/hooks/useLeaveStudy';
 import { isLoggedIn } from '@/utils/token';
 import TextModal from '@/components/ui/modal/TextModal';
 import type { Mentor, Study, Week } from '@/api/study';
+import type { MyStudiesResponse } from '@/types/study';
 
 interface IconTextBoxProps {
   text: string;
@@ -36,6 +37,7 @@ const WEEKDAY_KO: Record<string, string> = {
 
 export default function StudyIntro() {
   const { data: studies, isLoading, isError } = useStudies();
+  const { data: myStudies } = useMyStudies();
   const [activeTabIdx, setActiveTabIdx] = useState<number>(0);
 
   if (isLoading) {
@@ -74,15 +76,22 @@ export default function StudyIntro() {
         textclass="font-semibold"
       />
 
-      {activeStudy && <StudyCard key={activeStudy.studyId} study={activeStudy} />}
+      {activeStudy && (
+        <StudyCard key={activeStudy.studyId} study={activeStudy} myStudies={myStudies} />
+      )}
     </div>
   );
 }
 
 // ─── 스터디 카드 ──────────────────────────────────────────
 
-function StudyCard({ study }: { study: Study }) {
-  const { data: myStudies } = useMyStudies();
+function StudyCard({
+  study,
+  myStudies,
+}: {
+  study: Study;
+  myStudies: MyStudiesResponse | undefined;
+}) {
   const { mutate: join } = useJoinStudy();
   const { mutate: leave } = useLeaveStudy();
   const [pendingId, setPendingId] = useState<string | null>(null);
@@ -90,27 +99,55 @@ function StudyCard({ study }: { study: Study }) {
     open: false,
     message: '',
   });
+  const [successModal, setSuccessModal] = useState<{ open: boolean; message: string }>({
+    open: false,
+    message: '',
+  });
+  const [confirmLeave, setConfirmLeave] = useState<{ open: boolean; classId: string } | null>(null);
 
-  const isJoined = myStudies?.items.some((s) => s.studyId === study.studyId) ?? false;
+  const myStudy = myStudies?.items.find((s) => s.studyId === study.studyId);
 
-  const handleJoin = () => {
-    setPendingId(study.studyId);
-    join(study.studyId, {
-      onSettled: () => setPendingId(null),
-      onError: (error) =>
-        setErrorModal({
-          open: true,
-          message: axios.isAxiosError(error)
-            ? (error.response?.data?.message ?? '스터디 신청 중 오류가 발생했습니다.')
-            : '스터디 신청 중 오류가 발생했습니다.',
-        }),
-    });
+  const isMentorJoined = (mentor: Mentor) => {
+    if (!myStudy) return false;
+    const mentorWeekdays = Object.keys(mentor.studyTime).sort();
+    const joinedWeekdays = [...myStudy.selectedWeekdays].sort();
+    return JSON.stringify(mentorWeekdays) === JSON.stringify(joinedWeekdays);
   };
 
-  const handleLeave = () => {
-    setPendingId(study.studyId);
+  const handleJoin = (weekdays: string[], classId: string) => {
+    setPendingId(classId);
+    const weekdayKo = weekdays.map((w) => `${WEEKDAY_KO[w] ?? w}요일`).join(', ');
+    join(
+      { studyId: study.studyId, selectedWeekdays: weekdays },
+      {
+        onSettled: () => setPendingId(null),
+        onSuccess: () =>
+          setSuccessModal({
+            open: true,
+            message: `${study.name} (${weekdayKo}) 신청이 완료되었습니다.`,
+          }),
+        onError: (error) =>
+          setErrorModal({
+            open: true,
+            message: axios.isAxiosError(error)
+              ? (error.response?.data?.message ?? '스터디 신청 중 오류가 발생했습니다.')
+              : '스터디 신청 중 오류가 발생했습니다.',
+          }),
+      },
+    );
+  };
+
+  const handleLeave = (classId: string) => {
+    setConfirmLeave({ open: true, classId });
+  };
+
+  const doLeave = (classId: string) => {
+    setConfirmLeave(null);
+    setPendingId(classId);
     leave(study.studyId, {
       onSettled: () => setPendingId(null),
+      onSuccess: () =>
+        setSuccessModal({ open: true, message: `${study.name} 취소가 완료되었습니다.` }),
       onError: (error) =>
         setErrorModal({
           open: true,
@@ -146,7 +183,7 @@ function StudyCard({ study }: { study: Study }) {
       )}
 
       {/* 주차별 내용 */}
-      {(study.weeks?.length ?? 0) > 0 && (
+      {study.weeks.length > 0 && (
         <>
           <p className="mb-5 mt-10 text-lg font-semibold">주차별 내용</p>
           {[...study.weeks]
@@ -158,7 +195,7 @@ function StudyCard({ study }: { study: Study }) {
       )}
 
       {/* 신청하기 */}
-      {(study.mentors?.length ?? 0) > 0 && (
+      {study.mentors.length > 0 && (
         <div className="font-medium">
           <p className="text-md mb-1 mt-10 font-semibold text-[#0E0E0E] md:text-lg">신청하기</p>
           <p className="md:text-md text-sm text-[#6B6B6B]">
@@ -168,33 +205,17 @@ function StudyCard({ study }: { study: Study }) {
             (스터디 중 하나는 신청하셔야합니다)
           </p>
           <div className="flex flex-wrap gap-6">
-            {(study.mentors ?? []).map((mentor) => (
-              <MentorCard key={mentor.classId} mentor={mentor} />
+            {study.mentors.map((mentor) => (
+              <MentorCard
+                key={mentor.classId}
+                mentor={mentor}
+                isJoined={isMentorJoined(mentor)}
+                isPending={pendingId === mentor.classId}
+                onJoin={() => handleJoin(Object.keys(mentor.studyTime), mentor.classId)}
+                onLeave={() => handleLeave(mentor.classId)}
+              />
             ))}
           </div>
-
-          {/* 가입/취소 버튼 */}
-          {isLoggedIn() && (
-            <div className="mt-8 flex w-full justify-end">
-              {isJoined ? (
-                <button
-                  onClick={handleLeave}
-                  disabled={pendingId === study.studyId}
-                  className="rounded-lg bg-gray-200 px-6 py-2 font-semibold text-gray-600 hover:bg-gray-300 disabled:opacity-50"
-                >
-                  {pendingId === study.studyId ? '처리 중...' : '취소하기'}
-                </button>
-              ) : (
-                <button
-                  onClick={handleJoin}
-                  disabled={pendingId === study.studyId}
-                  className="rounded-lg bg-[#9747FF] px-6 py-2 font-semibold text-white hover:bg-[#8030ee] disabled:opacity-50"
-                >
-                  {pendingId === study.studyId ? '처리 중...' : '신청하기'}
-                </button>
-              )}
-            </div>
-          )}
         </div>
       )}
 
@@ -203,6 +224,19 @@ function StudyCard({ study }: { study: Study }) {
         title="오류"
         description={errorModal.message}
         onClose={() => setErrorModal({ open: false, message: '' })}
+      />
+      <TextModal
+        isOpen={successModal.open}
+        title="완료"
+        description={successModal.message}
+        onClose={() => setSuccessModal({ open: false, message: '' })}
+      />
+      <TextModal
+        isOpen={confirmLeave?.open ?? false}
+        title="스터디 취소"
+        description={`${study.name} 신청을 취소하시겠습니까?`}
+        onClose={() => setConfirmLeave(null)}
+        onConfirm={() => confirmLeave && doLeave(confirmLeave.classId)}
       />
     </div>
   );
@@ -228,7 +262,19 @@ function WeekRow({ week }: { week: Week }) {
 
 // ─── 멘토 카드 ────────────────────────────────────────────
 
-function MentorCard({ mentor }: { mentor: Mentor }) {
+function MentorCard({
+  mentor,
+  isJoined,
+  isPending,
+  onJoin,
+  onLeave,
+}: {
+  mentor: Mentor;
+  isJoined: boolean;
+  isPending: boolean;
+  onJoin: () => void;
+  onLeave: () => void;
+}) {
   const scheduleEntries = Object.entries(mentor.studyTime ?? {});
 
   return (
@@ -273,13 +319,28 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
         {scheduleEntries.map(([weekday, slot], index) => (
           <IconTextBox
             key={weekday}
-            text={`${WEEKDAY_KO[weekday] ?? weekday}요일 ${slot.startTime} ~ ${slot.endTime} / ${slot.maxCapacity == null ? '제한없음' : ` ${slot.maxCapacity}명`}`}
+            text={`${WEEKDAY_KO[weekday] ?? weekday}요일 ${slot.startTime} ~ ${slot.endTime} / ${slot.maxCapacity == null ? '제한없음' : `${slot.maxCapacity}명`}`}
             iconSrc={index === 0 ? ClockIcon : undefined}
             textClassName="text-[#919191] text-sm font-medium"
             iconClassName="w-4 h-4"
           />
         ))}
       </div>
+
+      {/* 신청/취소 버튼 */}
+      {isLoggedIn() && (
+        <button
+          onClick={() => (isJoined ? onLeave() : onJoin())}
+          disabled={isPending}
+          className={`mt-3 self-start rounded-lg px-6 py-2 font-semibold disabled:opacity-50 ${
+            isJoined
+              ? 'hover:bg- border border-[#9747FF] bg-white text-[#9747FF] hover:bg-purple-50'
+              : 'bg-[#9747FF] text-white hover:bg-[#8030ee]'
+          }`}
+        >
+          {isPending ? '처리 중...' : isJoined ? '취소하기' : '신청하기'}
+        </button>
+      )}
     </div>
   );
 }

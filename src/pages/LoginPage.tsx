@@ -96,7 +96,9 @@ export default function LoginPage() {
                     setPendingOpen(true);
                   }
                 },
-                onError: (_err) => {
+                onError: (err) => {
+                  const axiosErr = err as unknown as AxiosError<{ message?: string }>;
+                  console.error('로그인 실패:', axiosErr.response?.data);
                   setTextOpen(true);
                 },
               },

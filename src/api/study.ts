@@ -42,7 +42,6 @@ export interface Study {
   target: string;
   description: string;
   displayOrder: number;
-  joinable: boolean;
   mentors: Mentor[];
   weeks: Week[];
 }
@@ -85,7 +84,6 @@ function toStudy(raw: any): Study {
     target: raw.target ?? '',
     description: raw.description ?? '',
     displayOrder: raw.displayOrder,
-    joinable: raw.joinable,
     mentors,
     weeks: raw.weeks ?? [],
   };
@@ -96,21 +94,26 @@ function toStudy(raw: any): Study {
 /** 스터디 목록 조회 (기본: 현재 학기 기준) */
 export const getStudies = (params?: StudyListParams) =>
   client
-    .get<{ items: unknown[] }>('/studies', { params })
+    .get<{ items: unknown[] }>('/api/v1/studies', { params })
     .then((res) => res.data.items.map(toStudy));
 
 /** 스터디 상세 조회 */
 export const getStudyById = (studyId: string) =>
-  client.get<unknown>(`/studies/${studyId}`).then((res) => toStudy(res.data));
+  client.get<unknown>(`/api/v1/studies/${studyId}`).then((res) => toStudy(res.data));
 
 /** 내 스터디 목록 조회 */
 export const getMyStudies = (): Promise<MyStudiesResponse> =>
-  client.get<MyStudiesResponse>('/studies/my').then((res) => res.data);
+  client.get<MyStudiesResponse>('/api/v1/studies/my').then((res) => res.data);
 
 /** 스터디 가입 */
-export const joinStudy = (studyId: string): Promise<JoinStudyResponse> =>
-  client.post<JoinStudyResponse>(`/studies/${studyId}/join`).then((res) => res.data);
+export const joinStudy = (
+  studyId: string,
+  selectedWeekdays: string[],
+): Promise<JoinStudyResponse> =>
+  client
+    .post<JoinStudyResponse>(`/api/v1/studies/${studyId}/join`, { selectedWeekdays })
+    .then((res) => res.data);
 
 /** 스터디 탈퇴 */
 export const leaveStudy = (studyId: string): Promise<void> =>
-  client.post(`/studies/${studyId}/leave`).then((res) => res.data);
+  client.post(`/api/v1/studies/${studyId}/leave`).then((res) => res.data);

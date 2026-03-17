@@ -8,6 +8,7 @@ export const useLeaveStudy = () => {
     mutationFn: (studyId: string) => leaveStudy(studyId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myStudies'] });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });
 };
