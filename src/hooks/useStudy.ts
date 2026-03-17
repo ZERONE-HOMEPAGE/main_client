@@ -12,7 +12,6 @@ export const useStudies = (params?: StudyListParams) =>
   useQuery({
     queryKey: studyKeys.list(params),
     queryFn: () => getStudies(params),
-    select: (data) => data.items,
   });
 
 /** 스터디 상세 */

@@ -28,7 +28,7 @@ export interface Week {
   allowedWeekdays: string;
   studyDate: string[];
   requiredCount: number;
-  description: string; // 주차별 내용 (예: "입출력", "조건문")
+  description: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -46,23 +46,15 @@ export interface Study {
   weeks: Week[];
 }
 
-export interface StudyListResponse {
-  items: Study[];
-}
-
 export interface StudyListParams {
   year?: number;
   semester?: number;
 }
 
-// ─── 구 API 포맷 → 신 포맷 변환 ──────────────────────────
+// ─── API 응답 → Study 변환 ────────────────────────────────
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function normalizeStudy(raw: any): Study {
-  // 신 포맷이면 그대로 반환
-  if (Array.isArray(raw.mentors)) return raw as Study;
-
-  // 구 포맷 변환: classes[].mentors + operationTimes → mentors[].studyTime
+function toStudy(raw: any): Study {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mentors: Mentor[] = (raw.classes ?? []).flatMap((cls: any) =>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -87,13 +79,13 @@ function normalizeStudy(raw: any): Study {
 
   return {
     studyId: raw.studyId,
-    name: raw.studyName ?? raw.name ?? '',
-    year: raw.operation?.year ?? raw.year ?? 0,
-    semester: raw.operation?.semester ?? raw.semester ?? 0,
+    name: raw.studyName,
+    year: raw.operation.year,
+    semester: raw.operation.semester,
     target: raw.target ?? '',
     description: raw.description ?? '',
-    displayOrder: raw.displayOrder ?? 0,
-    joinable: raw.joinable ?? false,
+    displayOrder: raw.displayOrder,
+    joinable: raw.joinable,
     mentors,
     weeks: raw.weeks ?? [],
   };
@@ -105,8 +97,8 @@ function normalizeStudy(raw: any): Study {
 export const getStudies = (params?: StudyListParams) =>
   client
     .get<{ items: unknown[] }>('/studies', { params })
-    .then((res) => ({ items: res.data.items.map(normalizeStudy) }));
+    .then((res) => res.data.items.map(toStudy));
 
 /** 스터디 상세 조회 */
 export const getStudyById = (studyId: string) =>
-  client.get<unknown>(`/studies/${studyId}`).then((res) => normalizeStudy(res.data));
+  client.get<unknown>(`/studies/${studyId}`).then((res) => toStudy(res.data));
