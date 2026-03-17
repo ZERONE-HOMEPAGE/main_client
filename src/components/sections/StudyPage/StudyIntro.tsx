@@ -101,13 +101,15 @@ function StudyCard({ study }: { study: Study }) {
         </div>
       )}
 
-      {/* 주차별 내용 — weeks 배열 활용 */}
-      {study.weeks && study.weeks.length > 0 && (
+      {/* 주차별 내용 */}
+      {(study.weeks?.length ?? 0) > 0 && (
         <>
           <p className="mb-5 mt-10 text-lg font-semibold">주차별 내용</p>
-          {study.weeks.map((week) => (
-            <WeekRow key={week.weekId} week={week} />
-          ))}
+          {[...study.weeks]
+            .sort((a, b) => a.weekNo - b.weekNo)
+            .map((week) => (
+              <WeekRow key={week.weekId} week={week} />
+            ))}
         </>
       )}
 
@@ -138,9 +140,11 @@ function WeekRow({ week }: { week: Week }) {
   return (
     <div className="flex h-full w-full flex-row items-center">
       <img src={lineIcon} alt="라인아이콘" className="h-18 w-3" />
-      <div className="ml-8 flex w-full flex-row items-center rounded-xl border-2 border-[#D9D9D9] p-3">
-        <p className="mx-4 text-sm font-semibold text-[#919191]">{week.weekNo}주차</p>
-        <p className="mx-4 font-semibold">{week.description}</p>
+      <div className="ml-8 flex w-full flex-row items-center justify-between rounded-xl border-2 border-[#D9D9D9] p-3">
+        <div className="flex items-center">
+          <p className="mx-4 text-sm font-semibold text-[#919191]">{week.weekNo}주차</p>
+          <p className="mx-4 font-semibold">{week.description}</p>{' '}
+        </div>
       </div>
     </div>
   );
