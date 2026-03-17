@@ -4,23 +4,16 @@ export default function PillTab_study({
   activeTabIdx,
   textclass,
 }: {
-  tabElements: { label: string; active: boolean; tag: string }[];
+  tabElements: { label: string; active: boolean }[];
   clickHandler: (index: number) => void;
   activeTabIdx: number;
   textclass?: string;
 }) {
-  const algorithmCount = tabElements.filter((el) => el.tag === 'algorithm').length;
-
-  const developCount = tabElements.length - algorithmCount;
-
   return (
     <>
       {/* Desktop */}
       <div className="relative hidden h-12 overflow-hidden rounded-3xl lg:flex">
-        <div className="absolute inset-0 flex">
-          <div className="bg-[#E0D7F1]" style={{ flex: algorithmCount }} />
-          <div className="bg-[#C7CDF8]" style={{ flex: developCount }} />
-        </div>
+        <div className="absolute inset-0 bg-[#E0D7F1]" />
 
         <div
           className="absolute bottom-1 top-1 w-32 rounded-3xl bg-white transition-all duration-300 ease-in-out"

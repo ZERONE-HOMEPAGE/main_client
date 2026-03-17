@@ -1,22 +1,87 @@
 import Check_algo from '@/assets/icon/CheckIcon_algo.png';
-import Check_dev from '@/assets/icon/CheckIcon_dev.png';
 import HomeIcon from '@/assets/icon/home.png';
-import lineIcon from '@/assets/icon/line.png';
 import UserIcon from '@/assets/icon/user.png';
-import PillTab_study from '@/components/ui/PillTab/PillTab_study';
 import MailIcon from '@/assets/icon/mail.png';
+import ClockIcon from '@/assets/icon/clock.png';
+import lineIcon from '@/assets/icon/line.png';
+import PillTab_study from '@/components/ui/PillTab/PillTab_study';
 import { useState } from 'react';
 import axios from 'axios';
+import { useStudies } from '@/hooks/useStudy';
 import { useMyStudies } from '@/hooks/useMyStudies';
 import { useJoinStudy } from '@/hooks/useJoinStudy';
 import { useLeaveStudy } from '@/hooks/useLeaveStudy';
 import { isLoggedIn } from '@/utils/token';
-import { CheckTextProps, ContentsProps, MentorProps } from '@/types/study';
 import TextModal from '@/components/ui/modal/TextModal';
+import type { Mentor, Study, Week } from '@/api/study';
 
-const STUDY_ID = '11b7add5-a624-42d8-ae8b-b5a41b46391f';
+interface IconTextBoxProps {
+  text: string;
+  divClassName?: string;
+  iconClassName?: string;
+  textClassName?: string;
+  iconSrc?: string;
+  noContainer?: boolean;
+}
+
+const WEEKDAY_KO: Record<string, string> = {
+  MON: '월',
+  TUE: '화',
+  WED: '수',
+  THU: '목',
+  FRI: '금',
+  SAT: '토',
+  SUN: '일',
+};
 
 export default function StudyIntro() {
+  const { data: studies, isLoading, isError } = useStudies();
+  const [activeTabIdx, setActiveTabIdx] = useState<number>(0);
+
+  if (isLoading) {
+    return (
+      <div className="my-20 flex w-full flex-col items-center px-4">
+        <h1 className="mb-8 text-3xl font-bold">스터디 소개</h1>
+        <p className="text-gray-400">스터디 목록을 불러오는 중...</p>
+      </div>
+    );
+  }
+
+  if (isError || !studies) {
+    return (
+      <div className="my-20 flex w-full flex-col items-center px-4">
+        <h1 className="mb-8 text-3xl font-bold">스터디 소개</h1>
+        <p className="text-red-400">
+          스터디 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
+        </p>
+      </div>
+    );
+  }
+
+  const activeStudy = studies[activeTabIdx];
+
+  return (
+    <div className="my-20 flex w-full flex-col items-center px-4">
+      <h1 className="mb-8 text-3xl font-bold">스터디 소개</h1>
+
+      <PillTab_study
+        tabElements={studies.map((study, idx) => ({
+          label: study.name,
+          active: activeTabIdx === idx,
+        }))}
+        clickHandler={(idx) => setActiveTabIdx(idx)}
+        activeTabIdx={activeTabIdx}
+        textclass="font-semibold"
+      />
+
+      {activeStudy && <StudyCard key={activeStudy.studyId} study={activeStudy} />}
+    </div>
+  );
+}
+
+// ─── 스터디 카드 ──────────────────────────────────────────
+
+function StudyCard({ study }: { study: Study }) {
   const { data: myStudies } = useMyStudies();
   const { mutate: join } = useJoinStudy();
   const { mutate: leave } = useLeaveStudy();
@@ -26,12 +91,11 @@ export default function StudyIntro() {
     message: '',
   });
 
-  const isJoined = (studyId: string) =>
-    myStudies?.items.some((s) => s.studyId === studyId) ?? false;
+  const isJoined = myStudies?.items.some((s) => s.studyId === study.studyId) ?? false;
 
-  const handleJoin = (studyId: string) => {
-    setPendingId(studyId);
-    join(studyId, {
+  const handleJoin = () => {
+    setPendingId(study.studyId);
+    join(study.studyId, {
       onSettled: () => setPendingId(null),
       onError: (error) =>
         setErrorModal({
@@ -43,9 +107,9 @@ export default function StudyIntro() {
     });
   };
 
-  const handleLeave = (studyId: string) => {
-    setPendingId(studyId);
-    leave(studyId, {
+  const handleLeave = () => {
+    setPendingId(study.studyId);
+    leave(study.studyId, {
       onSettled: () => setPendingId(null),
       onError: (error) =>
         setErrorModal({
@@ -57,233 +121,82 @@ export default function StudyIntro() {
     });
   };
 
-  const Class = [
-    {
-      tabIdx: 0,
-      studyId: STUDY_ID,
-      name: 'C언어 기초반',
-      tag: 'algorithm',
-      intro: [
-        'C언어에 대한 이해를 높이고 문제를 통해 적용해보며 학습',
-        '직접 코드를 작성해보며 프로그램 동작 원리에 대한 이해',
-        '이후에 듣게 될 자료구조나 알고리즘 스터디 대비 및 문제 해결 능력 향상',
-      ],
-      target: '프로그래밍이 처음이거나, C언어를 기초부터 배우고 싶으신 분',
-      contents: ['입출력', '연산자', '조건문', '반복문', '배열', '함수'],
-      mentor: [
-        ['손동열', '컴퓨터학부 · 25학번', 'sdy423@hanyang.ac.kr', '멘토도 같이배우는 c언어'],
-      ],
-    },
-    {
-      tabIdx: 1,
-      studyId: STUDY_ID,
-      name: '파이썬 기초반',
-      tag: 'algorithm',
-      intro: [
-        '파이썬에 대한 이해를 높이고 문제를 통해 적용해보며 학습',
-        '직접 코드를 작성해보며 프로그램 동작 원리에 대한 이해',
-        '이후에 듣게 될 자료구조나 알고리즘 스터디 대비 및 문제 해결 능력 향상',
-      ],
-      target: '프로그래밍이 처음이거나, 파이썬를 기초부터 배우고 싶으신 분',
-      contents: [
-        '입출력, 자료형, 사칙연산',
-        '조건문과 연산자(비교 및 논리연산자)',
-        '반복문과 함수',
-        '리스트, 문자열',
-        '람다함수, 정렬',
-        '중첩 반복문, 완전탐색',
-      ],
-      mentor: [['유지성', '컴퓨터학부 · 22학번', 'swyjs@hanyang.ac.kr', 'Not the same']],
-    },
-    {
-      tabIdx: 2,
-      studyId: STUDY_ID,
-      name: '브릿지반',
-      tag: 'algorithm',
-      intro: [
-        '기초에서 자료구조로 넘어가기 전에 C 핵심 개념을 정리하는 단계',
-        '포인터, 재귀함수, 자료구조 등 C언어에서 심화 학습에 필요한 핵심 개념을 다룸',
-      ],
-      target: 'C언어 문법은 배웠지만, 포인터와 메모리 개념을 더 확실히 잡고 싶은 분',
-      contents: [
-        '포인터(1)',
-        '포인터(2)',
-        '다차원 배열 복습',
-        '재귀함수',
-        '구조체',
-        '메모리 동적 할당',
-      ],
-      mentor: [
-        [
-          '정다혜',
-          '컴퓨터학부 · 24학번',
-          'dahye8724@hanyang.ac.kr',
-          '편하게 와서 실력 다지고 올라가요',
-        ],
-      ],
-    },
-    {
-      tabIdx: 3,
-      studyId: STUDY_ID,
-      name: '자료구조반',
-      tag: 'algorithm',
-      intro: [
-        '자료구조에 대한 설명과 C++기반 문제풀이 위주 진행',
-        'C언어 기초 개념을 알고 있고, 구현이 가능하다는 전제 하에 진행됩니다.',
-      ],
-      target: 'C언어에서 함수와 다차원 배열을 모두 다뤄보신 분',
-      contents: ['c++, stl', '스택 큐 덱', 'map, set', '그래프', '트리', '우선순위 큐'],
-      mentor: [
-        ['김예림', '컴퓨터학부 · 24학번', 'yerim2298@hanyang.ac.kr', '같이 성장하는 자료구조반!'],
-        [
-          '신경현',
-          '컴퓨터학부 · 23학번',
-          'tlsrudgus0501@hanyang.ac.kr',
-          '풍물 동아리 탈 많은 관심 부탁드려요!',
-        ],
-      ],
-    },
-    {
-      tabIdx: 4,
-      studyId: STUDY_ID,
-      name: '알고리즘반',
-      tag: 'algorithm',
-      intro: ['C++ 기반 문제풀이에 주로 쓰이는 알고리즘 위주의 문제 해결 및 설명'],
-      target:
-        '기본적인 자료구조를 알고 있고 코딩테스트에서 주로 나오는 알고리즘을 공부하고 싶으신 분',
-      contents: ['완전탐색', '그래프 탐색', '백트래킹', '그리디', '동적계획법', '최단경로'],
-      mentor: [
-        ['곽용민', '컴퓨터학부 · 23학번', 'dydals1004@hanyang.ac.kr', '좋은 여러분들과 좋은 PS'],
-      ],
-    },
-    {
-      tabIdx: 5,
-      studyId: STUDY_ID,
-      name: '코드포스반',
-      tag: 'algorithm',
-      intro: [
-        '이전에 열린 코드포스 대회를 가상 참가하고 codeforces anytime으로 자신의 위치를 확인하는 것을 목표',
-      ],
-      target: '문제 풀이(PS)에 재미를 느끼고 계신 분',
-      contents: [
-        '코드포스 대회진행(1)',
-        '코드포스 대회진행(2)',
-        '코드포스 대회진행(3)',
-        '코드포스 대회진행(4)',
-        '코드포스 대회진행(5)',
-        '코드포스 대회진행(6)',
-      ],
-      mentor: [
-        ['곽용민', 'ICT융합학부 · 23학번', 'fir3work72@gmail.com', 'PS 재밌어요 같이 하실래요?'],
-      ],
-    },
-    {
-      tabIdx: 6,
-      studyId: STUDY_ID,
-      name: '웹개발 스터디',
-      tag: 'development',
-      intro: [
-        '웹 개발의 처음부터 배포까지 전 과정을 직접 해보는 스터디입니다.',
-        '1시간은 공통 실습으로 채팅형 웹 서비스를 함께 만들며 진행되고, 1시간은 배운 내용을 활용한 자율 프로젝트로 진행됩니다.',
-      ],
-      target: '웹 개발이 처음이지만 자신만의 웹사이트를 만들어보고 싶으신 분',
-      contents: [
-        '웹 개발 개요 & 전체 흐름',
-        '프론트엔드 기초 (HTML/CSS/JS)',
-        'OPEN API 활용',
-        '백엔드 기초 & 데이터 처리',
-        'GitHub 활용 & 협업 흐름',
-        '웹 서비스 배포',
-      ],
-      mentor: [['목정빈', '컴퓨터학부 25학번', 'jbmok66@hanyang.ac.kr', '즐겁게 웹개발 공부해요!']],
-    },
-  ] as const;
-
-  const [activeTabIdx, setActiveTabIdx] = useState<number>(0);
+  const introLines = study.description ? study.description.split(/\\n|\n/).filter(Boolean) : [];
 
   return (
-    <div className="my-20 flex w-full flex-col items-center px-4">
-      <h1 className="mb-8 text-3xl font-bold">스터디 소개</h1>
-      <PillTab_study
-        tabElements={Class.map((data, idx) => ({
-          label: data.name,
-          active: activeTabIdx === idx,
-          tag: data.tag,
-        }))}
-        clickHandler={(idx) => setActiveTabIdx(idx)}
-        activeTabIdx={activeTabIdx}
-        textclass="font-semibold"
-      />
+    <div className="mt-10 flex w-full max-w-5xl flex-col items-start rounded-lg border-2 border-[#E0D7F1] p-10">
+      {/* 소개 */}
+      {introLines.map((line, i) => (
+        <IconTextBox
+          key={i}
+          text={line}
+          divClassName="m-2"
+          iconClassName="w-6 h-6"
+          textClassName={`md:text-lg text-md text-[#9747FF] font-semibold max-w-7xl`}
+          iconSrc={Check_algo}
+        />
+      ))}
 
-      {Class.filter((item) => item.tabIdx === activeTabIdx).map((item, index) => (
-        <div
-          key={index}
-          className="mx-8 mt-10 flex w-full max-w-5xl flex-col items-start rounded-lg border-2 border-[#E0D7F1] p-10"
-        >
-          <p className="my-4 text-2xl font-bold">{item.name}</p>
-          {item.intro.map((introText, i) => (
-            <Icon_TextBox
-              key={i}
-              text={introText}
-              divClassName="m-2"
-              iconClassName="w-6 h-6"
-              textClassName={`text-lg ${item.tag === 'algorithm' ? 'text-[#9747FF]' : 'text-[#5F5CFF]'} font-semibold max-w-7xl`}
-              iconSrc={item.tag === 'algorithm' ? Check_algo : Check_dev}
-            />
-          ))}
-          <div className="mt-5 w-full self-center rounded-lg bg-[#EBEBEB] p-6">
-            <p className="mb-2">대상</p>
-            <p className="text-lg font-semibold">{item.target}</p>
-          </div>
+      {/* 대상 */}
+      {study.target && (
+        <div className="mt-5 w-full self-center rounded-lg bg-[#EBEBEB] p-6">
+          <p className="md:text-md mb-2 text-sm">대상</p>
+          <p className="text-md font-semibold md:text-lg">{study.target}</p>
+        </div>
+      )}
 
-          {/* 주차별 내용 */}
+      {/* 주차별 내용 */}
+      {(study.weeks?.length ?? 0) > 0 && (
+        <>
           <p className="mb-5 mt-10 text-lg font-semibold">주차별 내용</p>
-          {item.contents.map((weekContents, j) => (
-            <Line Week={j + 1} Content={weekContents} />
-          ))}
+          {[...study.weeks]
+            .sort((a, b) => a.weekNo - b.weekNo)
+            .map((week) => (
+              <WeekRow key={week.weekId} week={week} />
+            ))}
+        </>
+      )}
 
-          {/* 멘토진 */}
-          <p className="mb-5 mt-10 text-lg font-semibold">멘토진</p>
-          <div className="flex flex-wrap gap-8">
-            {item.mentor.map((mentor, k) => (
-              <Mentor
-                key={k}
-                Name={mentor[0]}
-                Department={mentor[1]}
-                Email={mentor[2]}
-                Message={mentor[3]}
-              />
+      {/* 신청하기 */}
+      {(study.mentors?.length ?? 0) > 0 && (
+        <div className="font-medium">
+          <p className="text-md mb-1 mt-10 font-semibold text-[#0E0E0E] md:text-lg">신청하기</p>
+          <p className="md:text-md text-sm text-[#6B6B6B]">
+            스터디 요일 교차 신청은 카카오톡 영과일로 문의 부탁드립니다
+          </p>
+          <p className="md:text-md mb-10 mt-1 text-sm text-[#6B6B6B]">
+            (스터디 중 하나는 신청하셔야합니다)
+          </p>
+          <div className="flex flex-wrap gap-6">
+            {(study.mentors ?? []).map((mentor) => (
+              <MentorCard key={mentor.classId} mentor={mentor} />
             ))}
           </div>
 
           {/* 가입/취소 버튼 */}
           {isLoggedIn() && (
             <div className="mt-8 flex w-full justify-end">
-              {isJoined(item.studyId) ? (
+              {isJoined ? (
                 <button
-                  onClick={() => handleLeave(item.studyId)}
-                  disabled={pendingId === item.studyId}
+                  onClick={handleLeave}
+                  disabled={pendingId === study.studyId}
                   className="rounded-lg bg-gray-200 px-6 py-2 font-semibold text-gray-600 hover:bg-gray-300 disabled:opacity-50"
                 >
-                  {pendingId === item.studyId ? '처리 중...' : '취소하기'}
+                  {pendingId === study.studyId ? '처리 중...' : '취소하기'}
                 </button>
               ) : (
                 <button
-                  onClick={() => handleJoin(item.studyId)}
-                  disabled={pendingId === item.studyId}
-                  className={`rounded-lg px-6 py-2 font-semibold text-white disabled:opacity-50 ${
-                    item.tag === 'algorithm'
-                      ? 'bg-[#9747FF] hover:bg-[#8030ee]'
-                      : 'bg-[#5F5CFF] hover:bg-[#4a47ee]'
-                  }`}
+                  onClick={handleJoin}
+                  disabled={pendingId === study.studyId}
+                  className="rounded-lg bg-[#9747FF] px-6 py-2 font-semibold text-white hover:bg-[#8030ee] disabled:opacity-50"
                 >
-                  {pendingId === item.studyId ? '처리 중...' : '신청하기'}
+                  {pendingId === study.studyId ? '처리 중...' : '신청하기'}
                 </button>
               )}
             </div>
           )}
         </div>
-      ))}
+      )}
 
       <TextModal
         isOpen={errorModal.open}
@@ -295,66 +208,106 @@ export default function StudyIntro() {
   );
 }
 
-function Icon_TextBox({
+// ─── 주차별 행 ────────────────────────────────────────────
+
+function WeekRow({ week }: { week: Week }) {
+  return (
+    <div className="flex h-full w-full flex-row items-center">
+      <img src={lineIcon} alt="라인아이콘" className="h-18 w-3" />
+      <div className="ml-8 flex w-full flex-row items-center justify-between rounded-xl border-2 border-[#D9D9D9] p-3">
+        <div className="flex items-center">
+          <p className="mx-3 text-sm font-semibold text-[#919191] md:text-base">
+            {week.weekNo}주차
+          </p>
+          <p className="mx-3 text-sm font-semibold md:text-base">{week.description}</p>{' '}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── 멘토 카드 ────────────────────────────────────────────
+
+function MentorCard({ mentor }: { mentor: Mentor }) {
+  const scheduleEntries = Object.entries(mentor.studyTime ?? {});
+
+  return (
+    <div className="flex w-56 flex-col">
+      <IconTextBox
+        text={mentor.name}
+        iconSrc={UserIcon}
+        divClassName="mb-1"
+        textClassName="font-semibold text-sm"
+        iconClassName="w-7 h-7"
+        noContainer
+      />
+      <div className="p-1"></div>
+      <IconTextBox
+        text={`${mentor.department} · ${mentor.studentId}학번`}
+        iconSrc={HomeIcon}
+        divClassName="mb-1"
+        textClassName="text-[#919191] text-sm font-medium"
+        iconClassName="w-4 h-4"
+      />
+      {mentor.email && (
+        <IconTextBox
+          text={mentor.email}
+          iconSrc={MailIcon}
+          divClassName="mb-1"
+          textClassName="text-[#919191] text-sm font-medium"
+          iconClassName="w-4 h-4"
+        />
+      )}
+
+      {/* note 한마디 */}
+      {mentor.note && mentor.note.trim() && (
+        <div className="mt-2 w-full rounded-lg border border-[#E0D7F1] bg-[#F8F4FF] px-4 py-2.5">
+          <p className="text-sm text-[#6B6B6B]">"{mentor.note}"</p>
+        </div>
+      )}
+
+      <div className="my-1 mt-3 w-[85%] border-t border-[#D9D9D9] md:w-full" />
+
+      {/* 수업 시간 */}
+      <div className="mt-3 flex flex-col gap-0.5">
+        {scheduleEntries.map(([weekday, slot], index) => (
+          <IconTextBox
+            key={weekday}
+            text={`${WEEKDAY_KO[weekday] ?? weekday}요일 ${slot.startTime} ~ ${slot.endTime} / ${slot.maxCapacity == null ? '제한없음' : ` ${slot.maxCapacity}명`}`}
+            iconSrc={index === 0 ? ClockIcon : undefined}
+            textClassName="text-[#919191] text-sm font-medium"
+            iconClassName="w-4 h-4"
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── 공통 UI ─────────────────────────────────────────────
+
+function IconTextBox({
   text,
   divClassName = '',
   iconClassName = '',
   textClassName = '',
   iconSrc,
-}: CheckTextProps) {
+  noContainer = false,
+}: IconTextBoxProps) {
   return (
     <div className={`flex items-center gap-3 ${divClassName}`}>
-      <img src={iconSrc} alt="Icon" className={`${iconClassName}`} />
-      <p className={`${textClassName}`}>{text}</p>
-    </div>
-  );
-}
-
-function Line({ Week, Content }: ContentsProps) {
-  return (
-    <div className="flex h-full w-full flex-row items-center">
-      <img src={lineIcon} alt="라인아이콘" className="h-18 w-3" />
-      <div className="ml-8 flex w-full flex-row items-center rounded-xl border-2 border-[#D9D9D9] p-3">
-        <p className="mx-4 text-sm font-semibold text-[#919191]">{Week}주차</p>
-        <p className="mx-4 font-semibold">{Content}</p>
-      </div>
-    </div>
-  );
-}
-
-function Mentor({ Name, Department, Email, Message }: MentorProps) {
-  return (
-    <div className={'flex flex-col pb-4'}>
-      <div className="flex flex-row">
-        <div className="ml-4 flex flex-col justify-center">
-          <Icon_TextBox
-            text={Name}
-            iconSrc={UserIcon}
-            divClassName="m-0.5"
-            textClassName="font-semibold text-md"
-            iconClassName="w-4 h-4"
-          />
-          <Icon_TextBox
-            text={Department}
-            iconSrc={HomeIcon}
-            divClassName="m-0.5"
-            textClassName="text-[#919191] text-md"
-            iconClassName="w-4 h-4"
-          />
-          <Icon_TextBox
-            text={Email}
-            iconSrc={MailIcon}
-            divClassName="m-0.5"
-            textClassName="text-[#919191] text-md"
-            iconClassName="w-4 h-4"
-          />
-        </div>
-      </div>
-      {Message && (
-        <div className="mt-3 max-w-xs rounded-lg border border-[#E0D7F1] bg-[#F8F4FF] p-3">
-          <p className="text-sm italic text-[#666666]">"{Message}"</p>
-        </div>
+      {iconSrc ? (
+        noContainer ? (
+          <img src={iconSrc} alt="Icon" className={iconClassName} />
+        ) : (
+          <div className="flex w-6 flex-shrink-0 items-center justify-center">
+            <img src={iconSrc} alt="Icon" className={iconClassName} />
+          </div>
+        )
+      ) : (
+        <div className="w-6 flex-shrink-0" />
       )}
+      <p className={textClassName}>{text}</p>
     </div>
   );
 }

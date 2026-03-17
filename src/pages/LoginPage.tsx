@@ -166,7 +166,7 @@ export default function LoginPage() {
               navigate('/migration', { state: { idToken, Phone, needSid, needBjid, maskedSid } });
             }
             // 매칭안됨 => signup
-            else {
+            else if (res.step === 'SIGNUP_REQUIRED') {
               navigate('/signup', { state: { idToken, Phone } });
             }
           },
