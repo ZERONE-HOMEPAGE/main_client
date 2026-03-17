@@ -4,10 +4,11 @@ import UserIcon from '@/assets/icon/user.png';
 import MailIcon from '@/assets/icon/mail.png';
 import ClockIcon from '@/assets/icon/clock.png';
 import MaxUserIcon from '@/assets/icon/maxUser.png';
+import lineIcon from '@/assets/icon/line.png';
 import PillTab_study from '@/components/ui/PillTab/PillTab_study';
 import { useState } from 'react';
 import { useStudies } from '@/hooks/useStudy';
-import type { Mentor, Study } from '@/api/study';
+import type { Mentor, Study, Week } from '@/api/study';
 
 interface IconTextBoxProps {
   text: string;
@@ -94,10 +95,20 @@ function StudyCard({ study }: { study: Study }) {
 
       {/* 대상 */}
       {study.target && (
-        <div className="mt-6 w-full rounded-lg bg-[#F5F5F5] px-6 py-4">
-          <p className="text-md mb-1 font-semibold text-[#919191]">대상</p>
-          <p className="text-base text-[#333]">{study.target}</p>
+        <div className="mt-5 w-full self-center rounded-lg bg-[#EBEBEB] p-6">
+          <p className="mb-2">대상</p>
+          <p className="text-lg font-semibold">{study.target}</p>
         </div>
+      )}
+
+      {/* 주차별 내용 — weeks 배열 활용 */}
+      {study.weeks && study.weeks.length > 0 && (
+        <>
+          <p className="mb-5 mt-10 text-lg font-semibold">주차별 내용</p>
+          {study.weeks.map((week) => (
+            <WeekRow key={week.weekId} week={week} />
+          ))}
+        </>
       )}
 
       {/* 신청하기 */}
@@ -117,6 +128,20 @@ function StudyCard({ study }: { study: Study }) {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// ─── 주차별 행 ────────────────────────────────────────────
+
+function WeekRow({ week }: { week: Week }) {
+  return (
+    <div className="flex h-full w-full flex-row items-center">
+      <img src={lineIcon} alt="라인아이콘" className="h-18 w-3" />
+      <div className="ml-8 flex w-full flex-row items-center rounded-xl border-2 border-[#D9D9D9] p-3">
+        <p className="mx-4 text-sm font-semibold text-[#919191]">{week.weekNo}주차</p>
+        <p className="mx-4 font-semibold">{week.description}</p>
+      </div>
     </div>
   );
 }

@@ -14,10 +14,23 @@ export interface Mentor {
   department: string;
   studentId: string;
   email: string | null;
+  note: string;
   studyTime: Record<string, StudyTimeSlot>;
   maxCapacity: number | null;
-  currentEnrollment: number;
-  applyButton: boolean;
+}
+
+export interface Week {
+  weekId: number;
+  studyId: string;
+  weekNo: number;
+  startDate: string;
+  endDate: string;
+  allowedWeekdays: string;
+  studyDate: string[];
+  requiredCount: number;
+  description: string; // 주차별 내용 (예: "입출력", "조건문")
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Study {
@@ -27,7 +40,10 @@ export interface Study {
   semester: number;
   target: string;
   description: string;
+  displayOrder: number;
+  joinable: boolean;
   mentors: Mentor[];
+  weeks: Week[];
 }
 
 export interface StudyListResponse {
@@ -57,6 +73,7 @@ function normalizeStudy(raw: any): Study {
       department: m.department,
       studentId: m.studentId,
       email: m.email ?? null,
+      note: m.note ?? '',
       studyTime: Object.fromEntries(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (cls.operationTimes ?? []).map((t: any) => [
@@ -64,9 +81,7 @@ function normalizeStudy(raw: any): Study {
           { startTime: t.startTime, endTime: t.endTime },
         ]),
       ),
-      maxCapacity: cls.operationTimes[0].maxMembers,
-      currentEnrollment: 0,
-      applyButton: raw.joinable ?? false,
+      maxCapacity: cls.operationTimes[0]?.maxMembers ?? null,
     })),
   );
 
@@ -77,7 +92,10 @@ function normalizeStudy(raw: any): Study {
     semester: raw.operation?.semester ?? raw.semester ?? 0,
     target: raw.target ?? '',
     description: raw.description ?? '',
+    displayOrder: raw.displayOrder ?? 0,
+    joinable: raw.joinable ?? false,
     mentors,
+    weeks: raw.weeks ?? [],
   };
 }
 
