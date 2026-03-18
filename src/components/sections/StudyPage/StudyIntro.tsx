@@ -281,7 +281,7 @@ function MentorCard({
   const scheduleEntries = Object.entries(mentor.studyTime ?? {});
 
   return (
-    <div className="flex w-56 flex-col">
+    <div className="flex w-72 flex-col">
       <IconTextBox
         text={mentor.name}
         iconSrc={UserIcon}
