@@ -161,7 +161,7 @@ export default function InfoModal({ onClose }: InfoProps) {
           value={newBjid}
           error={BjidError}
           title={Bjid === '' ? '추가할 백준 ID를 입력해주세요.' : '수정할 백준 ID를 입력해주세요.'}
-          description={'아래 하단 박스에다가 ID를 입력해주세요.'}
+          description={'하단 박스에 ID를 입력해주세요.'}
           onChange={setNewBjid}
           onSubmit={handleUpdate}
           onClose={() => setNew(false)}

@@ -10,8 +10,7 @@ export default function Header() {
   const observerRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const [ModalOpen, setModalOpen] = useState<boolean>(false);
-  const token = isLoggedIn();
-  const { data: profile } = useGetInfo({ enabled: !!token });
+  const { data: profile } = useGetInfo();
   const [ActiveAdmin, setAdmin] = useState(false);
   const [ActiveMentor, setMentor] = useState(false);
 
@@ -110,7 +109,7 @@ export default function Header() {
               ))}
               {/* 로그인 & 내정보 */}
               <li>
-                {!token ? (
+                {!isLoggedIn() ? (
                   <NavLink
                     to={'/login'}
                     className={({ isActive }) => (isActive ? 'font-bold' : '')}
@@ -126,11 +125,13 @@ export default function Header() {
 
               <li>
                 {/* 관리자페이지 */}
-                {token && ActiveAdmin && <a href={'https://zerone01.kr/admin'}>관리자페이지</a>}
+                {isLoggedIn() && ActiveAdmin && (
+                  <a href={'https://zerone01.kr/admin'}>관리자페이지</a>
+                )}
               </li>
               <li>
                 {/* 멘토페이지 */}
-                {token && ActiveMentor && (
+                {isLoggedIn() && ActiveMentor && (
                   <a href={'https://zerone01.kr/manage_study'}>스터디 관리</a>
                 )}
               </li>
@@ -168,7 +169,7 @@ export default function Header() {
                 </li>
               ))}
               <li>
-                {!token ? (
+                {!isLoggedIn() ? (
                   <NavLink
                     to={'/login'}
                     className={({ isActive }) =>
@@ -190,13 +191,13 @@ export default function Header() {
                   </button>
                 )}
               </li>
-              {token && ActiveAdmin && (
+              {isLoggedIn() && ActiveAdmin && (
                 <li>
                   <a href={'https://zerone01.kr/admin'}>관리자페이지</a>
                 </li>
               )}
 
-              {token && ActiveMentor && (
+              {isLoggedIn() && ActiveMentor && (
                 <li>
                   <a href={'https://zerone01.kr/manage_study'}>스터디 관리</a>
                 </li>

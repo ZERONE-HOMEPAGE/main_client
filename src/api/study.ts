@@ -1,0 +1,127 @@
+import { client } from '@/api/client';
+import type { JoinStudyResponse, MyStudiesResponse } from '@/types/study';
+
+// ─── 타입 정의 ───────────────────────────────────────────
+
+export interface StudyTimeSlot {
+  startTime: string;
+  endTime: string;
+  maxCapacity: number | null;
+  currentCount: number;
+}
+
+export interface Mentor {
+  classId: string;
+  userId: string;
+  name: string;
+  department: string;
+  studentId: string;
+  email: string | null;
+  note: string;
+  studyTime: Record<string, StudyTimeSlot>;
+}
+
+export interface Week {
+  weekId: number;
+  studyId: string;
+  weekNo: number;
+  startDate: string;
+  endDate: string;
+  allowedWeekdays: string;
+  studyDate: string[];
+  requiredCount: number;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Study {
+  studyId: string;
+  name: string;
+  year: number;
+  semester: number;
+  status: string;
+  target: string;
+  description: string;
+  displayOrder: number;
+  mentors: Mentor[];
+  weeks: Week[];
+}
+
+export interface StudyListParams {
+  year?: number;
+  semester?: number;
+}
+
+// ─── API 응답 → Study 변환 ────────────────────────────────
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toStudy(raw: any): Study {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const mentors: Mentor[] = (raw.classes ?? []).flatMap((cls: any) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (cls.mentors ?? []).map((m: any) => ({
+      classId: cls.classId ?? '',
+      userId: m.userId,
+      name: m.name,
+      department: m.department,
+      studentId: m.studentId,
+      email: m.email ?? null,
+      note: m.note ?? '',
+      studyTime: Object.fromEntries(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (cls.operationTimes ?? []).map((t: any) => [
+          t.weekday,
+          {
+            startTime: t.startTime,
+            endTime: t.endTime,
+            maxCapacity: t.maxMembers ?? null,
+            currentCount: t.currentMembers ?? 0,
+          },
+        ]),
+      ),
+    })),
+  );
+
+  return {
+    studyId: raw.studyId,
+    name: raw.studyName,
+    year: raw.operation.year,
+    semester: raw.operation.semester,
+    status: (raw.status ?? 'open').toLowerCase(),
+    target: raw.target ?? '',
+    description: raw.description ?? '',
+    displayOrder: raw.displayOrder,
+    mentors,
+    weeks: raw.weeks ?? [],
+  };
+}
+
+// ─── API 호출 함수 ────────────────────────────────────────
+
+/** 스터디 목록 조회 (기본: 현재 학기 기준) */
+export const getStudies = (params?: StudyListParams) =>
+  client
+    .get<{ items: unknown[] }>('/api/v1/studies', { params })
+    .then((res) => res.data.items.map(toStudy));
+
+/** 스터디 상세 조회 */
+export const getStudyById = (studyId: string) =>
+  client.get<unknown>(`/api/v1/studies/${studyId}`).then((res) => toStudy(res.data));
+
+/** 내 스터디 목록 조회 */
+export const getMyStudies = (): Promise<MyStudiesResponse> =>
+  client.get<MyStudiesResponse>('/api/v1/studies/my').then((res) => res.data);
+
+/** 스터디 가입 */
+export const joinStudy = (
+  studyId: string,
+  selectedWeekdays: string[],
+): Promise<JoinStudyResponse> =>
+  client
+    .post<JoinStudyResponse>(`/api/v1/studies/${studyId}/join`, { selectedWeekdays })
+    .then((res) => res.data);
+
+/** 스터디 탈퇴 */
+export const leaveStudy = (studyId: string): Promise<void> =>
+  client.post(`/api/v1/studies/${studyId}/leave`).then((res) => res.data);
