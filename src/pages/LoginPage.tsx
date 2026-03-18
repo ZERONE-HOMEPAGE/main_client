@@ -212,12 +212,12 @@ export default function LoginPage() {
           <div ref={googleButtonWrapRef} className="w-full">
             <div id={googleButtonElementId} className="w-full overflow-hidden rounded-xl" />
           </div>
-          <ActionButton
+          {/* <ActionButton
             onClick={() => window.open('https://open.kakao.com/o/gSIUi0hi', '_blank')}
             className="w-full"
           >
             가두모집 링크 바로가기
-          </ActionButton>
+          </ActionButton> */}
         </div>
       </div>
 
