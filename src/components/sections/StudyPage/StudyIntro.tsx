@@ -209,6 +209,7 @@ function StudyCard({
               <MentorCard
                 key={mentor.classId}
                 mentor={mentor}
+                studyStatus={study.status}
                 isJoined={isMentorJoined(mentor)}
                 isPending={pendingId === mentor.classId}
                 onJoin={() => handleJoin(Object.keys(mentor.studyTime), mentor.classId)}
@@ -264,12 +265,14 @@ function WeekRow({ week }: { week: Week }) {
 
 function MentorCard({
   mentor,
+  studyStatus,
   isJoined,
   isPending,
   onJoin,
   onLeave,
 }: {
   mentor: Mentor;
+  studyStatus: string;
   isJoined: boolean;
   isPending: boolean;
   onJoin: () => void;
@@ -319,7 +322,7 @@ function MentorCard({
         {scheduleEntries.map(([weekday, slot], index) => (
           <IconTextBox
             key={weekday}
-            text={`${WEEKDAY_KO[weekday] ?? weekday}요일 ${slot.startTime} ~ ${slot.endTime} / ${slot.maxCapacity == null ? '제한없음' : `${slot.maxCapacity}명`}`}
+            text={`${WEEKDAY_KO[weekday] ?? weekday}요일 ${slot.startTime} ~ ${slot.endTime} - ${slot.maxCapacity == null ? `${slot.currentCount} / 제한없음` : `${slot.currentCount} / ${slot.maxCapacity}명`}`}
             iconSrc={index === 0 ? ClockIcon : undefined}
             textClassName="text-[#919191] text-sm font-medium"
             iconClassName="w-4 h-4"
@@ -328,7 +331,16 @@ function MentorCard({
       </div>
 
       {/* 신청/취소 버튼 */}
-      {isLoggedIn() && (
+      {!isLoggedIn() ? (
+        <p className="mt-3 text-sm text-[#919191]">로그인 후 신청버튼이 표시됩니다!</p>
+      ) : studyStatus === 'closed' ? (
+        <button
+          disabled
+          className="mt-3 cursor-not-allowed self-start rounded-lg bg-gray-300 px-6 py-2 font-semibold text-gray-500"
+        >
+          신청 마감
+        </button>
+      ) : (
         <button
           onClick={() => (isJoined ? onLeave() : onJoin())}
           disabled={isPending}

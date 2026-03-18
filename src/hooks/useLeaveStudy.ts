@@ -9,6 +9,7 @@ export const useLeaveStudy = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myStudies'] });
       queryClient.invalidateQueries({ queryKey: ['profile'] });
+      queryClient.invalidateQueries({ queryKey: ['studies'] });
     },
   });
 };

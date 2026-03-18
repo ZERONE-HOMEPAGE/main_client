@@ -7,6 +7,7 @@ export interface StudyTimeSlot {
   startTime: string;
   endTime: string;
   maxCapacity: number | null;
+  currentCount: number;
 }
 
 export interface Mentor {
@@ -39,6 +40,7 @@ export interface Study {
   name: string;
   year: number;
   semester: number;
+  status: string;
   target: string;
   description: string;
   displayOrder: number;
@@ -70,7 +72,12 @@ function toStudy(raw: any): Study {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (cls.operationTimes ?? []).map((t: any) => [
           t.weekday,
-          { startTime: t.startTime, endTime: t.endTime, maxCapacity: t.maxMembers ?? null },
+          {
+            startTime: t.startTime,
+            endTime: t.endTime,
+            maxCapacity: t.maxMembers ?? null,
+            currentCount: t.currentMembers ?? 0,
+          },
         ]),
       ),
     })),
@@ -81,6 +88,7 @@ function toStudy(raw: any): Study {
     name: raw.studyName,
     year: raw.operation.year,
     semester: raw.operation.semester,
+    status: (raw.status ?? 'open').toLowerCase(),
     target: raw.target ?? '',
     description: raw.description ?? '',
     displayOrder: raw.displayOrder,
