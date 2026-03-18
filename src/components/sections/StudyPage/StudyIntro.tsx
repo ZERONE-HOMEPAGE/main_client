@@ -162,6 +162,11 @@ function StudyCard({
 
   return (
     <div className="mt-10 flex w-full max-w-5xl flex-col items-start rounded-lg border-2 border-[#E0D7F1] p-10">
+      {/* 스터디명 */}
+      <div className="my-4 flex items-center gap-3">
+        <p className="text-2xl font-bold">{study.name}</p>
+      </div>
+
       {/* 소개 */}
       {introLines.map((line, i) => (
         <IconTextBox
