@@ -34,6 +34,7 @@ export default function LoginPage() {
   // 모달용 함수
   const [isPendingOpen, setPendingOpen] = useState(false);
   const [onTextOpen, setTextOpen] = useState(false);
+  const [loginErrorMsg, setLoginErrorMsg] = useState('');
   const [onInputOpen, setInputOpen] = useState<boolean>(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -97,7 +98,8 @@ export default function LoginPage() {
                 },
                 onError: (err) => {
                   const axiosErr = err as unknown as AxiosError<{ message?: string }>;
-                  console.error('로그인 실패:', axiosErr.response?.data);
+                  const msg = axiosErr.response?.data?.message ?? `status: ${axiosErr.response?.status ?? 'unknown'} / ${String(err)}`;
+                  setLoginErrorMsg(msg);
                   setTextOpen(true);
                 },
               },
@@ -243,7 +245,7 @@ export default function LoginPage() {
       <TextModal
         isOpen={onTextOpen}
         title="로그인 실패"
-        description="한양대학교 이메일이 아닙니다."
+        description={loginErrorMsg || '알 수 없는 오류'}
         onClose={() => setTextOpen(false)}
       />
 

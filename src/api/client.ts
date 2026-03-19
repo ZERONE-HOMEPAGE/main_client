@@ -36,7 +36,13 @@ client.interceptors.response.use(
     };
 
     const isLogoutRequest = originalRequest.url?.includes('/auth/logout');
-    if (error.response?.status !== 401 || originalRequest._retry || isLogoutRequest) {
+    const hadAuthHeader = !!originalRequest.headers?.Authorization;
+    if (
+      error.response?.status !== 401 ||
+      originalRequest._retry ||
+      isLogoutRequest ||
+      !hadAuthHeader
+    ) {
       return Promise.reject(error);
     }
 
