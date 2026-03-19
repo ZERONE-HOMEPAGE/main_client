@@ -1,7 +1,7 @@
 import axios, { type AxiosRequestConfig } from 'axios';
 import { getAccessToken, setAccessToken } from '@/utils/token';
 
-const PROD_API_BASE = 'https://zerone01.kr/api/v1';
+const PROD_API_BASE = 'https://zerone01.kr';
 
 export const client = axios.create({
   baseURL: import.meta.env.DEV ? '/' : PROD_API_BASE,
