@@ -1,12 +1,9 @@
 import axios, { type AxiosRequestConfig } from 'axios';
-import { getAccessToken, setAccessToken } from '@/utils/token';
-
-const PROD_API_BASE = 'https://zerone01.kr';
+import { getAccessToken, setAccessToken, removeAccessToken } from '@/utils/token';
 
 export const client = axios.create({
-  baseURL: import.meta.env.DEV ? '/' : PROD_API_BASE,
   timeout: 10000,
-  withCredentials: true, // 쿠키 포함
+  withCredentials: true,
   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache', Pragma: 'no-cache' },
 });
 
@@ -59,13 +56,9 @@ client.interceptors.response.use(
 
     try {
       // refreshToken은 httpOnly 쿠키로 자동 전송됨
-      const refreshURL = import.meta.env.DEV
-        ? '/api/v1/auth/refresh'
-        : `${PROD_API_BASE}/auth/refresh`;
-      const { data } = await axios.post(refreshURL, {}, { withCredentials: true });
+      const { data } = await axios.post('/api/v1/auth/refresh', {}, { withCredentials: true });
 
       setAccessToken(data.accessToken);
-
       processQueue(data.accessToken);
 
       originalRequest.headers = {
@@ -76,7 +69,7 @@ client.interceptors.response.use(
     } catch {
       // 갱신 실패 → 대기열 정리 후 로그아웃 처리
       pendingRequests = [];
-      sessionStorage.removeItem('accessToken');
+      removeAccessToken();
       if (window.location.pathname !== '/') {
         window.location.href = '/';
       }

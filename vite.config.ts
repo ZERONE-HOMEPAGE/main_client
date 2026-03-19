@@ -29,15 +29,4 @@ RewriteRule ^ index.html [QSA,L]`;
       '@': path.resolve(__dirname, './src'),
     },
   },
-  server: {
-    proxy: {
-      // 로컬에서 /api로 시작하는 요청을 서버로 전달
-      '/api': {
-        target: 'https://zerone01.kr', // 실제 서버
-        changeOrigin: true,             // 서버는 요청이 localhost에서 왔다고 생각하지 않음
-        secure: true,                   // HTTPS 서버
-        rewrite: (path) => path.replace(/^\/api/, '/api'), // 경로 그대로 전달
-      },
-    },
-  },
 });
