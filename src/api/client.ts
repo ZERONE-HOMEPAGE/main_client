@@ -36,7 +36,13 @@ client.interceptors.response.use(
     };
 
     const isLogoutRequest = originalRequest.url?.includes('/auth/logout');
-    if (error.response?.status !== 401 || originalRequest._retry || isLogoutRequest) {
+    const hadAuthHeader = !!originalRequest.headers?.Authorization;
+    if (
+      error.response?.status !== 401 ||
+      originalRequest._retry ||
+      isLogoutRequest ||
+      !hadAuthHeader
+    ) {
       return Promise.reject(error);
     }
 
@@ -58,12 +64,7 @@ client.interceptors.response.use(
 
     try {
       // refreshToken은 httpOnly 쿠키로 자동 전송됨
-      const refreshBaseURL = import.meta.env.DEV ? '' : import.meta.env.VITE_API_BASE_URL;
-      const { data } = await axios.post(
-        `${refreshBaseURL}/api/v1/auth/refresh`,
-        {},
-        { withCredentials: true },
-      );
+      const { data } = await axios.post('/api/v1/auth/refresh', {}, { withCredentials: true });
 
       setAccessToken(data.accessToken);
 
