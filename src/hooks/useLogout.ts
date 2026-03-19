@@ -13,6 +13,7 @@ export const useLogout = () => {
     onSuccess: () => {
       removeAccessToken();
       queryClient.removeQueries({ queryKey: ['profile'] });
+      queryClient.removeQueries({ queryKey: ['myStudies'] });
       navigate('/');
     },
     onError: (err: any) => {
