@@ -58,12 +58,7 @@ client.interceptors.response.use(
 
     try {
       // refreshToken은 httpOnly 쿠키로 자동 전송됨
-      const refreshBaseURL = import.meta.env.DEV ? '' : import.meta.env.VITE_API_BASE_URL;
-      const { data } = await axios.post(
-        `${refreshBaseURL}/api/v1/auth/refresh`,
-        {},
-        { withCredentials: true },
-      );
+      const { data } = await axios.post('/api/v1/auth/refresh', {}, { withCredentials: true });
 
       setAccessToken(data.accessToken);
 
