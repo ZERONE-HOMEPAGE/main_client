@@ -1,9 +1,10 @@
 import axios, { type AxiosRequestConfig } from 'axios';
 import { getAccessToken, setAccessToken } from '@/utils/token';
 
-//개발환경에서 프록시 설정이 되어있는데, 이것의 필요성 파악할 필요 있음.(2026-03-15)
+const PROD_API_BASE = 'https://zerone01.kr/api/v1';
+
 export const client = axios.create({
-  baseURL: import.meta.env.DEV ? '/' : import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.DEV ? '/' : PROD_API_BASE,
   timeout: 10000,
   withCredentials: true, // 쿠키 포함
   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache', Pragma: 'no-cache' },
@@ -58,12 +59,10 @@ client.interceptors.response.use(
 
     try {
       // refreshToken은 httpOnly 쿠키로 자동 전송됨
-      const refreshBaseURL = import.meta.env.DEV ? '' : import.meta.env.VITE_API_BASE_URL;
-      const { data } = await axios.post(
-        `${refreshBaseURL}/api/v1/auth/refresh`,
-        {},
-        { withCredentials: true },
-      );
+      const refreshURL = import.meta.env.DEV
+        ? '/api/v1/auth/refresh'
+        : `${PROD_API_BASE}/auth/refresh`;
+      const { data } = await axios.post(refreshURL, {}, { withCredentials: true });
 
       setAccessToken(data.accessToken);
 
