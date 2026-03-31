@@ -9,6 +9,7 @@ import Layout from '@/components/layout/Layout';
 import MainPage from '@/pages/MainPage';
 import StudyPage from '@/pages/StudyPage';
 import QnAPage from '@/pages/QnAPage';
+import BingoPage from '@/pages/BingoPage';
 import NotFound from '@/pages/NotFoundPage';
 import LoginPage from '@/pages/LoginPage';
 import SignupPage from '@/pages/SignupPage';
@@ -40,6 +41,7 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/study" element={<StudyPage />} />
           <Route path="/QnA" element={<QnAPage />} />
+          <Route path="/Bingo" element={<BingoPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Route>
         <Route path="/signup" element={<SignupPage />} />
