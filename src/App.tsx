@@ -13,6 +13,7 @@ import NotFound from '@/pages/NotFoundPage';
 import LoginPage from '@/pages/LoginPage';
 import SignupPage from '@/pages/SignupPage';
 import MygrationPage from '@/pages/MygrationPage';
+import NetworkingForumPage from '@/pages/NetworkingForumPage';
 
 function App() {
   useEffect(() => {
@@ -40,6 +41,7 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/study" element={<StudyPage />} />
           <Route path="/QnA" element={<QnAPage />} />
+          <Route path="/networkingForum" element={<NetworkingForumPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Route>
         <Route path="/signup" element={<SignupPage />} />

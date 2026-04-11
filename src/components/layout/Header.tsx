@@ -21,7 +21,7 @@ export default function Header() {
 
   const menuItems = [
     { name: '스터디', path: '/study' },
-    //{ name: '활동', path: null },
+    { name: '네트워킹포럼', path: '/networkingForum' },
     //{ name: '게시판', path: null },
     //{ name: '컴파일러', path: 'https://zerone01.kr/compiler', external: true },
     { name: 'Q&A', path: '/QnA' },
