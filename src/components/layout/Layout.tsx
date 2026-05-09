@@ -18,7 +18,6 @@ export default function Layout() {
         <Outlet />
       </main>
       {!isLoginPage && <Footer />}
-      <Footer />
     </div>
   );
 }
