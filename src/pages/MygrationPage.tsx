@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useMigration } from '@/hooks/useMigration';
 import { MigrationRequest } from '@/types/Auth';
 import { useEffect } from 'react';
-import { isLoggedIn } from '@/utils/token';
+import { isLoggedIn, setAccessToken } from '@/utils/token';
 import DuesModal from '@/components/ui/modal/DuesModal';
 
 interface MigrationState {
@@ -66,7 +66,7 @@ export default function MygrationPage() {
       onSuccess: (data) => {
         // 마이그레이션 o + 학회비 지불 o
         if (data.step === 'LOGIN_SUCCESS') {
-          sessionStorage.setItem(data.accessToken, 'accessToken');
+          setAccessToken(data.accessToken);
           navigate('/');
         }
         // 마이그레이션 o + 학회비 지불 x
