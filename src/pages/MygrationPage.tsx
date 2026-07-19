@@ -126,8 +126,8 @@ export default function MygrationPage() {
     <DuesModal
       isNew={false}
       isOpen={onModal}
-      onClose={() => setOnModal}
-      onConfirm={() => setOnModal}
+      onClose={() => setOnModal(false)}
+      onConfirm={() => setOnModal(false)}
     />
   ) : (
     <div className="flex h-full h-screen w-full flex-col items-center bg-black">
