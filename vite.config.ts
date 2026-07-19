@@ -29,4 +29,13 @@ RewriteRule ^ index.html [QSA,L]`;
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+  proxy: {
+    '/api': {
+      target: 'http://zerone01.kr',
+      changeOrigin: true,
+    },
+  },
+},
+  
 });

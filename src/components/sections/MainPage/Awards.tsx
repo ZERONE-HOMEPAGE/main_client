@@ -1,55 +1,10 @@
 import Trophyicon from '@/assets/icon/Trophy.png';
 import PillTab from '@/components/ui/PillTab/PillTab';
 import { useState } from 'react';
+import { useAwards } from '@/hooks/useMain';
 
 export default function Awards() {
-  const awards = [
-    {
-      tabIdx: 0,
-      year: 2019,
-      type: [0, 0, 0, 1],
-    },
-    {
-      tabIdx: 0,
-      year: 2021,
-      type: [0, 1, 0, 1],
-    },
-    {
-      tabIdx: 0,
-      year: 2022,
-      type: [0, 0, 0, 1],
-    },
-    {
-      tabIdx: 0,
-      year: 2023,
-      type: [0, 1, 0, 0],
-    },
-    {
-      tabIdx: 0,
-      year: 2024,
-      type: [0, 0, 1, 0],
-    },
-    {
-      tabIdx: 0,
-      year: 2025,
-      type: [0, 0, 0, 1],
-    },
-    {
-      tabIdx: 1,
-      year: 2019,
-      type: [2, 2, 2, 0],
-    },
-    {
-      tabIdx: 1,
-      year: 2024,
-      type: [2, 2, 4, 0],
-    },
-    {
-      tabIdx: 1,
-      year: 2025,
-      type: [2, 0, 2, 4],
-    },
-  ];
+  const { data } = useAwards();
 
   const [activeTabIdx, setActiveTabIdx] = useState<number>(0);
 
@@ -78,7 +33,7 @@ export default function Awards() {
         />
 
         <div className="grid min-h-[300px] w-full grid-cols-2 gap-2 rounded-lg bg-[#DCDAEF] p-3 md:min-h-[350px] md:grid-cols-3">
-          {awards
+          {(data ?? [])
             .filter((award) => award.tabIdx === activeTabIdx)
             .map((award, index) => (
               <div
